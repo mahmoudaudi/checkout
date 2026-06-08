@@ -1,0 +1,182 @@
+/*
+ * components/button.css
+ * BEM block: btn
+ * Covers all button variants used in the checkout flow:
+ *   btn--primary   (gradient CTA, pill shape)
+ *   btn--secondary (bordered back button)
+ *   btn--outline   (light bordered)
+ *   btn--ghost     (text-only, transparent)
+ *   btn--small     (reduced size for edit links)
+ *   btn--full      (full-width)
+ *   btn--icon-start / btn--icon-end (with leading/trailing icon)
+ *   btn--retry     (refresh animation on hover)
+ */
+
+/* ── Base ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-5);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  border-radius: var(--radius-full);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition:
+    background     var(--transition-base),
+    box-shadow     var(--transition-base),
+    transform      var(--transition-base),
+    border-color   var(--transition-base),
+    color          var(--transition-base);
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  letter-spacing: 0.01em;
+}
+
+.btn svg { flex-shrink: 0; display: block; }
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-purple-500);
+  outline-offset: 3px;
+}
+
+/* ── Primary — gradient with glow ── */
+.btn--primary {
+  background: var(--gradient-brand);
+  color: var(--color-white);
+  border-color: transparent;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.15) inset,
+    0 4px 16px rgba(124, 58, 237, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.btn--primary:hover {
+  background: var(--gradient-brand-hover);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.12) inset,
+    0 6px 24px rgba(124, 58, 237, 0.5),
+    0 0 0 4px rgba(124, 58, 237, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn--primary:active {
+  transform: translateY(0) scale(0.99);
+  box-shadow:
+    0 2px 8px rgba(124, 58, 237, 0.3),
+    0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.btn--primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Secondary — bordered, white bg ── */
+.btn--secondary {
+  background: var(--color-white);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-200);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-purple-300);
+  color: var(--color-purple-700);
+  background: var(--color-purple-50);
+  box-shadow: 0 1px 3px rgba(124,58,237,0.1);
+}
+
+/* ── Outline — light border ── */
+.btn--outline {
+  background: transparent;
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-200);
+}
+
+.btn--outline:hover {
+  background: var(--color-gray-50);
+  border-color: var(--color-gray-300);
+  color: var(--color-gray-900);
+}
+
+/* ── Ghost — transparent, brand text ── */
+.btn--ghost {
+  background: transparent;
+  color: var(--color-purple-600);
+  border-color: transparent;
+  padding-inline: var(--space-3);
+  letter-spacing: 0;
+}
+
+.btn--ghost:hover {
+  background: var(--color-purple-50);
+  color: var(--color-purple-700);
+}
+
+/* ── Sizes ── */
+.btn--small {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3);
+  font-size: var(--font-size-xs);
+  border-radius: var(--radius-full);
+  gap: var(--space-1);
+}
+
+/* ── Layout ── */
+.btn--full {
+  width: 100%;
+}
+
+/* ── Icon modifiers ── */
+.btn--icon-end  svg { flex-shrink: 0; }
+.btn--icon-start svg { flex-shrink: 0; }
+
+/* Arrow slides right on hover */
+.btn--icon-end:hover svg {
+  transform: translateX(0.2rem);
+  transition: transform var(--transition-base);
+}
+
+/* Refresh rotates on hover */
+.btn--icon-start.btn--retry:hover svg {
+  transform: rotate(180deg);
+  transition: transform var(--transition-slow);
+}
+
+/* ── Responsive sizing ── */
+@media (min-width: 40rem) {
+  .btn {
+    font-size: var(--font-size-base);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-8);
+  }
+
+  .btn--small {
+    font-size: var(--font-size-sm);
+    padding-block: var(--space-2);
+    padding-inline: var(--space-4);
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn--primary:hover,
+  .btn--icon-end:hover svg,
+  .btn--icon-start.btn--retry:hover svg {
+    transform: none;
+    transition: none;
+  }
+}

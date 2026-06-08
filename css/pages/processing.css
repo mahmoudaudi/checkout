@@ -1,0 +1,225 @@
+/*
+ * pages/processing.css
+ * BEM block: processing
+ * Payment processing animation page.
+ * Spinner, animated progress bar, security step list, and warning banner.
+ * Light-theme: white card on light page background.
+ */
+
+/* ── Card container ── */
+.processing {
+  background: var(--color-white);
+  border-radius: var(--radius-2xl);
+  border: 1px solid var(--color-gray-100);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-6) var(--space-5);
+  text-align: center;
+  width: 100%;
+  max-width: var(--max-width-sm);
+  animation: fadeIn var(--transition-slow) ease-out both;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Gradient top accent line */
+.processing::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 3px;
+  background: var(--gradient-brand);
+  pointer-events: none;
+}
+
+/* ── Icon section ── */
+.processing__icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-block-end: var(--space-4);
+  height: 5rem;
+}
+
+/* Pulsing background ring */
+.processing__ping {
+  position: absolute;
+  width: 5rem;
+  height: 5rem;
+  background: linear-gradient(135deg, var(--color-purple-400), var(--color-blue-400));
+  border-radius: var(--radius-full);
+  opacity: 0.15;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Spinner circle */
+.processing__spinner {
+  position: relative;
+  z-index: var(--z-above);
+  width: 4rem;
+  height: 4rem;
+  background: var(--gradient-brand);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.15) inset,
+    0 4px 16px rgba(124, 58, 237, 0.35);
+  color: var(--color-white);
+}
+
+.processing__spinner svg {
+  animation: spin 1s linear infinite;
+}
+
+/* ── Title ── */
+.processing__title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+  margin-block-end: var(--space-2);
+}
+
+.processing__dots {
+  display: inline-block;
+  min-width: 1.5rem;
+  text-align: left;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Subtitle ── */
+.processing__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-500);
+  margin-block-end: var(--space-6);
+}
+
+/* ── Progress bar ── */
+.processing__progress {
+  height: 0.5rem;
+  background: var(--color-gray-100);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-block-end: var(--space-5);
+}
+
+.processing__progress-bar {
+  height: 100%;
+  background: var(--gradient-brand);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease-out;
+}
+
+/* ── Step list ── */
+.processing__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-block-end: var(--space-5);
+  text-align: left;
+}
+
+.processing__step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-600);
+  animation: slideUp var(--transition-slow) ease-out both;
+}
+
+.processing__step:nth-child(2) { animation-delay: 200ms; }
+.processing__step:nth-child(3) { animation-delay: 400ms; }
+
+.processing__step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.processing__step-icon--green  { background: var(--color-green-100);  color: var(--color-green-600); }
+.processing__step-icon--blue   { background: var(--color-blue-100);   color: var(--color-blue-600); }
+.processing__step-icon--purple { background: var(--color-purple-100); color: var(--color-purple-600); }
+
+/* ── Warning note ── */
+.processing__warning {
+  background: var(--color-yellow-50);
+  border: 1px solid var(--color-yellow-200);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3) var(--space-4);
+}
+
+.processing__warning p {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-yellow-800);
+}
+
+/* ── Responsive ── */
+@media (min-width: 40rem) {
+  .processing {
+    border-radius: var(--radius-3xl);
+    padding: var(--space-7);
+  }
+
+  .processing__icon-wrap {
+    height: 5.5rem;
+  }
+
+  .processing__ping {
+    width: 5.5rem;
+    height: 5.5rem;
+  }
+
+  .processing__spinner {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  .processing__title {
+    font-size: var(--font-size-3xl);
+  }
+
+  .processing__subtitle {
+    font-size: var(--font-size-base);
+  }
+
+  .processing__progress {
+    height: 0.625rem;
+  }
+
+  .processing__step {
+    font-size: var(--font-size-sm);
+    gap: var(--space-3);
+  }
+
+  .processing__step-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .processing__warning p {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .processing__ping        { animation: none; opacity: 0.1; }
+  .processing__spinner svg { animation: none; }
+  .processing__progress-bar { transition: none; }
+  .processing__step        { animation: none; }
+}

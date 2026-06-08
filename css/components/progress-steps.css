@@ -1,0 +1,219 @@
+/*
+ * components/progress-steps.css
+ * BEM block: progress-steps
+ * 6-step checkout progress indicator with circles, labels,
+ * connectors, and an active pulse dot.
+ * Compact on mobile to fit 6 steps without wrapping.
+ */
+
+/* ── Container ── */
+.progress-steps {
+  margin-block-end: var(--space-2);
+  padding-inline: var(--space-1);
+  animation: fadeIn var(--transition-slow) ease-out both;
+}
+
+/* ── List ── */
+.progress-steps__list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--max-width-lg);
+  margin-inline: auto;
+}
+
+/* ── Individual step item ── */
+.progress-steps__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+/* ── Circle ── */
+.progress-steps__circle {
+  position: relative;
+  z-index: var(--z-above);
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--color-gray-200);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--transition-slow),
+    background   var(--transition-slow),
+    box-shadow   var(--transition-slow),
+    transform    var(--transition-slow);
+}
+
+/* Completed */
+.progress-steps__circle--done {
+  background: var(--gradient-brand);
+  border-color: transparent;
+  color: var(--color-white);
+  box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);
+}
+
+/* Active (current step) */
+.progress-steps__circle--active {
+  border-color: var(--color-purple-400);
+  border-width: 2px;
+  background: var(--color-purple-50);
+  box-shadow:
+    0 0 0 3px rgba(124, 58, 237, 0.10),
+    0 4px 10px rgba(124, 58, 237, 0.18);
+  color: var(--color-purple-600);
+}
+
+/* ── Step number inside circle ── */
+.progress-steps__number {
+  font-size: 0.625rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-400);
+}
+
+.progress-steps__circle--active .progress-steps__number {
+  color: var(--color-purple-600);
+}
+
+/* ── Label ── */
+.progress-steps__label {
+  margin-block-start: var(--space-1);
+  font-size: 0.625rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-400);
+  text-align: center;
+  transition: color var(--transition-base);
+  white-space: nowrap;
+}
+
+.progress-steps__label--active {
+  color: var(--color-gray-800);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Short name on mobile, full on ≥ sm */
+.progress-steps__label-short { display: inline; }
+.progress-steps__label-full  { display: none; }
+
+@media (min-width: 40rem) {
+  .progress-steps__label-short { display: none; }
+  .progress-steps__label-full  { display: inline; }
+
+  .progress-steps__label {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* ── Pulse dot (active step only) ── */
+.progress-steps__pulse {
+  position: absolute;
+  bottom: -0.4rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  background: var(--color-purple-500);
+  border-radius: var(--radius-full);
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 5px rgba(124, 58, 237, 0.5);
+}
+
+/* ── Connector between steps ── */
+.progress-steps__connector-wrap {
+  flex: 1;
+  padding-inline: 0.125rem;
+  margin-block-end: var(--space-3);
+  display: flex;
+  align-items: center;
+}
+
+.progress-steps__connector {
+  height: 1.5px;
+  width: 100%;
+  border-radius: var(--radius-full);
+  background: var(--color-gray-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-steps__connector::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-brand);
+  border-radius: var(--radius-full);
+  width: 0%;
+  transition: width var(--transition-slow);
+}
+
+.progress-steps__connector--done::after {
+  width: 100%;
+}
+
+/* ── Larger circles on tablet ── */
+@media (min-width: 40rem) {
+  .progress-steps {
+    padding-inline: var(--space-2);
+  }
+
+  .progress-steps__circle {
+    width: 2rem;
+    height: 2rem;
+    border-width: 2px;
+  }
+
+  .progress-steps__circle--active {
+    transform: scale(1.08);
+  }
+
+  .progress-steps__number {
+    font-size: var(--font-size-xs);
+  }
+
+  .progress-steps__connector-wrap {
+    padding-inline: var(--space-1);
+  }
+
+  .progress-steps__connector {
+    height: 2px;
+  }
+
+  .progress-steps__pulse {
+    width: 0.375rem;
+    height: 0.375rem;
+    bottom: -0.5rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .progress-steps {
+    margin-block-end: var(--space-3);
+  }
+
+  .progress-steps__circle {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .progress-steps__number {
+    font-size: var(--font-size-sm);
+  }
+
+  .progress-steps__label {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .progress-steps__circle,
+  .progress-steps__connector::after,
+  .progress-steps__pulse {
+    transition: none;
+    animation: none;
+  }
+}

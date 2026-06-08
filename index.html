@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary meta -->
+  <title>Checkout — Secure Order Completion</title>
+  <meta name="description" content="Streamlines online purchases with a responsive, user-friendly checkout flow that ensures secure payment processing and seamless order completion across devices." />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Checkout — Secure Order Completion" />
+  <meta property="og:description" content="Complete your purchase securely with our responsive, multi-step checkout experience." />
+  <meta property="og:image"       content="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=630&fit=crop" />
+  <meta property="og:url"         content="/" />
+
+  <!-- Structured data for e-commerce breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Cart",             "item": "/checkout" },
+      { "@type": "ListItem", "position": 2, "name": "Personal Info",    "item": "/checkout/personal-info" },
+      { "@type": "ListItem", "position": 3, "name": "Shipping Address", "item": "/checkout/address" },
+      { "@type": "ListItem", "position": 4, "name": "Payment",          "item": "/checkout/payment" },
+      { "@type": "ListItem", "position": 5, "name": "Review",           "item": "/checkout/confirmation" }
+    ]
+  }
+  </script>
+
+  <!-- Stylesheets — loaded in dependency order -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components/button.css" />
+  <link rel="stylesheet" href="css/components/card.css" />
+  <link rel="stylesheet" href="css/components/form.css" />
+  <link rel="stylesheet" href="css/components/progress-steps.css" />
+  <link rel="stylesheet" href="css/components/card-preview.css" />
+  <link rel="stylesheet" href="css/pages/processing.css" />
+  <link rel="stylesheet" href="css/pages/result.css" />
+
+  <!-- canvas-confetti CDN — only allowed external dependency -->
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- Minimal root styles -->
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    #app { height: 100%; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <!--
+    #app is the SPA mount point. Each mounted page renders its own <main>
+    landmark, so role="main" is omitted here to avoid duplicate landmarks.
+    aria-live="polite" announces route changes to screen readers.
+  -->
+  <div id="app" aria-live="polite" aria-atomic="false">
+    <!-- Pages are rendered here by js/main.js -->
+  </div>
+
+  <!-- Application entry point — type="module" enables ES module imports -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

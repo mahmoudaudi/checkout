@@ -1,0 +1,511 @@
+/*
+ * components/form.css
+ * BEM blocks: form, form-field, billing-checkbox, security-banner
+ * Covers all form layout and input styles used in the checkout flow.
+ * Handles: default, focused, valid, error, and disabled states.
+ */
+
+/* ══════════════════════════════════════
+   FORM — layout wrapper
+   ══════════════════════════════════════ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Reset native fieldset border/padding that browsers add by default */
+.form__group {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: contents;
+}
+
+/* Two-column row (country + city, expiry + CVV) */
+.form__row--two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 40rem) {
+  .form__row--two-col {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+  }
+}
+
+/* Action buttons row */
+.form__actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: var(--space-2);
+  padding-block-start: var(--space-2);
+}
+
+@media (min-width: 40rem) {
+  .form__actions {
+    flex-direction: row;
+    gap: var(--space-3);
+    padding-block-start: var(--space-3);
+  }
+
+  .form__actions .btn--primary {
+    flex: 1;
+  }
+}
+
+/* ══════════════════════════════════════
+   FORM FIELD — label + input + error
+   ══════════════════════════════════════ */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  animation: slideUp var(--transition-slow) ease-out both;
+}
+
+.form-field__label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-500);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Red asterisk on required fields only (skip optional labels) */
+.form-field__label:not(:has(.form-field__optional))::after {
+  content: ' *';
+  color: var(--color-red-500);
+  font-weight: var(--font-weight-bold);
+}
+
+.form-field__optional {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray-400);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Input wrapper (for icon layout) */
+.form-field__input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* ══════════════════════════════════════
+   PHONE FIELD — prefix select + number input
+   ══════════════════════════════════════ */
+
+.phone-field__wrap {
+  gap: 0;
+  border: none;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-gray-50);
+  transition:
+    box-shadow var(--transition-base),
+    background var(--transition-base);
+}
+
+.phone-field__wrap:focus-within {
+  box-shadow:
+    0 0 0 2.5px rgba(124, 58, 237, 0.30),
+    0 2px 8px rgba(124, 58, 237, 0.08);
+  background: var(--color-white);
+}
+
+/* Dial-code select */
+.phone-field__prefix {
+  flex-shrink: 0;
+  border: none;
+  border-right: 1px solid var(--color-gray-200);
+  background: transparent;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-700);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  appearance: none;
+  /* Small chevron as bg image */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-2) center;
+  padding-inline-end: calc(var(--space-2) + 14px);
+  outline: none;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.phone-field__prefix:focus {
+  background-color: var(--color-purple-50);
+}
+
+/* Number input — no individual border, inherits from wrapper */
+.phone-field__number {
+  flex: 1;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-3);
+}
+
+.phone-field__number:focus {
+  outline: none;
+}
+
+@media (min-width: 40rem) {
+  .phone-field__prefix {
+    font-size: var(--font-size-base);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-4);
+    padding-inline-end: calc(var(--space-3) + 14px);
+  }
+
+  .phone-field__number {
+    padding-block: var(--space-4);
+    padding-inline: var(--space-4);
+  }
+}
+
+/* ── end phone field ── */
+
+.form-field__input-wrap--select {
+  position: relative;
+}
+
+/* Leading icon */
+.form-field__icon {
+  position: absolute;
+  inset-inline-start: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--color-gray-300);
+  transition: color var(--transition-base);
+  z-index: var(--z-above);
+}
+
+.form-field__icon--error { color: var(--color-red-400); }
+.form-field__icon--valid { color: var(--color-purple-500); }
+
+/* Trailing success icon */
+.form-field__success-icon {
+  position: absolute;
+  inset-inline-end: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--color-purple-500);
+}
+
+/* ── Input ── */
+.form-field__input {
+  width: 100%;
+  padding-block: var(--space-3);
+  padding-inline: var(--space-4);
+  font-size: var(--font-size-base);
+  color: var(--color-gray-900);
+  background: var(--color-gray-50);
+  border: none;
+  border-radius: var(--radius-lg);
+  transition:
+    box-shadow   var(--transition-base),
+    background   var(--transition-base);
+  appearance: none;
+}
+
+/* Input with leading icon */
+.form-field__input--with-icon {
+  padding-inline-start: calc(var(--space-4) * 2 + 20px);
+}
+
+/* Mono font for card fields */
+.form-field__input--mono {
+  font-family: var(--font-family-mono);
+  letter-spacing: 0.05em;
+}
+
+/* States */
+.form-field__input:focus {
+  background: var(--color-white);
+  box-shadow:
+    0 0 0 2.5px rgba(124, 58, 237, 0.30),
+    0 2px 8px rgba(124, 58, 237, 0.08);
+  outline: none;
+}
+
+.form-field__input--valid {
+  background: var(--color-white);
+}
+
+.form-field__input--valid:focus {
+  box-shadow:
+    0 0 0 2.5px rgba(124, 58, 237, 0.30),
+    0 2px 8px rgba(124, 58, 237, 0.08);
+}
+
+.form-field__input--error {
+  background: var(--color-red-50);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18);
+}
+
+.form-field__input--error:focus {
+  box-shadow:
+    0 0 0 2.5px rgba(239, 68, 68, 0.35),
+    0 2px 8px rgba(239, 68, 68, 0.08);
+}
+
+/* ── Select ── */
+.form-field__select {
+  width: 100%;
+  padding-block: var(--space-3);
+  padding-inline-start: calc(var(--space-4) * 2 + 20px);
+  padding-inline-end: var(--space-8);
+  font-size: var(--font-size-base);
+  color: var(--color-gray-900);
+  background: var(--color-gray-50)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+    no-repeat right var(--space-3) center;
+  border: none;
+  border-radius: var(--radius-lg);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    box-shadow   var(--transition-base),
+    background   var(--transition-base);
+}
+
+.form-field__select:focus {
+  background-color: var(--color-white);
+  box-shadow:
+    0 0 0 2.5px rgba(124, 58, 237, 0.30),
+    0 2px 8px rgba(124, 58, 237, 0.08);
+  outline: none;
+}
+
+.form-field__select--error {
+  background-color: var(--color-red-50);
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18);
+}
+
+/* ── Error message ── */
+.form-field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-red-500);
+  animation: slideUp 0.2s ease-out both;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+}
+
+/* display:flex overrides the browser's [hidden]{display:none} — fix that */
+.form-field__error[hidden] {
+  display: none;
+}
+
+
+/* ── Responsive input sizing ── */
+@media (min-width: 40rem) {
+  .form-field__input,
+  .form-field__select {
+    font-size: var(--font-size-base);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-5);
+  }
+
+  .form-field__icon {
+    inset-inline-start: var(--space-4);
+  }
+
+  .form-field__input--with-icon {
+    padding-inline-start: calc(var(--space-4) + var(--space-4) + 20px);
+  }
+
+  .form-field__select {
+    padding-inline-start: calc(var(--space-4) + var(--space-4) + 20px);
+  }
+
+  .form-field__error {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ══════════════════════════════════════
+   BILLING CHECKBOX
+   ══════════════════════════════════════ */
+
+.billing-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: none;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  transition:
+    background   var(--transition-base),
+    box-shadow   var(--transition-base);
+  background: var(--color-gray-50);
+}
+
+.billing-checkbox:hover {
+  background: var(--color-purple-50);
+}
+
+.billing-checkbox--checked {
+  background: linear-gradient(135deg, var(--color-purple-50), var(--color-blue-50));
+  box-shadow: 0 0 0 2.5px rgba(124,58,237,0.20);
+}
+
+.billing-checkbox__input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--color-purple-600);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-block-start: 0.125rem;
+}
+
+.billing-checkbox__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.billing-checkbox__primary {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
+}
+
+.billing-checkbox__secondary {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+}
+
+@media (min-width: 40rem) {
+  .billing-checkbox {
+    gap: var(--space-4);
+    padding: var(--space-5);
+  }
+
+  .billing-checkbox__input {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .billing-checkbox__primary {
+    font-size: var(--font-size-base);
+  }
+
+  .billing-checkbox__secondary {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ══════════════════════════════════════
+   SECURITY BANNER (payment page)
+   ══════════════════════════════════════ */
+
+.security-banner {
+  background: var(--gradient-brand);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  color: var(--color-white);
+  box-shadow: var(--shadow-purple);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle inner highlight */
+.security-banner::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.25);
+}
+
+.security-banner__icon {
+  flex-shrink: 0;
+  margin-block-start: 2px;
+  opacity: 0.9;
+}
+
+.security-banner__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.security-banner__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+}
+
+.security-banner__subtitle {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.75);
+  margin-block-start: 2px;
+}
+
+.security-banner__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  width: 100%;
+  margin-block-start: var(--space-1);
+}
+
+.security-banner__badge {
+  padding: 3px var(--space-2);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(4px);
+}
+
+@media (min-width: 40rem) {
+  .security-banner {
+    padding: var(--space-5);
+    border-radius: var(--radius-2xl);
+    gap: var(--space-4);
+  }
+
+  .security-banner__title {
+    font-size: var(--font-size-base);
+  }
+
+  .security-banner__subtitle {
+    font-size: var(--font-size-sm);
+  }
+
+  .security-banner__badge {
+    padding: var(--space-1) var(--space-3);
+  }
+}
