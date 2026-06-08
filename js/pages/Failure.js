@@ -15,6 +15,7 @@
 
 import { navigate } from '../router.js';
 import { icon }     from '../components/icons.js';
+import { CheckoutHeader } from '../components/CheckoutHeader.js';
 
 /** @type {string[]} */
 const COMMON_ISSUES = [
@@ -31,11 +32,18 @@ const COMMON_ISSUES = [
  */
 export function mount(container) {
   const page = document.createElement('main');
-  page.className = 'page page--centered';
+  page.className = 'page';
+
+  const inner = document.createElement('div');
+  inner.className = 'page__inner';
+
+  inner.appendChild(CheckoutHeader());
 
   const card = document.createElement('div');
   card.className = 'result result--failure';
   card.setAttribute('role', 'alert');
+  card.style.maxWidth = '42rem';
+  card.style.marginInline = 'auto';
 
   // Background decorations
   const deco1 = document.createElement('div');
@@ -180,6 +188,7 @@ export function mount(container) {
   card.appendChild(issuesCard);
   card.appendChild(helpCard);
   card.appendChild(actions);
-  page.appendChild(card);
+  inner.appendChild(card);
+  page.appendChild(inner);
   container.appendChild(page);
 }

@@ -41,8 +41,8 @@
 .form__actions {
   display: flex;
   flex-direction: column-reverse;
-  gap: var(--space-2);
-  padding-block-start: var(--space-2);
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
 }
 
 @media (min-width: 40rem) {
@@ -70,25 +70,23 @@
 
 .form-field__label {
   display: block;
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-gray-500);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700);
+  letter-spacing: -0.01em;
 }
 
 /* Red asterisk on required fields only (skip optional labels) */
 .form-field__label:not(:has(.form-field__optional))::after {
   content: ' *';
-  color: var(--color-red-500);
-  font-weight: var(--font-weight-bold);
+  color: var(--color-red-400);
+  font-weight: var(--font-weight-normal);
 }
 
 .form-field__optional {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-normal);
   color: var(--color-gray-400);
-  text-transform: none;
   letter-spacing: 0;
 }
 
@@ -214,9 +212,9 @@
 /* ── Input ── */
 .form-field__input {
   width: 100%;
-  padding-block: var(--space-3);
+  padding-block: var(--space-2);
   padding-inline: var(--space-4);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--color-gray-900);
   background: var(--color-gray-50);
   border: none;
@@ -225,6 +223,7 @@
     box-shadow   var(--transition-base),
     background   var(--transition-base);
   appearance: none;
+  min-height: 2.5rem;
 }
 
 /* Input with leading icon */
@@ -271,10 +270,10 @@
 /* ── Select ── */
 .form-field__select {
   width: 100%;
-  padding-block: var(--space-3);
+  padding-block: var(--space-2);
   padding-inline-start: calc(var(--space-4) * 2 + 20px);
   padding-inline-end: var(--space-8);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--color-gray-900);
   background: var(--color-gray-50)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
@@ -424,34 +423,22 @@
    SECURITY BANNER (payment page)
    ══════════════════════════════════════ */
 
+/* Security banner — subtle trust signal, not a promotional element.
+   Stripe/Shopify pattern: green icon + light background, not dominant purple. */
 .security-banner {
-  background: var(--gradient-brand);
+  background: var(--color-gray-50);
+  border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-xl);
-  padding: var(--space-4);
-  color: var(--color-white);
-  box-shadow: var(--shadow-purple);
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-gray-600);
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-3);
-  align-items: flex-start;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Subtle inner highlight */
-.security-banner::before {
-  content: '';
-  position: absolute;
-  inset-block-start: 0;
-  inset-inline: 0;
-  height: 1px;
-  background: rgba(255,255,255,0.25);
 }
 
 .security-banner__icon {
   flex-shrink: 0;
-  margin-block-start: 2px;
-  opacity: 0.9;
+  color: var(--color-emerald-500);
 }
 
 .security-banner__body {
@@ -461,13 +448,14 @@
 
 .security-banner__title {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
   letter-spacing: -0.01em;
 }
 
 .security-banner__subtitle {
   font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-gray-500);
   margin-block-start: 2px;
 }
 
@@ -475,37 +463,26 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  width: 100%;
-  margin-block-start: var(--space-1);
+  margin-block-start: var(--space-2);
 }
 
 .security-banner__badge {
-  padding: 3px var(--space-2);
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2px var(--space-2);
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.02em;
-  backdrop-filter: blur(4px);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-500);
 }
 
 @media (min-width: 40rem) {
   .security-banner {
-    padding: var(--space-5);
-    border-radius: var(--radius-2xl);
-    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-xl);
   }
 
   .security-banner__title {
-    font-size: var(--font-size-base);
-  }
-
-  .security-banner__subtitle {
     font-size: var(--font-size-sm);
-  }
-
-  .security-banner__badge {
-    padding: var(--space-1) var(--space-3);
   }
 }

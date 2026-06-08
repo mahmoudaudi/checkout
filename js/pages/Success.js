@@ -16,6 +16,7 @@
 import { navigate } from '../router.js';
 import { icon }     from '../components/icons.js';
 import { ProgressSteps } from '../components/ProgressSteps.js';
+import { CheckoutHeader } from '../components/CheckoutHeader.js';
 
 /**
  * Generates a short random alphanumeric order number.
@@ -84,13 +85,13 @@ export function mount(container) {
   const orderNumber = generateOrderNumber();
 
   const page = document.createElement('main');
-  page.className = 'page page--form';
+  page.className = 'page';
 
   const inner = document.createElement('div');
   inner.className = 'page__inner';
 
-  // Show all 6 steps as complete
-  inner.appendChild(ProgressSteps(7)); // 7 > 6 so all steps show as "done"
+  inner.appendChild(CheckoutHeader());
+  inner.appendChild(ProgressSteps(7)); // 7 > 6 marks all steps as done
 
   const card = document.createElement('div');
   card.className = 'result result--success';
@@ -202,7 +203,14 @@ export function mount(container) {
   card.appendChild(delivery);
   card.appendChild(actions);
 
-  inner.appendChild(card);
+  /* Center the card within the standard layout */
+  const cardWrapper = document.createElement('div');
+  cardWrapper.style.maxWidth = '42rem';
+  cardWrapper.style.marginInline = 'auto';
+  cardWrapper.style.width = '100%';
+  cardWrapper.appendChild(card);
+
+  inner.appendChild(cardWrapper);
   page.appendChild(inner);
   container.appendChild(page);
 

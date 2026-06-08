@@ -102,10 +102,7 @@
 .cart-item__price {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  background: var(--gradient-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-gray-900);
   letter-spacing: -0.02em;
 }
 
@@ -300,10 +297,7 @@
 .order-summary__total-row dd {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  background: var(--gradient-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-gray-900);
   letter-spacing: -0.02em;
 }
 
@@ -356,7 +350,7 @@
 
   .order-summary__total-row--light dd {
     font-size: var(--font-size-2xl);
-    -webkit-text-fill-color: var(--color-white);
+    color: var(--color-white);
   }
 }
 

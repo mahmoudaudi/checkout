@@ -15,6 +15,7 @@ import { getState } from '../state/store.js';
 import { navigate } from '../router.js';
 import { icon, lockFilled } from '../components/icons.js';
 import { ProgressSteps } from '../components/ProgressSteps.js';
+import { CheckoutHeader } from '../components/CheckoutHeader.js';
 
 const SHIPPING = 12.99;
 
@@ -59,13 +60,6 @@ function CartItem(item, index) {
   heading.className   = 'cart-item__name';
   heading.textContent = item.name;
 
-  const badge = document.createElement('div');
-  badge.className = 'cart-item__badge';
-  badge.innerHTML = icon('sparkles', 14);
-  const badgeText = document.createElement('span');
-  badgeText.textContent = 'Premium Quality';
-  badge.appendChild(badgeText);
-
   const footer = document.createElement('div');
   footer.className = 'cart-item__footer';
 
@@ -75,12 +69,11 @@ function CartItem(item, index) {
 
   const price = document.createElement('span');
   price.className   = 'cart-item__price';
-  price.textContent = `$${item.price.toFixed(2)}`;
+  price.textContent = `$${(item.price * item.quantity).toFixed(2)}`;
 
   footer.appendChild(qty);
   footer.appendChild(price);
   body.appendChild(heading);
-  body.appendChild(badge);
   body.appendChild(footer);
   article.appendChild(imgWrap);
   article.appendChild(body);
@@ -177,6 +170,13 @@ function OrderSummaryPanel(subtotal, orderItems) {
   rows.appendChild(divider);
   rows.appendChild(totalRow);
 
+  body.appendChild(heading);
+  body.appendChild(rows);
+
+  /* ── Footer: CTA always visible, even when accordion is collapsed ── */
+  const footer = document.createElement('div');
+  footer.className = 'order-summary__footer';
+
   const cta = document.createElement('button');
   cta.className = 'btn btn--primary btn--full btn--icon-end';
   cta.type      = 'button';
@@ -187,13 +187,12 @@ function OrderSummaryPanel(subtotal, orderItems) {
   secure.className = 'order-summary__secure';
   secure.innerHTML = `${lockFilled()}<span>Secure checkout powered by SSL</span>`;
 
-  body.appendChild(heading);
-  body.appendChild(rows);
-  body.appendChild(cta);
-  body.appendChild(secure);
+  footer.appendChild(cta);
+  footer.appendChild(secure);
 
   aside.appendChild(toggle);
   aside.appendChild(body);
+  aside.appendChild(footer);
   return aside;
 }
 
@@ -227,16 +226,12 @@ export function mount(container) {
   const inner = document.createElement('div');
   inner.className = 'page__inner page__inner--wide';
 
+  inner.appendChild(CheckoutHeader());
   inner.appendChild(ProgressSteps(1));
 
   // Header
   const header = document.createElement('header');
   header.className = 'page__header page__header--centered';
-
-  const iconWrap = document.createElement('div');
-  iconWrap.className = 'page__icon-wrap page__icon-wrap--brand';
-  iconWrap.setAttribute('aria-hidden', 'true');
-  iconWrap.innerHTML = icon('shopping-bag', 24);
 
   const h1 = document.createElement('h1');
   h1.className   = 'page__title page__title--gradient';
@@ -244,9 +239,8 @@ export function mount(container) {
 
   const subtitle = document.createElement('p');
   subtitle.className   = 'page__subtitle';
-  subtitle.textContent = 'Review your items before checkout';
+  subtitle.textContent = `${orderItems.length} ${orderItems.length === 1 ? 'item' : 'items'} ready for checkout`;
 
-  header.appendChild(iconWrap);
   header.appendChild(h1);
   header.appendChild(subtitle);
 

@@ -8,9 +8,9 @@
 
 /* ── Container ── */
 .progress-steps {
-  margin-block-end: var(--space-2);
   padding-inline: var(--space-1);
   animation: fadeIn var(--transition-slow) ease-out both;
+  flex-shrink: 0;
 }
 
 /* ── List ── */
@@ -132,7 +132,7 @@
 }
 
 .progress-steps__connector {
-  height: 1.5px;
+  height: 2px;
   width: 100%;
   border-radius: var(--radius-full);
   background: var(--color-gray-200);
@@ -190,10 +190,6 @@
 }
 
 @media (min-width: 64rem) {
-  .progress-steps {
-    margin-block-end: var(--space-3);
-  }
-
   .progress-steps__circle {
     width: 2.25rem;
     height: 2.25rem;

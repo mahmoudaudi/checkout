@@ -16,6 +16,7 @@ import { getState, setState }         from '../state/store.js';
 import { navigate }                   from '../router.js';
 import { icon }                       from '../components/icons.js';
 import { ProgressSteps }              from '../components/ProgressSteps.js';
+import { CheckoutHeader }             from '../components/CheckoutHeader.js';
 import { COUNTRIES as DIAL_CODES }    from '../data/countries.js';
 import { validateAll, firstInvalid }  from '../utils/validation.js';
 
@@ -256,11 +257,12 @@ export function mount(container) {
   const { personalInfo } = getState();
 
   const page = document.createElement('main');
-  page.className = 'page page--form';
+  page.className = 'page';
 
   const inner = document.createElement('div');
   inner.className = 'page__inner';
 
+  inner.appendChild(CheckoutHeader());
   inner.appendChild(ProgressSteps(2));
 
   const card = document.createElement('section');

@@ -20,63 +20,83 @@
  */
 
 /* ══════════════════════════════════════
-   PAGE — outer wrapper (full-screen, dark gradient background)
+   PAGE — outer wrapper (viewport-locked, no page-level scroll)
    ══════════════════════════════════════ */
 
 .page {
-  min-height: 100%;
-  background: var(--gradient-page-bg);
-  padding: var(--space-4) var(--space-3);
-  animation: fadeIn var(--transition-slow) ease-out both;
-}
-
-/* Centered variant — Processing, Success, Failure */
-.page--centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-4) var(--space-3);
-}
-
-/* Form variant — fills the viewport exactly, zero page-level scroll */
-.page--form {
   height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: var(--space-3);
+  background: var(--gradient-page-bg);
+  animation: fadeIn var(--transition-slow) ease-out both;
 }
 
-/* Inner wrapper: flex column, hidden scrollbar as last-resort safety net */
-.page--form > .page__inner {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+/* Centered variant — Processing page (compact content, vertically centered) */
+.page--centered {
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Inner container — scrollable if content overflows (scrollbar hidden) ── */
+.page__inner {
+  flex: 1;
   max-height: 100%;
   overflow-y: auto;
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE/Edge */
-}
-
-.page--form > .page__inner::-webkit-scrollbar {
-  display: none;                /* Chrome/Safari */
-}
-
-/* Wide variant — Confirmation */
-.page--wide {
-  padding-inline: var(--space-3);
-}
-
-/* ── Inner container ── */
-.page__inner {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior: contain;
   max-width: var(--max-width-lg);
   margin-inline: auto;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3);
+}
+
+.page__inner::-webkit-scrollbar {
+  display: none;
 }
 
 .page__inner--wide {
   max-width: var(--max-width-xl);
+}
+
+/* ══════════════════════════════════════
+   CHECKOUT HEADER — brand identity bar
+   ══════════════════════════════════════ */
+
+.checkout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-1);
+  flex-shrink: 0;
+}
+
+.checkout-header__brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.checkout-header__logo {
+  height: 2.75rem;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.checkout-header__secure {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-400);
+  user-select: none;
 }
 
 /* ── Page header (cart page — sits on dark bg) ── */
@@ -169,9 +189,9 @@
 
 .form-page {
   background: var(--color-white);
-  border-radius: var(--radius-2xl);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-4);
   position: relative;
   overflow: hidden;
   animation: slideUp var(--transition-slow) ease-out both;
@@ -190,7 +210,7 @@
 }
 
 .form-page__header {
-  margin-block-end: var(--space-2);
+  margin-block-end: var(--space-3);
 }
 
 .form-page__header--icon-row {
@@ -216,10 +236,7 @@
 .form-page__title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
-  background: var(--gradient-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-gray-900);
   margin-block-end: 2px;
   letter-spacing: -0.02em;
 }
@@ -230,8 +247,8 @@
 }
 
 .form-page__footer {
-  margin-block-start: var(--space-2);
-  padding-block-start: var(--space-2);
+  margin-block-start: var(--space-3);
+  padding-block-start: var(--space-3);
   border-top: 1px solid var(--color-gray-100);
 }
 
@@ -244,22 +261,20 @@
   padding: var(--space-4);
   border: 1px solid;
   animation: slideUp var(--transition-slow) ease-out both;
-  transition: box-shadow var(--transition-base);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
 }
 
-.review-section--purple {
-  background: var(--gradient-card-purple);
-  border-color: var(--color-purple-100);
+.review-section:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
-.review-section--blue {
-  background: var(--gradient-card-blue);
-  border-color: var(--color-blue-100);
-}
-
+/* Uniform clean white — color coding adds noise, not meaning */
+.review-section--purple,
+.review-section--blue,
 .review-section--pink {
-  background: var(--gradient-card-pink);
-  border-color: var(--color-pink-100);
+  background: var(--color-white);
+  border-color: var(--color-gray-100);
 }
 
 .review-section__header {
@@ -371,10 +386,7 @@
 .order-summary__toggle-amount {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  background: var(--gradient-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-gray-900);
 }
 
 .order-summary__toggle-chevron {
@@ -403,6 +415,15 @@
   padding-block: 0;
 }
 
+/* ── Order Summary Footer — always-visible CTA area ── */
+.order-summary__footer {
+  padding: var(--space-4) var(--space-5);
+  border-top: 1px solid var(--color-gray-100);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
 /* On desktop: always show body, hide toggle button */
 @media (min-width: 64rem) {
   .order-summary__toggle {
@@ -415,6 +436,11 @@
     opacity: 1 !important;
     overflow: visible;
     padding: var(--space-5);
+  }
+
+  .order-summary__footer {
+    padding: var(--space-5) var(--space-7);
+    border-top: 1px solid var(--color-gray-100);
   }
 }
 
@@ -482,8 +508,9 @@
    RESPONSIVE — tablet (≥ 640px)
    ══════════════════════════════════════ */
 @media (min-width: 40rem) {
-  .page {
-    padding: var(--space-5) var(--space-4);
+  .page__inner {
+    padding: var(--space-4) var(--space-5);
+    gap: var(--space-4);
   }
 
   .page__icon-wrap {
@@ -500,12 +527,12 @@
   }
 
   .form-page {
-    padding: var(--space-5);
-    border-radius: var(--radius-3xl);
+    padding: var(--space-6);
+    border-radius: var(--radius-2xl);
   }
 
   .form-page__title {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
   }
 
   .form-page__subtitle {
@@ -539,8 +566,9 @@
    RESPONSIVE — desktop (≥ 1024px)
    ══════════════════════════════════════ */
 @media (min-width: 64rem) {
-  .page {
-    padding: var(--space-6) var(--space-6);
+  .page__inner {
+    padding: var(--space-5) var(--space-8);
+    gap: var(--space-4);
   }
 
   .page__icon-wrap {

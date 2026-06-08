@@ -30,6 +30,7 @@ import { getState } from '../state/store.js';
 import { navigate } from '../router.js';
 import { icon, lockFilled } from '../components/icons.js';
 import { ProgressSteps } from '../components/ProgressSteps.js';
+import { CheckoutHeader } from '../components/CheckoutHeader.js';
 
 const SHIPPING = 12.99;
 
@@ -214,11 +215,12 @@ export function mount(container) {
   const { personalInfo, addressInfo, paymentInfo } = state;
 
   const page = document.createElement('main');
-  page.className = 'page page--form page--wide';
+  page.className = 'page page--wide';
 
   const inner = document.createElement('div');
   inner.className = 'page__inner page__inner--wide';
 
+  inner.appendChild(CheckoutHeader());
   inner.appendChild(ProgressSteps(5));
 
   const card = document.createElement('div');

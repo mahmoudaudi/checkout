@@ -88,7 +88,6 @@ export const COUNTRIES = [
   { code: 'IR', name: 'Iran',                               dial: '+98',   flag: '🇮🇷' },
   { code: 'IQ', name: 'Iraq',                               dial: '+964',  flag: '🇮🇶' },
   { code: 'IE', name: 'Ireland',                            dial: '+353',  flag: '🇮🇪' },
-  { code: 'IL', name: 'Israel',                             dial: '+972',  flag: '🇮🇱' },
   { code: 'IT', name: 'Italy',                              dial: '+39',   flag: '🇮🇹' },
   { code: 'JM', name: 'Jamaica',                            dial: '+1',    flag: '🇯🇲' },
   { code: 'JP', name: 'Japan',                              dial: '+81',   flag: '🇯🇵' },
