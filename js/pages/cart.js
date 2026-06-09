@@ -47,23 +47,13 @@ document.addEventListener('DOMContentLoaded', function () {
     var toggleAmt = document.querySelector('.order-summary__toggle-amount');
     if (toggleAmt) toggleAmt.textContent = formatPrice(total);
 
-    // Count active items
-    var count = items.filter(function (i) { return i.qty > 0; }).length;
+    // Update item count in subtitle
+    var count    = items.reduce(function (s, i) { return s + i.qty; }, 0);
     var subtitle = document.querySelector('.page__subtitle');
-
-    if (count === 0) {
-      proceedBtn.disabled = true;
-      if (emptyEl) emptyEl.hidden = false;
-      if (subtitle) subtitle.textContent = 'Your cart is empty';
-    } else {
-      proceedBtn.disabled = false;
-      if (emptyEl) emptyEl.hidden = true;
-      if (subtitle) subtitle.textContent = count + (count === 1 ? ' item' : ' items') + ' — ready for checkout';
-    }
+    if (subtitle) subtitle.textContent = count + (count === 1 ? ' item' : ' items') + ' — ready for checkout';
   }
 
   var proceedBtn = document.getElementById('proceed-btn');
-  var emptyEl    = document.getElementById('cart-empty');
 
   proceedBtn.addEventListener('click', function () {
     window.location.href = 'personal-info.html';
@@ -74,12 +64,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var incBtn  = item.el.querySelector('.cart-item__qty-btn--inc');
     var qtyEl   = item.el.querySelector('.cart-item__qty-value');
     var priceEl = item.el.querySelector('[data-item-price]');
-    var remBtn  = item.el.querySelector('.cart-item__remove');
 
     function render() {
-      qtyEl.textContent  = item.qty;
+      qtyEl.textContent   = item.qty;
       priceEl.textContent = formatPrice(item.qty * item.unitPrice);
-      decBtn.disabled    = item.qty <= 1;
+      decBtn.disabled     = item.qty <= 1;
     }
 
     decBtn.addEventListener('click', function () {
@@ -90,17 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
       item.qty++;
       render();
       recalc();
-    });
-
-    remBtn.addEventListener('click', function () {
-      item.el.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-      item.el.style.opacity    = '0';
-      item.el.style.transform  = 'translateX(1rem)';
-      setTimeout(function () {
-        item.el.remove();
-        item.qty = 0;
-        recalc();
-      }, 250);
     });
 
     render();

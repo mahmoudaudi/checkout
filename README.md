@@ -209,9 +209,6 @@ The payment page shows an animated credit card that mirrors the form in real tim
 
 Amex uses 15-digit formatting and a 4-digit CVV. All other cards use 16-digit formatting and a 3-digit CVV. The input `maxlength`, format mask, and card preview all adapt automatically when the type changes.
 
-### Cart Empty Guard
-
-Removing all items disables the Proceed button and shows an empty-state message. The button re-enables as soon as at least one item is in the cart.
 
 ### Mobile Order Summary Accordion
 

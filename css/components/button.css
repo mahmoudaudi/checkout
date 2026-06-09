@@ -67,8 +67,8 @@
   box-shadow: none;
 }
 
-/* Spin loader icon — only when explicitly in a loading state */
-.btn--primary.btn--loading:disabled svg {
+/* Spin loader icon when disabled/loading */
+.btn--primary:disabled svg {
   animation: spin 0.8s linear infinite;
 }
 
