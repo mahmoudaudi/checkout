@@ -13,7 +13,7 @@ function buildProgressSteps(containerId, currentStep) {
     { id: 6, short: 'Done',    full: 'Confirmation' },
   ];
 
-  var CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  var CHECK = '<i data-lucide="check" width="12" height="12" stroke-width="2.5" aria-hidden="true"></i>';
 
   var ol = document.createElement('ol');
   ol.className = 'progress-steps__list';

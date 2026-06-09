@@ -31,4 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var success = Math.random() < 0.7;
     window.location.href = success ? 'success.html' : 'failure.html';
   }, DURATION + 200);
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });

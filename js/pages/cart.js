@@ -99,4 +99,5 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   recalc();
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });

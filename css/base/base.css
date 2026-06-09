@@ -31,7 +31,7 @@ body {
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-normal);
   color: var(--color-gray-900);
-  background: #fafafa;
+  background: #f8fafc;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -186,8 +186,8 @@ dl, dt, dd {
 }
 
 @keyframes pulseBtn {
-  0%, 100% { box-shadow: 0 4px 14px rgba(79,70,229,0.35), 0 0 0 0 rgba(99,102,241,0); }
-  50%       { box-shadow: 0 4px 14px rgba(79,70,229,0.45), 0 0 0 8px rgba(99,102,241,0); }
+  0%, 100% { box-shadow: 0 4px 14px rgba(55,48,163,0.40), 0 0 0 0 rgba(67,56,202,0); }
+  50%       { box-shadow: 0 4px 14px rgba(55,48,163,0.50), 0 0 0 8px rgba(67,56,202,0); }
 }
 
 @keyframes successBounce {

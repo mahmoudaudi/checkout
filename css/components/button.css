@@ -182,6 +182,13 @@
   }
 }
 
+/* ── Mobile-only confirm CTA (confirmation page — sidebar handles desktop) ── */
+@media (min-width: 64rem) {
+  .btn--confirm-mobile {
+    display: none;
+  }
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .btn {

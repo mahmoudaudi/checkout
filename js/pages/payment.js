@@ -28,9 +28,10 @@ document.addEventListener('DOMContentLoaded', function () {
   var previewExpiry = document.getElementById('card-expiry-preview');
   var brandEl       = document.getElementById('card-brand');
 
-  var CREDIT_CARD_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>';
+  var CREDIT_CARD_SVG = '<i data-lucide="credit-card" width="22" height="22" aria-hidden="true"></i>';
 
   function updateBrand(type) {
+    if (brandEl.getAttribute('data-card-type') === type) return;
     brandEl.setAttribute('data-card-type', type);
     if (type === 'visa') {
       brandEl.innerHTML = '<span class="card-preview__brand-text card-preview__brand-text--visa">VISA</span>';
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
       brandEl.innerHTML = ''; // MC circles drawn via CSS pseudo-elements
     } else {
       brandEl.innerHTML = CREDIT_CARD_SVG;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
     // Amex CID lives on the front face — unflip the card when switching to Amex
     if (amexCid) {
@@ -226,11 +228,20 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('cvv').addEventListener('focus', function () {
     if (currentType !== 'amex') cardFlip.classList.add('card-flip--flipped');
   });
+
+  // pointerdown on the submit button fires before CVV blur — setting this flag
+  // prevents the 0.65s 3D flip animation from starting at the same time as form
+  // validation DOM updates, which causes a visible freeze on mobile
+  var submitting = false;
   document.getElementById('cvv').addEventListener('blur', function () {
-    cardFlip.classList.remove('card-flip--flipped');
+    if (!submitting) cardFlip.classList.remove('card-flip--flipped');
   });
 
   // ── Form submit ──────────────────────────────────────────────────────────────
+
+  document.getElementById('next-btn').addEventListener('pointerdown', function () {
+    submitting = true;
+  });
 
   document.getElementById('pay-form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -242,7 +253,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var invalid = [holderInput, numberInput, expiryInput, cvvValidated]
       .find(function (i) { return !i.checkValidity(); });
-    if (invalid) { invalid.focus(); return; }
+    if (invalid) {
+      submitting = false;
+      cardFlip.classList.remove('card-flip--flipped');
+      // scrollIntoView + preventScroll avoids triggering a second scroll and
+      // prevents the virtual keyboard from reopening mid-scroll on mobile
+      invalid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      invalid.focus({ preventScroll: true });
+      return;
+    }
 
     var nextBtn = document.getElementById('next-btn');
     nextBtn.disabled = true;
@@ -250,14 +269,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // CVV is intentionally not saved — must never be stored even in sessionStorage
     // Only the last 4 digits of the card number are stored — full PAN must never be stored
-    CheckoutState.set({
-      paymentInfo: {
-        cardholderName: holderInput.value.trim(),
-        cardNumber:     numberInput.value.replace(/\D/g, '').slice(-4),
-        expiryDate:     expiryInput.value.trim(),
-      }
-    });
-
-    window.location.href = 'confirmation.html';
+    try {
+      CheckoutState.set({
+        paymentInfo: {
+          cardholderName: holderInput.value.trim(),
+          cardNumber:     numberInput.value.replace(/\D/g, '').slice(-4),
+          expiryDate:     expiryInput.value.trim(),
+        }
+      });
+      window.location.href = 'confirmation.html';
+    } catch (err) {
+      nextBtn.disabled = false;
+      nextBtn.querySelector('span').textContent = 'Review Order';
+      submitting = false;
+    }
   });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });

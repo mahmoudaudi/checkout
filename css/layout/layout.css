@@ -12,7 +12,7 @@
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: #fafafa;
+  background: #f8fafc;
   animation: fadeIn var(--transition-slow) ease-out both;
 }
 
@@ -571,7 +571,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  background: #fafafa;
+  background: #f8fafc;
 }
 
 /* ── LEFT: white form panel ── */

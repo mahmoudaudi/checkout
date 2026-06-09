@@ -52,12 +52,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Guard against double-submit if the user clicks rapidly
   var confirming = false;
-  document.getElementById('confirm-btn').addEventListener('click', function () {
+  function handleConfirm() {
     if (confirming) return;
     confirming = true;
-    var btn = document.getElementById('confirm-btn');
-    btn.disabled = true;
-    btn.querySelector('span').textContent = 'Processing…';
+    ['confirm-btn', 'confirm-btn-mobile'].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (!btn) return;
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Processing…';
+    });
     window.location.href = 'processing.html';
-  });
+  }
+  document.getElementById('confirm-btn').addEventListener('click', handleConfirm);
+  var mobileCta = document.getElementById('confirm-btn-mobile');
+  if (mobileCta) mobileCta.addEventListener('click', handleConfirm);
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });

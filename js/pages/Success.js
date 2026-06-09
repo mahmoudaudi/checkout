@@ -58,12 +58,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var cards = [
     {
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+      icon: '<i data-lucide="mail" width="18" height="18" aria-hidden="true"></i>',
       label: 'Confirmation sent to',
       value: email,
     },
     {
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>',
+      icon: '<i data-lucide="credit-card" width="18" height="18" aria-hidden="true"></i>',
       label: 'Charged to card ending',
       value: cardMask,
     },
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '</div>';
     grid.appendChild(div);
   });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 
   // Confetti burst (pure CSS + JS, no library)
   spawnConfetti();

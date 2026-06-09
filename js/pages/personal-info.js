@@ -122,4 +122,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.location.href = 'address.html';
   });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });

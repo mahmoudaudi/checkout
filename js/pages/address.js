@@ -127,4 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.location.href = 'payment.html';
   });
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 });
