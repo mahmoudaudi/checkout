@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (confirming) return;
     confirming = true;
     var btn = document.getElementById('confirm-btn');
-    btn.classList.add('btn--loading');
     btn.disabled = true;
     btn.querySelector('span').textContent = 'Processing…';
     window.location.href = 'processing.html';

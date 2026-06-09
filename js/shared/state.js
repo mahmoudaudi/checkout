@@ -10,6 +10,13 @@ const CheckoutState = (function () {
       billingAddressLine1: '', billingAddressLine2: '', billingPostalCode: '',
     },
     paymentInfo: { cardholderName: '', cardNumber: '', expiryDate: '', cvv: '' },
+    cartInfo: {
+      items: [
+        { id: '1', name: 'Premium Wireless Headphones', variant: 'Black · Default Title', img: 'assets/images/headphone.avif', unitPrice: 80.00, qty: 1 },
+        { id: '2', name: 'Smart Watch',                variant: 'White · Default Title', img: 'assets/images/wear.avif',       unitPrice: 50.00, qty: 1 }
+      ],
+      shipping: 12.99
+    },
   };
 
   return {

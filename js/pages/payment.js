@@ -40,6 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       brandEl.innerHTML = CREDIT_CARD_SVG;
     }
+    // Amex CID is on front; flip back if switching to Amex while card is flipped
+    if (amexCid) {
+      amexCid.hidden = (type !== 'amex');
+      if (type === 'amex' && cardFlip) cardFlip.classList.remove('card-flip--flipped');
+    }
   }
 
   // Restore saved values into preview
@@ -187,9 +192,29 @@ document.addEventListener('DOMContentLoaded', function () {
     previewExpiry.textContent = document.getElementById('expiryDate').value || 'MM/YY';
   });
 
-  // ── CVV ──────────────────────────────────────────────────────────────────────
+  // ── CVV + card flip ──────────────────────────────────────────────────────────
 
-  var cvvValidated = attachValidation('cvv', 'cvv-icon', null);
+  var cardFlip  = document.getElementById('card-flip');
+  var cvcBack   = document.getElementById('card-cvc-back');
+  var cvcFront  = document.getElementById('card-cvc-front');
+  var amexCid   = document.getElementById('amex-cid');
+
+  var cvvValidated = attachValidation('cvv', 'cvv-icon', function () {
+    var val = document.getElementById('cvv').value;
+    if (currentType === 'amex') {
+      cvcFront.textContent = val || '••••';
+    } else {
+      cvcBack.textContent = val || '•••';
+    }
+  });
+
+  document.getElementById('cvv').addEventListener('focus', function () {
+    if (currentType !== 'amex') cardFlip.classList.add('card-flip--flipped');
+  });
+
+  document.getElementById('cvv').addEventListener('blur', function () {
+    cardFlip.classList.remove('card-flip--flipped');
+  });
 
   // ── Form submit ──────────────────────────────────────────────────────────────
 

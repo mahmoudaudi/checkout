@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Review Your Order — Checkout</title>
+  <title>Review Your Order â€” Checkout</title>
   <link rel="icon" type="image/png" href="/assets/images/e-commerce%20with%20name.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
 <body>
 <div class="checkout-split">
 
-  <!-- ══ LEFT: review sections ══ -->
+  <!-- â•â• LEFT: review sections â•â• -->
   <main class="checkout-split__main" id="app">
     <div class="checkout-split__inner">
 
@@ -46,7 +46,7 @@
           </div>
         </header>
 
-        <!-- Review sections — populated by confirmation.js -->
+        <!-- Review sections â€” populated by confirmation.js -->
         <div class="checkout-split__review-body">
 
           <section class="review-section review-section--purple">
@@ -111,7 +111,7 @@
     </div>
   </main>
 
-  <!-- ══ RIGHT: dark sidebar with confirm CTA ══ -->
+  <!-- â•â• RIGHT: dark sidebar with confirm CTA â•â• -->
   <aside class="checkout-split__sidebar" aria-label="Order summary">
 
     <p class="sidebar-summary__label">Order Summary</p>
@@ -119,45 +119,45 @@
     <div class="sidebar-summary__items">
       <div class="sidebar-item">
         <div class="sidebar-item__badge">
-          <div class="sidebar-item__img-wrap"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
+          <div class="sidebar-item__img-wrap"><img src="assets/images/headphone.avif" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
           <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
         </div>
         <div class="sidebar-item__body">
           <p class="sidebar-item__name">Premium Wireless Headphones</p>
-          <p class="sidebar-item__variant">Silver · Default</p>
+          <p class="sidebar-item__variant">Black · Default Title</p>
         </div>
-        <span class="sidebar-item__price">$249.99</span>
+        <span class="sidebar-item__price">$80.00</span>
       </div>
       <div class="sidebar-item">
         <div class="sidebar-item__badge">
-          <div class="sidebar-item__img-wrap"><img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
+          <div class="sidebar-item__img-wrap"><img src="assets/images/wear.avif" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
           <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
         </div>
         <div class="sidebar-item__body">
-          <p class="sidebar-item__name">Leather Laptop Bag</p>
-          <p class="sidebar-item__variant">Dark Brown · 15"</p>
+          <p class="sidebar-item__name">Smart Watch</p>
+          <p class="sidebar-item__variant">White · Default Title</p>
         </div>
-        <span class="sidebar-item__price">$129.99</span>
+        <span class="sidebar-item__price">$50.00</span>
       </div>
     </div>
 
     <div class="sidebar-summary__divider" aria-hidden="true"></div>
 
     <dl class="sidebar-summary__rows">
-      <div class="sidebar-summary__row"><dt>Subtotal</dt><dd>$379.98</dd></div>
+      <div class="sidebar-summary__row"><dt>Subtotal</dt><dd>$130.00</dd></div>
       <div class="sidebar-summary__row"><dt>Shipping</dt><dd>$12.99</dd></div>
     </dl>
 
     <dl class="sidebar-summary__total">
       <dt>Total</dt>
-      <dd>$392.97</dd>
+      <dd>$142.99</dd>
     </dl>
 
-    <!-- Confirm CTA — id="confirm-btn" required by confirmation.js -->
+    <!-- Confirm CTA â€” id="confirm-btn" required by confirmation.js -->
     <div class="sidebar-summary__cta">
       <button type="button" class="btn btn--primary btn--full btn--icon-start btn--confirm" id="confirm-btn">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span>Confirm &amp; Pay $392.97</span>
+        <span>Confirm &amp; Pay $142.99</span>
       </button>
       <p class="sidebar-summary__cta-note">You won't be charged until confirmed</p>
     </div>
@@ -173,7 +173,9 @@
 
 <script src="js/data/countries.js"></script>
 <script src="js/shared/state.js"></script>
+<script src="js/shared/order-summary.js"></script>
 <script src="js/shared/progress-steps.js"></script>
 <script src="js/pages/confirmation.js"></script>
 </body>
 </html>
+

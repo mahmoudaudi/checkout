@@ -49,10 +49,10 @@
         <!-- Cart items -->
         <section class="page__items" aria-label="Cart items">
 
-          <article class="cart-item" data-item-id="1" data-unit-price="249.99">
+          <article class="cart-item" data-item-id="1" data-unit-price="80.00">
             <div class="cart-item__img-wrap cart-item__img-wrap--skeleton">
               <img
-                src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop"
+                src="assets/images/headphone.avif"
                 alt="Premium Wireless Headphones" class="cart-item__img"
                 width="112" height="112" loading="lazy"
                 onload="this.closest('.cart-item__img-wrap').classList.remove('cart-item__img-wrap--skeleton')"
@@ -62,7 +62,7 @@
               <p class="cart-item__name">Premium Wireless Headphones</p>
               <span class="cart-item__badge">
                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                Silver · Default Title
+                Black · Default Title
               </span>
               <div class="cart-item__footer">
                 <div class="cart-item__qty-controls" role="group" aria-label="Quantity">
@@ -74,25 +74,25 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
                   </button>
                 </div>
-                <span class="cart-item__price" data-item-price>$249.99</span>
+                <span class="cart-item__price" data-item-price>$80.00</span>
               </div>
             </div>
           </article>
 
-          <article class="cart-item" data-item-id="2" data-unit-price="129.99">
+          <article class="cart-item" data-item-id="2" data-unit-price="50.00">
             <div class="cart-item__img-wrap cart-item__img-wrap--skeleton">
               <img
-                src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop"
-                alt="Leather Laptop Bag" class="cart-item__img"
+                src="assets/images/wear.avif"
+                alt="Smart Watch" class="cart-item__img"
                 width="112" height="112" loading="lazy"
                 onload="this.closest('.cart-item__img-wrap').classList.remove('cart-item__img-wrap--skeleton')"
                 onerror="this.closest('.cart-item__img-wrap').classList.remove('cart-item__img-wrap--skeleton')">
             </div>
             <div class="cart-item__body">
-              <p class="cart-item__name">Leather Laptop Bag</p>
+              <p class="cart-item__name">Smart Watch</p>
               <span class="cart-item__badge">
                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                Dark Brown · 15"
+                White · Default Title
               </span>
               <div class="cart-item__footer">
                 <div class="cart-item__qty-controls" role="group" aria-label="Quantity">
@@ -104,7 +104,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
                   </button>
                 </div>
-                <span class="cart-item__price" data-item-price>$129.99</span>
+                <span class="cart-item__price" data-item-price>$50.00</span>
               </div>
             </div>
           </article>
@@ -119,7 +119,7 @@
                   aria-expanded="false" aria-controls="order-summary-body">
             <span class="order-summary__toggle-label">Order Summary</span>
             <span class="order-summary__toggle-right">
-              <span class="order-summary__toggle-amount">$392.97</span>
+              <span class="order-summary__toggle-amount">$142.99</span>
               <span class="order-summary__toggle-chevron" id="summary-chevron" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
               </span>
@@ -132,7 +132,7 @@
             <dl class="order-summary__rows">
               <div class="order-summary__row">
                 <dt>Subtotal</dt>
-                <dd>$379.98</dd>
+                <dd>$130.00</dd>
               </div>
               <div class="order-summary__row">
                 <dt>Shipping</dt>
@@ -141,7 +141,7 @@
               <div class="order-summary__divider" aria-hidden="true"></div>
               <div class="order-summary__total-row">
                 <dt class="order-summary__total-label">Total</dt>
-                <dd class="order-summary__total-value">$392.97</dd>
+                <dd class="order-summary__total-value">$142.99</dd>
               </div>
             </dl>
           </div>
@@ -165,6 +165,7 @@
     </div>
   </main>
 
+  <script src="js/shared/state.js"></script>
   <script src="js/shared/progress-steps.js"></script>
   <script src="js/pages/cart.js"></script>
 </body>
