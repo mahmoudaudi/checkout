@@ -1,6 +1,6 @@
 # Checkout Flow
 
-A production-quality, multi-step checkout flow built in pure vanilla JavaScript — no frameworks, no build tools, no dependencies beyond a single CDN script for confetti. Inspired by the UX patterns of Stripe and Shopify.
+A production-quality, multi-step checkout flow built with pure HTML, CSS, and vanilla JavaScript — no frameworks, no build tools, no dependencies.
 
 ---
 
@@ -17,23 +17,27 @@ A production-quality, multi-step checkout flow built in pure vanilla JavaScript 
 
 ## How to Run Locally
 
-The project uses ES modules (`type="module"`). ES modules require a proper HTTP server — opening `index.html` as a `file://` URL will not work.
+The project is plain HTML/CSS/JS with no build step. You can open it directly in a browser or serve it with any local server.
 
-**Option 1 — Node.js (no install needed)**
+**Option 1 — Open directly**
+
+Double-click `index.html` in your file explorer, or drag it into a browser tab.
+
+**Option 2 — Node.js**
 
 ```bash
 npx serve .
-# Visit http://localhost:3000/checkout
+# Visit http://localhost:3000
 ```
 
-**Option 2 — Python 3**
+**Option 3 — Python 3**
 
 ```bash
 python -m http.server 8080
-# Visit http://localhost:8080/checkout
+# Visit http://localhost:8080
 ```
 
-**Option 3 — VS Code Live Server**
+**Option 4 — VS Code Live Server**
 
 Install the [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) extension, right-click `index.html`, and choose **Open with Live Server**.
 
@@ -45,61 +49,70 @@ No `npm install`, no build step, no configuration required.
 
 ```
 checkout-project/
-├── index.html                      # Single entry point — all <link> and <script> tags
+├── index.html              # Step 1 — Cart & order summary
+├── personal-info.html      # Step 2 — Name, email, phone
+├── address.html            # Step 3 — Shipping + optional billing address
+├── payment.html            # Step 4 — Card details with live preview
+├── confirmation.html       # Step 5 — Review all details before paying
+├── processing.html         # Transition — animated payment loading screen
+├── success.html            # Terminal — order confirmed + confetti
+├── failure.html            # Terminal — payment failed + recovery options
+│
 ├── css/
-│   ├── base.css                    # Design tokens (variables), reset, global typography
-│   ├── layout.css                  # Page wrapper, grids, form-page card, accordion, billing
-│   ├── animations.css              # Keyframes: fadeIn, slideUp, shimmer, pulse, spin
+│   ├── variables.css       # Design tokens — colors, spacing, radius, shadows
+│   ├── base.css            # Reset, global typography, keyframe animations
+│   ├── layout.css          # Split layout, page wrappers, review sections
 │   └── components/
-│       ├── button.css              # btn block — all variants, sizes, states, loading
-│       ├── card.css                # cart-item, order-summary, info-card
-│       ├── card-preview.css        # Animated floating credit card (payment page)
-│       ├── form.css                # form-field, validation states, billing-checkbox
-│       ├── progress-steps.css      # 6-step progress indicator
-│       └── result.css              # Success / Failure terminal pages
+│       ├── button.css      # All button variants and states
+│       ├── card.css        # Cart items, order summary, empty cart state
+│       ├── card-preview.css # Animated floating credit card (payment page)
+│       ├── form.css        # Form fields, phone input, billing checkbox
+│       ├── progress-steps.css # 6-step progress indicator
+│       ├── processing.css  # Payment loading screen
+│       └── result.css      # Success and failure terminal pages
+│
 └── js/
-    ├── main.js                     # Registers routes and boots the router
-    ├── router.js                   # Client-side SPA router (history.pushState)
-    ├── state/
-    │   └── store.js                # Pub/sub store — single source of truth
-    ├── components/
-    │   ├── icons.js                # Inline SVG icon factory
-    │   ├── ProgressSteps.js        # 6-step progress indicator component
-    │   └── validation.js           # Shared validateAll() force-validate utility
+    ├── data/
+    │   └── countries.js    # Country list with ISO codes and flag emojis
+    ├── shared/
+    │   ├── state.js        # CheckoutState — sessionStorage wrapper
+    │   └── progress-steps.js # buildProgressSteps() — builds the step indicator
     └── pages/
-        ├── CheckoutSummary.js      # Step 1 — Cart review + order summary
-        ├── PersonalInformation.js  # Step 2 — Name, email, phone
-        ├── AddressInformation.js   # Step 3 — Shipping + billing address
-        ├── PaymentDetails.js       # Step 4 — Card entry with live preview
-        ├── Confirmation.js         # Step 5 — Review all details before paying
-        ├── Processing.js           # Transition — animated processing screen
-        ├── Success.js              # Terminal — payment confirmed + confetti
-        └── Failure.js              # Terminal — payment failed + recovery CTAs
+        ├── cart.js         # Qty controls, remove items, proceed guard
+        ├── personal-info.js # Name/email/phone validation + save
+        ├── address.js      # Shipping + billing address, country select
+        ├── payment.js      # Card formatting, type detection, live preview
+        ├── confirmation.js # Reads state and renders review summary
+        ├── processing.js   # Simulated payment delay + redirect
+        └── success.js      # Order number, delivery estimate, copy button
 ```
 
 ---
 
 ## Architecture Decisions
 
-### Pure Vanilla JS with ES Modules
+### Multi-Page Application (MPA)
 
-No React, Vue, or build toolchain. Each page exports a single `mount(container)` function; the router calls it on navigation and replaces the container's entire contents. This keeps each page fully self-contained — no component tree to reconcile, no virtual DOM overhead.
+The checkout is implemented as a set of separate HTML pages. Each page is fully self-contained: it loads its own CSS and JS, reads state on mount, and writes back on submit. Navigation between steps uses `window.location.href`.
 
-ES modules provide native scoping at zero cost. Dynamic imports (`import(...)`) mean unused pages are never loaded until the user actually navigates to them.
+This approach was chosen deliberately:
+- **No framework overhead.** Each page is a plain HTML document — readable without any build tooling or prior framework knowledge.
+- **Natural browser behavior.** The browser handles page transitions, scroll restoration, and history natively. The back button works exactly as expected.
+- **Easy to audit.** Inspecting any page in DevTools shows exactly what's happening, with no virtual DOM or compiled output in the way.
 
-### Client-Side SPA Router
+### SessionStorage State
 
-`js/router.js` maps URL paths to page modules and drives navigation with `history.pushState`. URLs are bookmarkable and the browser back/forward buttons work correctly. A `popstate` listener handles history traversal without a full page reload.
+`js/shared/state.js` exports a `CheckoutState` IIFE that wraps `sessionStorage`. It provides two methods:
 
-### Pub/Sub State Store
-
-`js/state/store.js` is a minimal global store: a plain JS object with `getState()`, `setState(patch)`, and `subscribe(listener)`. Pages read from the store on mount (to pre-fill forms) and write back on submit. State persists across navigation for the lifetime of the session, so navigating back to a previous step restores what the user already typed.
+```js
+CheckoutState.get()        // returns the full state object
+CheckoutState.set(updates) // shallow-merges updates and persists
+```
 
 State shape:
 
 ```js
 {
-  orderItems:   [{ id, name, price, quantity, image }],
   personalInfo: { fullName, email, phone },
   addressInfo: {
     country, city, addressLine1, addressLine2, postalCode,
@@ -107,121 +120,103 @@ State shape:
     billingCountry, billingCity, billingAddressLine1,
     billingAddressLine2, billingPostalCode,
   },
-  paymentInfo:  { cardholderName, cardNumber, expiryDate, cvv },
+  paymentInfo: { cardholderName, cardNumber, expiryDate, cvv },
 }
 ```
 
-### BEM CSS
+Each page reads from `CheckoutState.get()` on load (to restore previously entered values when navigating back) and writes via `CheckoutState.set()` on submit. `sessionStorage` scopes the state to the current browser tab and clears it when the tab is closed.
 
-All class names follow the `Block__Element--Modifier` convention. Layout utilities (`page`, `page__inner`, `page__grid`) live in `layout.css`. Component-specific styles live in `css/components/`. No specificity conflicts; modifiers override base styles with a single class.
+### BEM CSS + Design Tokens
 
-All colors, spacing, shadows, and transitions are CSS custom properties defined in `base.css`. Changing the design system is a single-file edit.
+All class names follow the `Block__Element--Modifier` convention. All colors, spacing values, border radii, shadows, and transitions are CSS custom properties defined in `css/variables.css`. No hardcoded values appear elsewhere in the stylesheets — changing the visual language is a single-file edit.
 
 ### XSS Prevention
 
-User-provided data is always written via `element.textContent`, never `innerHTML`. The only code that uses `innerHTML` is the icon factory in `icons.js`, which generates static SVG strings — never user input.
+User input is always written to the DOM via `element.textContent`, never `innerHTML`. The only `innerHTML` assignments in the codebase write static, hardcoded SVG strings.
 
 ---
 
 ## Validation Strategy
 
-### HTML5 Constraint Validation API
+### Blur-First: Errors Appear After Leaving a Field
 
-All inputs use native validation attributes (`required`, `type`, `pattern`, `minlength`). Validation state is read with `input.checkValidity()` and `input.validationMessage`. Custom error messages are set with `input.setCustomValidity()` to replace browser defaults ("Please fill in this field") with human-friendly copy ("Please enter your full name").
+Each field tracks a `touched` boolean that starts as `false` and is set to `true` on the first `blur` event. Error messages are only shown when `touched === true`.
 
-No third-party form validation library is needed.
-
-### Blur-First: Show Errors After Leaving a Field
-
-Each field tracks a `touched` boolean flag that starts as `false`. The flag is set on the first `blur` event. Error messages are only rendered when `touched === true`.
-
-This means errors never appear while the user is actively typing for the first time — they only appear after the field loses focus. Once touched, the error updates in real time on every `input` event so the user sees immediate positive feedback as they correct mistakes.
+This means errors never appear while the user is typing for the first time. Once a field has been visited, errors update in real time on every `input` event — giving immediate positive feedback as the user corrects mistakes.
 
 ### Force-Validate on Submit
 
-When the user presses Continue, `validateAll()` runs across all required fields regardless of `touched` state. This ensures fields that were skipped entirely (e.g. tabbed past without typing) still show errors before navigation proceeds.
+When the user presses Continue, every required field is force-validated regardless of its `touched` state. Fields that were skipped entirely (never focused) immediately show their error message and block navigation. The page scrolls to the first invalid field.
 
-`validateAll()` calls each input's `_forceValidate()` method, which sets `touched = true` and triggers a sync, immediately showing the error message.
+### HTML5 Constraint Validation API
+
+Inputs use native validation attributes (`required`, `type="email"`, `pattern`, `minlength`). Validity is read with `input.checkValidity()`. Custom error copy is set with `input.setCustomValidity()` to replace default browser messages with human-friendly text.
 
 ### Billing Address Exclusion
 
-Billing address inputs carry the `disabled` attribute when "Same as shipping" is checked. The HTML5 Constraint Validation API excludes `disabled` inputs from validity checks automatically — they cannot block form submission. When the checkbox is unchecked, `disabled` is removed and the fields re-enter validation.
+Billing address inputs carry the `disabled` attribute while "Same as shipping" is checked. The HTML5 Constraint Validation API automatically excludes `disabled` inputs from validity checks, so they cannot block submission. When the checkbox is unchecked, `disabled` is removed and the fields re-enter validation.
 
 ---
 
 ## UX Decisions
 
+### Split Layout
+
+On desktop (≥ 1024 px), the form pages use a two-column split layout: a white form panel on the left and a dark order-summary sidebar on the right. Both columns fill the full viewport height with no page scroll — the form content scrolls independently if needed. On mobile, the columns stack vertically with the summary collapsed into an accordion.
+
 ### 6-Step Progress Indicator
 
-The checkout is split into six named steps: Cart → Personal Info → Address → Payment → Review → Confirmation. A persistent progress bar at the top of every page communicates position (how far into the flow the user is), completion (which steps are done, shown with a checkmark), and direction (what comes next). This reduces checkout abandonment by setting clear expectations about effort remaining.
-
-On narrow mobile screens (< 640 px), step labels are hidden and only the step circles are shown to prevent overflow. Labels reappear on tablet and desktop.
+A persistent progress bar at the top of every page shows position, completion, and direction. Completed steps show a checkmark with a gradient fill. The current step shows a filled circle with a glow shadow. Future steps show an outlined circle with a dashed connector line. On narrow screens (< 640 px), step labels are hidden and only the circles are shown.
 
 ### Live Card Preview
 
-The payment page shows a floating credit card that updates in real time as the user types:
+The payment page shows a floating credit card that updates in real time:
 
 - **Card number** — formatted with spaces in the correct grouping (4-4-4-4 for standard cards, 4-6-5 for Amex)
-- **Cardholder name** — mirrors the name input live
-- **Expiry** — mirrors the MM/YY input with auto-slash insertion
-- **Brand logo** — switches based on detected card type
+- **Cardholder name** — mirrors the name field live
+- **Expiry** — auto-inserts the `/` separator as the user types
+- **Brand logo** — switches dynamically based on the detected card type
 
-Card type is detected from the first digits:
+Card type detection from first digits:
 
-| Card type  | Leading digits                    |
-|------------|-----------------------------------|
-| Visa       | 4                                 |
-| Mastercard | 51–55 or 2221–2720 (new BIN range)|
-| Amex       | 34 or 37                          |
+| Type       | Leading digits                     |
+|------------|------------------------------------|
+| Visa       | 4                                  |
+| Mastercard | 51–55 or 2221–2720 (new BIN range) |
+| Amex       | 34 or 37                           |
 
-Amex uses 15-digit format (4-6-5 grouping). All other cards use 16-digit format (4-4-4-4). The input `maxLength`, `pattern`, and live card formatting all switch when Amex is detected. The CVV field adapts to 4 digits for Amex, 3 for all others.
+For Amex: 15-digit format (4-6-5 grouping), 4-digit CVV. All others: 16-digit format (4-4-4-4), 3-digit CVV. The input `maxlength`, formatting, and card preview all adapt automatically.
+
+### Cart Empty Guard
+
+If the user removes all items from the cart, the Proceed button is disabled and an empty-state message replaces the item list. The page subtitle also updates to reflect the empty state. The button re-enables as soon as items are present.
 
 ### Mobile Order Summary Accordion
 
-On mobile, the order summary collapses into a toggle button that shows the total amount. Tapping expands the full itemized list. On desktop (≥ 1024 px), the toggle is hidden and the full summary is visible as a sticky sidebar positioned at the top of the viewport.
-
-The collapse animation uses `max-height` CSS transition (0 → 1000 px) since `height: auto` is not animatable with CSS transitions.
+On mobile, the order summary collapses into a toggle that shows the running total. Tapping it expands the full itemized breakdown. On desktop, the toggle is hidden and the full summary is always visible in the sidebar.
 
 ### Billing Address Toggle
 
-A "Billing address same as shipping" checkbox (checked by default) hides the billing address form. Unchecking it slides in a separate billing form. The form shows/hides via the same `max-height` CSS transition pattern. Billing inputs are `disabled` while hidden so they are invisible to validation and excluded from form submission.
+"Billing address same as shipping" is checked by default, hiding the billing form. Unchecking it reveals a separate billing address section. The visibility is driven by the `hidden` attribute toggled in JS — the inputs are also `disabled` while hidden to exclude them from validation.
 
-### Button Loading States
+### Success and Failure Pages
 
-Submit and navigate buttons are immediately `disabled` on click and show a spinning loader icon. This prevents double-submission and gives the user confirmation that their action was registered. The spinner is a CSS `animation: spin` on an SVG icon — no animation library required.
+The **Success** page generates a random order number, calculates a 5–7 business day delivery estimate, shows a confetti animation, and provides a copy-to-clipboard button for the order number.
 
-### Success and Failure Terminal Pages
-
-The **Success** page shows all 6 progress steps in the "done" state, a generated order number, a confetti celebration (skipped when `prefers-reduced-motion` is set), and two CTAs: Continue Shopping and View Order.
-
-The **Failure** page provides three recovery paths: Retry Payment (re-submits with existing card details), Change Payment Method (navigates back to the payment form), and Return to Cart. A list of common failure reasons gives users actionable context rather than a generic error message.
+The **Failure** page provides three recovery paths: Retry Payment, Change Payment Method, and Return to Cart — along with a short list of common failure reasons to give users actionable context.
 
 ---
 
 ## Accessibility
 
-### Semantic HTML
-
-Every page uses proper landmark elements: `<main>` for page content, `<aside>` for the order summary sidebar, `<section>` for review groups, `<article>` for info cards. Heading levels follow a strict hierarchy (h1 → h2 → h3) with no skipped levels. Form inputs have associated `<label>` elements via `for`/`id` pairs. Grouped fields use `<fieldset>` and `<legend>`.
-
-### ARIA Attributes
-
-| Attribute | Where used | Purpose |
-|---|---|---|
-| `aria-label` | Icon-only buttons (edit, back) | Provides a text description for screen readers |
-| `aria-describedby` | Form inputs | Points to the error message element; screen readers announce it on focus |
-| `aria-invalid="true"` | Inputs with validation errors | Tells assistive technology the field is invalid |
-| `aria-expanded` | Mobile order summary toggle | Announces current collapsed/expanded state |
-| `aria-controls` | Mobile order summary toggle | Points to the panel ID it controls |
-| `aria-hidden="true"` | Decorative SVGs, background blobs | Removes visual-only elements from the accessibility tree |
-| `role="alert"` | Failure page result card | Announces the error state immediately, without requiring focus |
-
-### Keyboard Navigation
-
-All interactive elements are focusable and operable with the keyboard in natural DOM tab order. No `tabindex` values greater than 0 are used. Focus styles (`outline`) are preserved — the CSS reset does not remove `:focus-visible` styles.
-
-### Color and Motion
-
-Error states use both color (red) and an icon — error information is never communicated by color alone. Text colors meet WCAG AA contrast ratios (4.5:1 for body text).
-
-All CSS animations are wrapped in a `@media (prefers-reduced-motion: reduce)` rule in `base.css` that sets `animation-duration: 0.01ms` and `transition-duration: 0.01ms`. The confetti effect additionally checks `window.matchMedia('(prefers-reduced-motion: reduce)')` in JavaScript and skips entirely when set.
+- Semantic HTML throughout: `<main>`, `<aside>`, `<nav>`, `<article>`, `<section>`, `<fieldset>`, `<legend>`
+- All form inputs have associated `<label>` elements via `for`/`id` pairs
+- `aria-invalid="true"` is set on inputs that fail validation
+- `aria-describedby` links each input to its error message element
+- `aria-label` is used on all icon-only buttons
+- `aria-expanded` and `aria-controls` on the mobile summary accordion toggle
+- `aria-hidden="true"` on all decorative SVGs and background elements
+- `role="alert"` on the failure page result card for immediate announcement
+- All animations respect `@media (prefers-reduced-motion: reduce)`
+- Error states use both color and an icon — never color alone
+- Focus styles are preserved on all interactive elements
