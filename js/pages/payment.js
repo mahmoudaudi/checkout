@@ -48,18 +48,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  var currentType = detectType((info.cardNumber || '').replace(/\D/g, ''));
+  // Only last 4 digits are stored — cannot reliably detect type from them
+  var currentType = 'unknown';
   updateBrand(currentType);
 
   if (info.cardholderName) {
     document.getElementById('cardholderName').value = info.cardholderName;
     previewName.textContent = info.cardholderName;
   }
-  if (info.cardNumber) {
-    var savedDigits = info.cardNumber.replace(/\D/g, '');
-    document.getElementById('cardNumber').value = formatNumber(savedDigits, currentType);
-    previewNumber.textContent = formatNumber(savedDigits, currentType);
-  }
+  // Card number is intentionally not restored — full PAN is never stored
   if (info.expiryDate) {
     document.getElementById('expiryDate').value = info.expiryDate;
     previewExpiry.textContent = info.expiryDate;
@@ -156,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (type !== currentType) {
       currentType = type;
       var isAmex = type === 'amex';
-      cvvInput.maxLength  = isAmex ? 4 : 4;
+      cvvInput.maxLength  = 4;
       cvvInput.pattern    = isAmex ? '[0-9]{4}' : '[0-9]{3,4}';
       cvvInput.placeholder = isAmex ? '1234' : '123';
       cvvInput.dataset.patternMessage = isAmex ? 'Amex CID is 4 digits' : 'CVV must be 3 or 4 digits';
@@ -252,10 +249,11 @@ document.addEventListener('DOMContentLoaded', function () {
     nextBtn.querySelector('span').textContent = 'Saving…';
 
     // CVV is intentionally not saved — must never be stored even in sessionStorage
+    // Only the last 4 digits of the card number are stored — full PAN must never be stored
     CheckoutState.set({
       paymentInfo: {
         cardholderName: holderInput.value.trim(),
-        cardNumber:     numberInput.value.replace(/\s/g, ''),
+        cardNumber:     numberInput.value.replace(/\D/g, '').slice(-4),
         expiryDate:     expiryInput.value.trim(),
       }
     });
