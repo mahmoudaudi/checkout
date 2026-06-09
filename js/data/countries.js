@@ -6,7 +6,7 @@
  * @typedef {{ code: string, name: string, dial: string, flag: string }} Country
  * @type {Country[]}
  */
-export const COUNTRIES = [
+const COUNTRIES = [
   { code: 'AF', name: 'Afghanistan',                        dial: '+93',   flag: '🇦🇫' },
   { code: 'AL', name: 'Albania',                            dial: '+355',  flag: '🇦🇱' },
   { code: 'DZ', name: 'Algeria',                            dial: '+213',  flag: '🇩🇿' },
@@ -198,3 +198,4 @@ export const COUNTRIES = [
   { code: 'ZM', name: 'Zambia',                             dial: '+260',  flag: '🇿🇲' },
   { code: 'ZW', name: 'Zimbabwe',                           dial: '+263',  flag: '🇿🇼' },
 ];
+window.COUNTRIES = COUNTRIES;

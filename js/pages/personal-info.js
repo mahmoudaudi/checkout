@@ -1,0 +1,126 @@
+document.addEventListener('DOMContentLoaded', function () {
+  buildProgressSteps('progress-steps', 2);
+
+  // Populate dial code select
+  var dialSelect = document.getElementById('dialCode');
+  COUNTRIES.forEach(function (c) {
+    var opt = document.createElement('option');
+    opt.value = c.dial;
+    opt.textContent = c.flag + ' ' + c.dial;
+    dialSelect.appendChild(opt);
+  });
+
+  // Restore saved state
+  var state = CheckoutState.get();
+  var info  = state.personalInfo;
+  if (info.fullName) document.getElementById('fullName').value = info.fullName;
+  if (info.email)    document.getElementById('email').value    = info.email;
+  if (info.phone) {
+    // Separate stored "dial number" string back into prefix + number
+    for (var i = 0; i < COUNTRIES.length; i++) {
+      var c = COUNTRIES[i];
+      if (info.phone.startsWith(c.dial + ' ')) {
+        dialSelect.value = c.dial;
+        document.getElementById('phone').value = info.phone.slice(c.dial.length).trim();
+        break;
+      }
+    }
+  }
+
+  // Blur-first validation
+  function attachValidation(inputId, iconId, successId, errorId) {
+    var input   = document.getElementById(inputId);
+    var icon    = iconId    ? document.getElementById(iconId)    : null;
+    var success = successId ? document.getElementById(successId) : null;
+    var error   = document.getElementById(errorId);
+    var touched = false;
+
+    function sync(force) {
+      var hasValue = input.value.trim().length > 0;
+      var valid    = input.checkValidity();
+      var showErr  = !valid && (hasValue || force) && (touched || force);
+
+      input.classList.toggle('form-field__input--error', showErr);
+      input.classList.toggle('form-field__input--valid', valid && hasValue);
+      if (icon) {
+        icon.classList.toggle('form-field__icon--error', showErr);
+        icon.classList.toggle('form-field__icon--valid', valid && hasValue);
+      }
+      if (success) success.hidden = !(valid && hasValue);
+      if (showErr) {
+        error.textContent = input.validity.patternMismatch
+          ? (input.dataset.patternMessage || input.validationMessage)
+          : input.validationMessage;
+        error.hidden = false;
+        input.setAttribute('aria-invalid', 'true');
+      } else {
+        error.hidden = true;
+        input.setAttribute('aria-invalid', 'false');
+      }
+    }
+
+    input.addEventListener('blur',  function () { touched = true; sync(false); });
+    input.addEventListener('input', function () { sync(false); });
+    input._forceValidate = function () { touched = true; sync(true); };
+    return input;
+  }
+
+  // Attach validation to each field
+  var nameInput  = attachValidation('fullName', null, null, 'fullName-error');
+  var emailInput = attachValidation('email',    null, null, 'email-error');
+  var phoneInput = (function () {
+    var input   = document.getElementById('phone');
+    var error   = document.getElementById('phone-error');
+    var touched = false;
+
+    function sync(force) {
+      var hasValue = input.value.trim().length > 0;
+      var valid    = input.checkValidity() && hasValue;
+      var showErr  = !valid && (hasValue || force) && (touched || force);
+      input.classList.toggle('form-field__input--error', showErr);
+      input.classList.toggle('form-field__input--valid', valid);
+      if (showErr) {
+        error.textContent = input.validity.patternMismatch
+          ? input.dataset.patternMessage
+          : input.validationMessage;
+        error.hidden = false;
+        input.setAttribute('aria-invalid', 'true');
+      } else {
+        error.hidden = true;
+        input.setAttribute('aria-invalid', 'false');
+      }
+    }
+
+    input.addEventListener('blur',  function () { touched = true; sync(false); });
+    input.addEventListener('input', function () { sync(false); });
+    input._forceValidate = function () { touched = true; sync(true); };
+    return input;
+  })();
+
+  // Form submit
+  document.getElementById('pi-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    nameInput._forceValidate();
+    emailInput._forceValidate();
+    phoneInput._forceValidate();
+
+    if (!nameInput.checkValidity())  { nameInput.focus();  return; }
+    if (!emailInput.checkValidity()) { emailInput.focus(); return; }
+    if (!phoneInput.checkValidity()) { phoneInput.focus(); return; }
+
+    var nextBtn = document.getElementById('next-btn');
+    nextBtn.disabled = true;
+    nextBtn.querySelector('span').textContent = 'Saving…';
+
+    CheckoutState.set({
+      personalInfo: {
+        fullName: nameInput.value.trim(),
+        email:    emailInput.value.trim(),
+        phone:    dialSelect.value + ' ' + phoneInput.value.trim(),
+      }
+    });
+
+    window.location.href = 'address.html';
+  });
+});

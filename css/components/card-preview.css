@@ -1,29 +1,68 @@
 /*
  * components/card-preview.css
  * BEM block: card-preview
- * Aurora-style animated credit card preview.
- * Inspired by: https://codepen.io/Darkseens/pen/gORLdjx
- *              https://freefrontend.com/css-credit-cards/
+ * Premium banking card preview — aurora glows, holographic shimmer,
+ * realistic EMV chip, NFC contactless icon, hover depth.
+ *
+ * JS contracts preserved (payment.js must not change):
+ *   - [data-card-type="mastercard"] → CSS-drawn circles
+ *   - .card-preview__brand-text--visa / --amex → wordmark styles
+ *   - IDs: card-preview, card-brand, card-number-preview,
+ *          card-name-preview, card-expiry-preview
  */
 
 /* ── Card shell ── */
 .card-preview {
   position: relative;
   height: 11rem;
-  border-radius: 1.125rem;
+  border-radius: 1rem;
   overflow: hidden;
-  /* Deep space base */
-  background:
-    linear-gradient(135deg, #0a0620 0%, #12063a 40%, #05122e 70%, #0a0620 100%);
-  padding: var(--space-5);
+  padding: 1.125rem 1.375rem;
   color: var(--color-white);
+
+  /* Flex column with space-between distributes the 3 rows naturally */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Deep midnight base — visible through transparent aurora patches */
+  background: linear-gradient(
+    145deg,
+    #060b1e 0%,
+    #0d1848 30%,
+    #160b3a 60%,
+    #0b1444 85%,
+    #060b1e 100%
+  );
+
+  /* Layered elevation: glass edge + depth + colored ambient */
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.07),
-    0 2px 4px  rgba(0, 0, 0, 0.5),
-    0 8px 24px rgba(0, 0, 0, 0.45),
-    0 24px 64px rgba(0, 0, 0, 0.4),
-    0 0 80px rgba(80, 30, 220, 0.18);
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.13),
+    0 2px 4px rgba(0, 0, 0, 0.55),
+    0 8px 20px rgba(0, 0, 0, 0.45),
+    0 24px 56px rgba(0, 0, 0, 0.35),
+    0 0 64px rgba(79, 70, 229, 0.2);
+
+  cursor: default;
+  user-select: none;
   animation: slideUp var(--transition-slow) ease-out both;
+  transition:
+    transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+/* Lift on hover — subtle depth cue */
+.card-preview:hover {
+  transform: translateY(-3px) scale(1.006);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    0 40px 80px rgba(0, 0, 0, 0.35),
+    0 0 100px rgba(99, 102, 241, 0.32);
 }
 
 /* ── Aurora edge glows ── */
@@ -31,40 +70,60 @@
   content: '';
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse 55% 90% at -5% 50%,  rgba(30,  90, 255, 0.45) 0%, transparent 65%),
-    radial-gradient(ellipse 55% 90% at 105% 50%, rgba(180,  0, 230, 0.35) 0%, transparent 65%),
-    radial-gradient(ellipse 70% 50% at 50%  -5%, rgba(80,  20, 200, 0.25) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 50% 110%, rgba(120, 40, 255, 0.20) 0%, transparent 55%);
-  pointer-events: none;
   z-index: 0;
+  pointer-events: none;
+  background:
+    /* Left — electric sky blue */
+    radial-gradient(ellipse 55% 100% at -8% 50%,
+      rgba(56, 189, 248, 0.50) 0%,
+      rgba(99, 102, 241, 0.32) 35%,
+      transparent 65%
+    ),
+    /* Right — deep violet */
+    radial-gradient(ellipse 55% 100% at 108% 50%,
+      rgba(168, 85, 247, 0.45) 0%,
+      rgba(99, 102, 241, 0.26) 40%,
+      transparent 65%
+    ),
+    /* Top crown — indigo */
+    radial-gradient(ellipse 80% 55% at 50% -10%,
+      rgba(99, 102, 241, 0.28) 0%,
+      transparent 65%
+    ),
+    /* Bottom accent — cobalt */
+    radial-gradient(ellipse 55% 45% at 28% 115%,
+      rgba(59, 130, 246, 0.18) 0%,
+      transparent 55%
+    );
 }
 
-/* ── Animated holographic shimmer sweep ── */
+/* ── Holographic shimmer sweep ── */
 .card-preview::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    108deg,
-    transparent          30%,
-    rgba(255,255,255,0.04) 42%,
-    rgba(255,255,255,0.10) 50%,
-    rgba(255,255,255,0.04) 58%,
-    transparent          70%
-  );
-  background-size: 250% 100%;
-  animation: cardShimmer 4s ease-in-out infinite;
-  pointer-events: none;
   z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    112deg,
+    transparent          22%,
+    rgba(255,255,255,0.02) 36%,
+    rgba(255,255,255,0.09) 47%,
+    rgba(255,255,255,0.14) 50%,
+    rgba(255,255,255,0.09) 53%,
+    rgba(255,255,255,0.02) 64%,
+    transparent          78%
+  );
+  background-size: 280% 100%;
+  animation: cardShimmer 5s ease-in-out infinite;
 }
 
 @keyframes cardShimmer {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
+  0%   { background-position: 220% center; }
+  100% { background-position: -220% center; }
 }
 
-/* ── All inner content sits above glows ── */
+/* ── All content above glow layers ── */
 .card-preview__top-row,
 .card-preview__number,
 .card-preview__bottom-row {
@@ -72,139 +131,183 @@
   z-index: 2;
 }
 
-/* ── Top row: chip + network icon ── */
+/* ── Top row: chip-wrap + brand icon ── */
 .card-preview__top-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
-/* ── SIM chip — realistic contact pad ── */
+/* ── Chip + NFC icon group ── */
+.card-preview__chip-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── EMV chip — 6-pad contact pattern via layered backgrounds ── */
 .card-preview__chip {
   width: 2.25rem;
   height: 1.75rem;
-  border-radius: 0.3rem;
-  background: linear-gradient(135deg,
-    #c8a84b 0%,
-    #f5d876 22%,
-    #d4a843 38%,
-    #f5ce68 52%,
-    #c49b35 68%,
-    #e8c855 85%,
-    #a87c25 100%
-  );
-  box-shadow:
-    0 1px 3px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+  border-radius: 4px;
+  flex-shrink: 0;
   position: relative;
   overflow: hidden;
-  flex-shrink: 0;
+
+  background:
+    /* Vertical center divider */
+    linear-gradient(to right,
+      transparent                 calc(50% - 0.5px),
+      rgba(68, 42, 4, 0.40)       calc(50% - 0.5px),
+      rgba(68, 42, 4, 0.40)       calc(50% + 0.5px),
+      transparent                 calc(50% + 0.5px)
+    ),
+    /* Upper horizontal divider — 33% */
+    linear-gradient(to bottom,
+      transparent                 calc(33% - 0.5px),
+      rgba(68, 42, 4, 0.32)       calc(33% - 0.5px),
+      rgba(68, 42, 4, 0.32)       calc(33% + 0.5px),
+      transparent                 calc(33% + 0.5px)
+    ),
+    /* Lower horizontal divider — 67% */
+    linear-gradient(to bottom,
+      transparent                 calc(67% - 0.5px),
+      rgba(68, 42, 4, 0.32)       calc(67% - 0.5px),
+      rgba(68, 42, 4, 0.32)       calc(67% + 0.5px),
+      transparent                 calc(67% + 0.5px)
+    ),
+    /* Golden base */
+    linear-gradient(
+      145deg,
+      #b08824 0%,
+      #ecc54e 18%,
+      #c89230 34%,
+      #f2d060 50%,
+      #c8902c 65%,
+      #e2bc44 82%,
+      #a0721a 100%
+    );
+
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 195, 60, 0.22),
+    inset 0 1px 1px rgba(255, 240, 180, 0.38),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.28);
 }
 
-/* Chip contact lines — horizontal + vertical grid */
+/* Outer contact pad border */
 .card-preview__chip::before {
   content: '';
   position: absolute;
-  inset: 4px;
-  border: 1px solid rgba(90, 55, 5, 0.45);
+  inset: 3px;
+  border: 1px solid rgba(68, 42, 4, 0.42);
   border-radius: 2px;
 }
 
-.card-preview__chip::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(90, 55, 5, 0.3);
-  transform: translateY(-50%);
+/* ── Contactless NFC icon ── */
+/* WiFi icon rotated 90° = standard EMV contactless indicator */
+.card-preview__contactless {
+  display: block;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: rgba(255, 255, 255, 0.4);
+  transform: rotate(90deg);
+  flex-shrink: 0;
 }
 
-/* ── Network brand icon — switches between card types ── */
+/* ── Brand icon area ── */
 .card-preview__brand-icon {
   display: flex;
   align-items: center;
-  gap: 0;
   flex-shrink: 0;
   min-width: 3.25rem;
   justify-content: flex-end;
 }
 
-/* Default: SVG shown when no type detected */
 .card-preview__brand-icon svg {
   display: block;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.45);
 }
 
-/* Mastercard pseudo-elements — hidden by default */
+/* Mastercard pseudo-element circles — hidden by default */
 .card-preview__brand-icon::before,
 .card-preview__brand-icon::after {
   content: '';
   display: none;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.875rem;
+  height: 1.875rem;
   border-radius: var(--radius-full);
-  opacity: 0.85;
 }
 
-/* Mastercard: two overlapping circles */
+/* Mastercard — red circle */
 .card-preview__brand-icon[data-card-type="mastercard"]::before {
   display: block;
   background: #eb001b;
-  margin-inline-end: -0.55rem;
+  margin-inline-end: -0.7rem;
+  opacity: 0.92;
+  box-shadow: 0 2px 8px rgba(235, 0, 27, 0.55);
 }
 
+/* Mastercard — amber circle */
 .card-preview__brand-icon[data-card-type="mastercard"]::after {
   display: block;
   background: #f79e1b;
+  opacity: 0.92;
+  box-shadow: 0 2px 8px rgba(247, 158, 27, 0.45);
 }
 
 .card-preview__brand-icon[data-card-type="mastercard"] svg { display: none; }
 
-/* Visa / Amex: hide MC circles, show brand text */
+/* Visa / Amex — brand text replaces SVG icon */
 .card-preview__brand-icon[data-card-type="visa"] svg,
 .card-preview__brand-icon[data-card-type="amex"] svg { display: none; }
 
-/* ── Brand text (Visa / Amex wordmarks) ── */
+/* ── Brand wordmarks ── */
 .card-preview__brand-text {
   font-weight: 900;
-  color: rgba(255,255,255,0.92);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
 }
 
 .card-preview__brand-text--visa {
   font-family: 'Times New Roman', Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.625rem;
   font-style: italic;
+  font-weight: 900;
   letter-spacing: -0.04em;
+  color: rgba(255, 255, 255, 0.96);
   text-shadow:
-    0 1px 4px rgba(0,0,0,0.4),
-    0 0 20px rgba(100,160,255,0.4);
+    0 0 28px rgba(160, 210, 255, 0.65),
+    0 2px 6px rgba(0, 0, 0, 0.45);
 }
 
 .card-preview__brand-text--amex {
-  font-size: 0.65rem;
-  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* ── Card number ── */
 .card-preview__number {
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-base);
-  letter-spacing: 0.2em;
-  margin-block: var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  /* Reset paragraph margin — flex justify-content handles vertical rhythm */
+  margin-block: 0;
   color: rgba(255, 255, 255, 0.92);
   text-shadow:
-    0 0 20px rgba(120, 80, 255, 0.6),
-    0 1px 3px rgba(0,0,0,0.4);
+    0 0 24px rgba(148, 130, 255, 0.72),
+    0 1px 3px rgba(0, 0, 0, 0.5);
   transition: opacity var(--transition-base);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* ── Bottom row ── */
+/* ── Bottom row: cardholder + expiry ── */
 .card-preview__bottom-row {
   display: flex;
   justify-content: space-between;
@@ -227,33 +330,30 @@
 
 .card-preview__group-label {
   font-size: 0.5rem;
-  color: rgba(255, 255, 255, 0.38);
-  letter-spacing: 0.15em;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .card-preview__group-value {
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: rgba(255, 255, 255, 0.90);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.92);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  letter-spacing: 0.05em;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   transition: opacity var(--transition-base);
 }
 
-/* ── Responsive ── */
+/* ── Tablet (≥ 640px) ── */
 @media (min-width: 40rem) {
   .card-preview {
     height: 12.5rem;
-    padding: var(--space-6);
-    border-radius: 1.25rem;
-  }
-
-  .card-preview__number {
-    font-size: var(--font-size-lg);
+    padding: 1.375rem 1.625rem;
+    border-radius: 1.125rem;
   }
 
   .card-preview__chip {
@@ -261,18 +361,32 @@
     height: 2rem;
   }
 
-  .card-preview__brand-icon[data-card-type="mastercard"]::before,
-  .card-preview__brand-icon[data-card-type="mastercard"]::after {
-    width: 1.75rem;
-    height: 1.75rem;
+  .card-preview__contactless {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .card-preview__brand-icon::before,
+  .card-preview__brand-icon::after {
+    width: 2.125rem;
+    height: 2.125rem;
   }
 
   .card-preview__brand-icon[data-card-type="mastercard"]::before {
-    margin-inline-end: -0.65rem;
+    margin-inline-end: -0.8rem;
   }
 
   .card-preview__brand-text--visa {
-    font-size: 1.55rem;
+    font-size: 1.875rem;
+  }
+
+  .card-preview__number {
+    font-size: var(--font-size-base);
+    letter-spacing: 0.25em;
+  }
+
+  .card-preview__group-label {
+    font-size: 0.5625rem;
   }
 
   .card-preview__group-value {
@@ -280,14 +394,15 @@
   }
 }
 
+/* ── Desktop (≥ 1024px) ── */
 @media (min-width: 64rem) {
   .card-preview {
-    height: 13.5rem;
-    padding: var(--space-7);
+    height: 10rem;
+    padding: 1.125rem 1.375rem;
   }
 
   .card-preview__number {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-sm);
     letter-spacing: 0.22em;
   }
 
@@ -296,7 +411,7 @@
   }
 
   .card-preview__group-value {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-xs);
   }
 }
 
@@ -306,6 +421,7 @@
     animation: none;
   }
 
+  .card-preview,
   .card-preview__number,
   .card-preview__group-value {
     transition: none;

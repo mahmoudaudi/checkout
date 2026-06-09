@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — Checkout</title>
+  <link rel="icon" type="image/png" href="/assets/images/e-commerce%20with%20name.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components/button.css">
+  <link rel="stylesheet" href="css/pages/result.css">
+  <style>html, body { height: 100%; } #app { min-height: 100%; display: flex; flex-direction: column; }</style>
+</head>
+<body>
+  <main class="page page--centered" id="app">
+
+    <article class="result result--success" aria-label="Order confirmed">
+
+      <!-- Background glow blobs -->
+      <div class="result__deco result__deco--top-right result__deco--success" aria-hidden="true"></div>
+      <div class="result__deco result__deco--bottom-left result__deco--purple" aria-hidden="true"></div>
+
+      <!-- Success icon -->
+      <div class="result__icon-wrap" aria-hidden="true">
+        <div class="result__pulse result__pulse--success"></div>
+        <div class="result__icon-circle result__icon-circle--success">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+      </div>
+
+      <!-- Title -->
+      <h1 class="result__title result__title--success">Payment Successful!</h1>
+      <p class="result__subtitle">Your order has been confirmed and is being processed</p>
+
+      <!-- Order number card -->
+      <div class="result__order-card">
+        <p class="result__order-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
+          Order Number
+        </p>
+        <p class="result__order-number" id="order-number">—</p>
+      </div>
+
+      <!-- Info cards row -->
+      <div class="result__info-grid" id="info-grid">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Delivery estimate -->
+      <div class="result__delivery">
+        <p class="result__delivery-label">Estimated Delivery</p>
+        <p class="result__delivery-value" id="delivery-date">—</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="result__actions">
+        <button type="button" class="btn btn--primary btn--full btn--icon-start" onclick="window.location.href='index.html'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Continue Shopping</span>
+        </button>
+        <button type="button" class="btn btn--secondary btn--full" onclick="window.print()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <span>Print Receipt</span>
+        </button>
+      </div>
+
+    </article>
+
+  </main>
+
+  <script src="js/shared/state.js"></script>
+  <script src="js/pages/success.js"></script>
+</body>
+</html>

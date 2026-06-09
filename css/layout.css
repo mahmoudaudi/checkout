@@ -1,62 +1,37 @@
 /*
  * layout.css
  * Page shell, grid layouts, and structural BEM blocks.
- * BEM block: page
- * Covers: page wrapper, inner container, header variants, grids.
- *
- * Dark background paradigm: .page fills the viewport with a deep navy
- * gradient. Cards (form-page, result, etc.) appear as white panels.
- * All text directly on .page must be light-colored.
- */
-
-/*
- * layout.css
- * Page shell, grid layouts, and structural BEM blocks.
- *
- * Updates:
- *   - Order summary mobile accordion (toggle + collapsible body)
- *   - Billing address form section (show/hide toggle)
- *   - Cart image skeleton shimmer loader
+ * BEM blocks: page, checkout-split, sidebar-summary, review-section
  */
 
 /* ══════════════════════════════════════
-   PAGE — outer wrapper (viewport-locked, no page-level scroll)
+   PAGE — outer wrapper
    ══════════════════════════════════════ */
 
 .page {
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--gradient-page-bg);
   animation: fadeIn var(--transition-slow) ease-out both;
 }
 
-/* Centered variant — Processing page (compact content, vertically centered) */
 .page--centered {
   align-items: center;
   justify-content: center;
+  padding: var(--space-4);
 }
 
-/* ── Inner container — scrollable if content overflows (scrollbar hidden) ── */
+/* ── Inner container ── */
 .page__inner {
   flex: 1;
-  max-height: 100%;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overscroll-behavior: contain;
   max-width: var(--max-width-lg);
   margin-inline: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-3) var(--space-3);
-}
-
-.page__inner::-webkit-scrollbar {
-  display: none;
+  padding: var(--space-3) var(--space-4);
 }
 
 .page__inner--wide {
@@ -64,44 +39,48 @@
 }
 
 /* ══════════════════════════════════════
-   CHECKOUT HEADER — brand identity bar
+   CHECKOUT HEADER
    ══════════════════════════════════════ */
 
 .checkout-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-block: var(--space-1);
-  padding-inline: var(--space-1);
   flex-shrink: 0;
 }
 
 .checkout-header__brand {
   display: flex;
   align-items: center;
-  text-decoration: none;
 }
 
 .checkout-header__logo {
-  height: 2.75rem;
-  width: auto;
-  object-fit: contain;
-  object-position: left center;
+  height: 5rem;
+  width: 5rem;
+  object-fit: cover;
+  object-position: center 32%;
+}
+
+@media (min-width: 40rem) {
+  .checkout-header__logo { height: 6rem; width: 6rem; }
 }
 
 .checkout-header__secure {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
-  font-size: var(--font-size-xs);
+  gap: 5px;
+  font-size: 0.75rem;
   font-weight: var(--font-weight-medium);
   color: var(--color-gray-400);
   user-select: none;
+  letter-spacing: 0.01em;
 }
 
-/* ── Page header (cart page — sits on dark bg) ── */
+/* ══════════════════════════════════════
+   PAGE HEADER / TITLE (cart page)
+   ══════════════════════════════════════ */
+
 .page__header {
-  margin-block-end: var(--space-5);
   padding-inline: var(--space-2);
 }
 
@@ -110,32 +89,30 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-/* ── Icon wrap (brand gradient circle) ── */
 .page__icon-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-purple);
   color: var(--color-white);
   flex-shrink: 0;
+  box-shadow: var(--shadow-btn-primary);
 }
 
 .page__icon-wrap--brand {
   background: var(--gradient-brand);
 }
 
-/* ── Page title (on dark background) ── */
 .page__title {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
   line-height: var(--line-height-tight);
-  /* Gradient text reads well on dark bg */
+  letter-spacing: -0.03em;
 }
 
 .page__title--gradient {
@@ -146,58 +123,48 @@
 }
 
 .page__subtitle {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-sm);
   color: var(--color-gray-500);
+  font-weight: var(--font-weight-normal);
 }
 
-/* ── Cart summary grid (2/3 items + 1/3 sidebar) ── */
-.page__grid {
-  margin-inline: auto;
-}
+/* ══════════════════════════════════════
+   CART SUMMARY GRID (index.html)
+   ══════════════════════════════════════ */
 
 .page__grid--summary {
-  max-width: var(--max-width-xl);
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-4);
+  gap: var(--space-5);
+  width: 100%;
 }
 
-/* ── Cart item list ── */
 .page__items {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
-/* ── Confirmation grid ── */
-.page__grid--confirmation {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-5);
-}
-
-/* ── Review sections column ── */
-.review-sections {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+/* Order summary appears above cart items on mobile */
+@media (max-width: 63.9375rem) {
+  .order-summary {
+    order: -1;
+  }
 }
 
 /* ══════════════════════════════════════
-   FORM PAGE CARD — white panel on dark bg
+   FORM PAGE CARD (legacy pages only)
    ══════════════════════════════════════ */
 
 .form-page {
   background: var(--color-white);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-card);
-  padding: var(--space-4) var(--space-4);
+  padding: var(--space-5);
   position: relative;
-  overflow: hidden;
   animation: slideUp var(--transition-slow) ease-out both;
 }
 
-/* Gradient top-line accent */
 .form-page::before {
   content: '';
   position: absolute;
@@ -206,18 +173,6 @@
   height: 3px;
   background: var(--gradient-brand);
   border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
-  opacity: 0.9;
-}
-
-.form-page__header {
-  margin-block-end: var(--space-3);
-}
-
-.form-page__header--icon-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-block-end: var(--space-2);
 }
 
 .form-page__header-icon {
@@ -230,46 +185,27 @@
   border-radius: var(--radius-lg);
   color: var(--color-white);
   flex-shrink: 0;
-  box-shadow: var(--shadow-purple);
-}
-
-.form-page__title {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-900);
-  margin-block-end: 2px;
-  letter-spacing: -0.02em;
-}
-
-.form-page__subtitle {
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-500);
-}
-
-.form-page__footer {
-  margin-block-start: var(--space-3);
-  padding-block-start: var(--space-3);
-  border-top: 1px solid var(--color-gray-100);
+  box-shadow: var(--shadow-btn-primary);
 }
 
 /* ══════════════════════════════════════
-   REVIEW SECTION CARDS (Confirmation page)
+   REVIEW SECTION CARDS (confirmation)
    ══════════════════════════════════════ */
 
 .review-section {
   border-radius: var(--radius-xl);
   padding: var(--space-4);
-  border: 1px solid;
+  border: 1.5px solid var(--color-gray-100);
+  background: var(--color-white);
   animation: slideUp var(--transition-slow) ease-out both;
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
 }
 
 .review-section:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  border-color: var(--color-indigo-100);
 }
 
-/* Uniform clean white — color coding adds noise, not meaning */
 .review-section--purple,
 .review-section--blue,
 .review-section--pink {
@@ -302,7 +238,7 @@
   border-radius: var(--radius-md);
   color: var(--color-white);
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 4px 10px rgba(79,70,229,0.25);
 }
 
 .review-section__title {
@@ -315,9 +251,7 @@
   letter-spacing: -0.01em;
 }
 
-.review-section__edit-label {
-  display: none;
-}
+.review-section__edit-label { display: none; }
 
 .review-section__details {
   font-size: var(--font-size-sm);
@@ -335,8 +269,8 @@
 .review-section__detail--mono {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
-  color: var(--color-gray-700);
   letter-spacing: 0.05em;
+  color: var(--color-gray-700);
 }
 
 .review-section__detail--muted {
@@ -345,10 +279,9 @@
 }
 
 /* ══════════════════════════════════════
-   ORDER SUMMARY — MOBILE ACCORDION
+   ORDER SUMMARY ACCORDION (cart page)
    ══════════════════════════════════════ */
 
-/* Toggle button — visible only on mobile */
 .order-summary__toggle {
   display: flex;
   align-items: center;
@@ -393,18 +326,17 @@
   display: flex;
   color: var(--color-gray-400);
   transition: transform var(--transition-base);
-  transform: rotate(90deg); /* point down */
+  transform: rotate(90deg);
 }
 
 .order-summary__toggle-chevron--open {
-  transform: rotate(-90deg); /* point up when open */
+  transform: rotate(-90deg);
 }
 
-/* Collapsible body */
 .order-summary__body {
   overflow: hidden;
   max-height: 1000px;
-  transition: max-height 0.35s ease, opacity 0.25s ease;
+  transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.25s ease;
   opacity: 1;
   padding: var(--space-5);
 }
@@ -415,7 +347,6 @@
   padding-block: 0;
 }
 
-/* ── Order Summary Footer — always-visible CTA area ── */
 .order-summary__footer {
   padding: var(--space-4) var(--space-5);
   border-top: 1px solid var(--color-gray-100);
@@ -424,23 +355,19 @@
   gap: var(--space-3);
 }
 
-/* On desktop: always show body, hide toggle button */
 @media (min-width: 64rem) {
-  .order-summary__toggle {
-    display: none;
-  }
+  .order-summary__toggle { display: none; }
 
   .order-summary__body,
   .order-summary__body--collapsed {
     max-height: none !important;
     opacity: 1 !important;
     overflow: visible;
-    padding: var(--space-5);
+    padding: var(--space-4) !important;
   }
 
   .order-summary__footer {
-    padding: var(--space-5) var(--space-7);
-    border-top: 1px solid var(--color-gray-100);
+    padding: var(--space-3) var(--space-4);
   }
 }
 
@@ -450,13 +377,13 @@
 
 .billing-form {
   padding: var(--space-5);
-  background: linear-gradient(135deg, var(--color-blue-50), var(--color-purple-50));
-  border: 1.5px solid var(--color-blue-100);
+  background: var(--color-indigo-50);
+  border: 1.5px solid var(--color-indigo-100);
   border-radius: var(--radius-xl);
   animation: slideUp var(--transition-slow) ease-out both;
   overflow: hidden;
   max-height: 1000px;
-  transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
   opacity: 1;
   margin-block-start: var(--space-3);
 }
@@ -474,9 +401,6 @@
   font-weight: var(--font-weight-bold);
   color: var(--color-gray-800);
   margin-block-end: var(--space-4);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
   letter-spacing: -0.01em;
 }
 
@@ -509,34 +433,17 @@
    ══════════════════════════════════════ */
 @media (min-width: 40rem) {
   .page__inner {
-    padding: var(--space-4) var(--space-5);
-    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6);
+    gap: var(--space-5);
   }
 
-  .page__icon-wrap {
-    width: 3.75rem;
-    height: 3.75rem;
-  }
-
-  .page__title {
-    font-size: var(--font-size-5xl);
-  }
-
-  .page__grid--summary {
-    gap: var(--space-6);
-  }
+  .page__title { font-size: var(--font-size-4xl); }
+  .page__subtitle { font-size: var(--font-size-base); }
+  .page__grid--summary { gap: var(--space-6); }
 
   .form-page {
     padding: var(--space-6);
     border-radius: var(--radius-2xl);
-  }
-
-  .form-page__title {
-    font-size: var(--font-size-2xl);
-  }
-
-  .form-page__subtitle {
-    font-size: var(--font-size-base);
   }
 
   .review-section {
@@ -552,9 +459,7 @@
     font-size: var(--font-size-base);
   }
 
-  .review-section__edit-label {
-    display: inline;
-  }
+  .review-section__edit-label { display: inline; }
 
   .review-section__details {
     font-size: var(--font-size-base);
@@ -566,32 +471,540 @@
    RESPONSIVE — desktop (≥ 1024px)
    ══════════════════════════════════════ */
 @media (min-width: 64rem) {
+  /* Lock cart page to viewport — no scroll */
+  .page {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
   .page__inner {
-    padding: var(--space-5) var(--space-8);
-    gap: var(--space-4);
+    padding: var(--space-3) var(--space-6);
+    gap: var(--space-2);
+    overflow: hidden;
+  }
+
+  /* Shrink logo so header takes less vertical space */
+  .checkout-header__logo {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  /* Compact page title area */
+  .page__header--centered {
+    gap: var(--space-1);
   }
 
   .page__icon-wrap {
-    width: 4rem;
-    height: 4rem;
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
+  .page__title { font-size: var(--font-size-xl); }
+  .page__subtitle { font-size: var(--font-size-xs); }
+
+  /* Grid fills remaining height; left col scrolls internally */
   .page__grid--summary {
+    flex: 1;
+    min-height: 0;
+    display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: var(--space-8);
+    grid-template-rows: 1fr;
+    gap: var(--space-6);
+    overflow: hidden;
   }
 
-  .page__grid--confirmation {
-    grid-template-columns: 2fr 1fr;
-    gap: var(--space-8);
+  .page__items {
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gray-200) transparent;
   }
 
-  .form-page {
-    padding: var(--space-6);
+  .order-summary {
+    align-self: start;
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   .review-section__icon {
     width: 2.75rem;
     height: 2.75rem;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   CHECKOUT SPLIT LAYOUT
+   Professional 2-column: white form (left) · dark sidebar (right)
+   Mobile: stacked. Desktop (≥1024px): side-by-side, 100dvh no scroll.
+   ════════════════════════════════════════════════════════════ */
+
+/* Root wrapper */
+.checkout-split {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: var(--color-white);
+}
+
+/* ── LEFT: white form panel ── */
+.checkout-split__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4) var(--space-4);
+  gap: var(--space-3);
+}
+
+/* Constrained inner — centers and caps width on large screens */
+.checkout-split__inner {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+/* Logo + secure badge row */
+.checkout-split__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding-block-end: var(--space-4);
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.checkout-split__header .checkout-header__logo {
+  height: 5rem;
+  width: 5rem;
+  object-fit: cover;
+  object-position: center 32%;
+}
+
+/* Form area — fills remaining height of inner */
+.checkout-split__form-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+.checkout-split__form-area > .form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-split__form-area > .form .form__actions {
+  margin-top: auto;
+  padding-top: var(--space-3);
+}
+
+/* Icon + title separator above the form */
+.checkout-split__form-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block-end: var(--space-4);
+  border-bottom: 1px solid var(--color-gray-100);
+  flex-shrink: 0;
+}
+
+.checkout-split__form-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.checkout-split__form-subtitle {
+  font-size: 0.8125rem;
+  color: var(--color-gray-500);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* Mobile summary accordion (form pages — hidden at desktop) */
+.checkout-split__mobile-summary {
+  display: block;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 64rem) {
+  .checkout-split__mobile-summary {
+    display: none;
+  }
+}
+
+/* Toggle button */
+.mst-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  gap: var(--space-3);
+}
+
+.mst-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-indigo-600);
+}
+
+.mst-chevron {
+  color: var(--color-gray-400);
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.mst-amount {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+  flex-shrink: 0;
+}
+
+/* Expandable body */
+.mst-body {
+  border-top: 1px solid var(--color-gray-100);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Scrollable review sections pane (confirmation page) */
+.checkout-split__review-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ── RIGHT: dark order summary sidebar ── */
+/* Hidden on mobile — accordion inside the form handles it there */
+.checkout-split__sidebar {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-5);
+  background: linear-gradient(180deg, #0e1525 0%, #0b0f1c 100%);
+  padding: var(--space-6) var(--space-5);
+}
+
+@media (min-width: 64rem) {
+  .checkout-split__sidebar {
+    display: flex;
+  }
+}
+
+/* ── Desktop layout (≥ 1024px) ── */
+@media (min-width: 64rem) {
+  .checkout-split {
+    flex-direction: row;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .checkout-split__main {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    gap: 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gray-200) transparent;
+  }
+
+  .checkout-split__inner {
+    max-width: 28rem;
+    gap: var(--space-2);
+  }
+
+  .checkout-split__form-area {
+    flex: 1;
+    min-height: 0;
+    gap: var(--space-2);
+  }
+
+  /* Form fills height — actions pushed to bottom */
+  .checkout-split__form-area > .form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .checkout-split__form-area > .form .form__actions {
+    margin-top: auto;
+    padding-top: var(--space-2);
+  }
+
+  /* Review body scrolls internally */
+  .checkout-split__review-body {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding-bottom: var(--space-2);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.08) transparent;
+  }
+
+  .checkout-split__sidebar {
+    width: 22rem;
+    flex-shrink: 0;
+    overflow-y: auto;
+    border-left: 1px solid rgba(255,255,255,0.05);
+    padding: 1.25rem 1.5rem;
+    gap: var(--space-3);
+    scrollbar-width: none;
+  }
+
+  .checkout-split__sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .checkout-split__header {
+    padding-block-end: var(--space-2);
+  }
+
+  .checkout-split__header .checkout-header__logo {
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .checkout-split__form-header {
+    margin-bottom: var(--space-2);
+    padding-block-end: var(--space-2);
+  }
+
+  .form-page__header-icon {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   SIDEBAR SUMMARY — dark panel: items · pricing · total
+   ════════════════════════════════════════════════════════════ */
+
+/* "Order Summary" eyebrow label */
+.sidebar-summary__label {
+  font-size: 0.6875rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.32);
+  flex-shrink: 0;
+}
+
+/* Cart item rows */
+.sidebar-summary__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.sidebar-item__badge {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sidebar-item__img-wrap {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.sidebar-item__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sidebar-item__qty-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  background: var(--color-indigo-500);
+  border-radius: var(--radius-full);
+  font-size: 0.6rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 3px;
+  line-height: 1;
+  box-shadow: 0 0 0 2px rgba(14,21,37,0.8);
+}
+
+.sidebar-item__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-item__name {
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-medium);
+  color: rgba(255,255,255,0.88);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sidebar-item__variant {
+  font-size: 0.6875rem;
+  color: rgba(255,255,255,0.35);
+  margin-top: 3px;
+}
+
+.sidebar-item__price {
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-semibold);
+  color: rgba(255,255,255,0.88);
+  flex-shrink: 0;
+  padding-left: var(--space-2);
+}
+
+/* Thin separator */
+.sidebar-summary__divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+
+/* Subtotal / shipping rows */
+.sidebar-summary__rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sidebar-summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+}
+
+.sidebar-summary__row dt {
+  color: rgba(255,255,255,0.38);
+  font-weight: var(--font-weight-normal);
+}
+
+.sidebar-summary__row dd {
+  font-weight: var(--font-weight-medium);
+  color: rgba(255,255,255,0.72);
+}
+
+/* Grand total */
+.sidebar-summary__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-summary__total dt {
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-semibold);
+  color: rgba(255,255,255,0.42);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.sidebar-summary__total dd {
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.035em;
+  /* Platinum shimmer for premium feel */
+  background: linear-gradient(135deg, #e2e8f0 0%, #f8fafc 50%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Trust badge — anchored to sidebar bottom */
+.sidebar-summary__trust {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.6875rem;
+  color: rgba(255,255,255,0.24);
+  margin-top: auto;
+}
+
+/* Confirm CTA (confirmation page only) */
+.sidebar-summary__cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+.sidebar-summary__cta .btn {
+  font-size: var(--font-size-sm);
+  padding: 0.875rem var(--space-5);
+}
+
+.sidebar-summary__cta-note {
+  font-size: 0.6875rem;
+  color: rgba(255,255,255,0.28);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ══════════════════════════════════════
+   SIDEBAR — desktop compact
+   ══════════════════════════════════════ */
+@media (min-width: 64rem) {
+  .sidebar-summary__items {
+    gap: var(--space-3);
+  }
+
+  .sidebar-item__img-wrap {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .sidebar-summary__total {
+    padding-top: var(--space-3);
+  }
+
+  .sidebar-summary__total dd {
+    font-size: 1.35rem;
+  }
+
+  .sidebar-summary__cta .btn {
+    padding: 0.5rem var(--space-5);
   }
 }

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Your Order — Checkout</title>
+  <link rel="icon" type="image/png" href="/assets/images/e-commerce%20with%20name.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components/button.css">
+  <link rel="stylesheet" href="css/components/form.css">
+  <link rel="stylesheet" href="css/components/progress-steps.css">
+</head>
+<body>
+<div class="checkout-split">
+
+  <!-- ══ LEFT: review sections ══ -->
+  <main class="checkout-split__main" id="app">
+    <div class="checkout-split__inner">
+
+      <header class="checkout-split__header">
+        <div class="checkout-header__brand">
+          <img src="/assets/images/e-commerce%20with%20name.png" alt="Audi Online Shopping"
+               class="checkout-header__logo" width="240" height="96" loading="eager">
+        </div>
+        <div class="checkout-header__secure" aria-label="Secure checkout">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+          <span>Secure Checkout</span>
+        </div>
+      </header>
+
+      <nav class="progress-steps" aria-label="Checkout progress" id="progress-steps"></nav>
+
+      <div class="checkout-split__form-area">
+
+        <header class="checkout-split__form-header">
+          <div class="form-page__header-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div>
+            <h1 class="checkout-split__form-title">Review Your Order</h1>
+            <p class="checkout-split__form-subtitle">Confirm all details before placing your order</p>
+          </div>
+        </header>
+
+        <!-- Review sections — populated by confirmation.js -->
+        <div class="checkout-split__review-body">
+
+          <section class="review-section review-section--purple">
+            <div class="review-section__header">
+              <div class="review-section__title-group">
+                <div class="review-section__icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <h2 class="review-section__title">Personal Information</h2>
+              </div>
+              <button type="button" class="btn btn--ghost btn--small" aria-label="Edit personal information" onclick="window.location.href='personal-info.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                <span class="review-section__edit-label">Edit</span>
+              </button>
+            </div>
+            <dl class="review-section__details" id="personal-details"></dl>
+          </section>
+
+          <section class="review-section review-section--blue">
+            <div class="review-section__header">
+              <div class="review-section__title-group">
+                <div class="review-section__icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <h2 class="review-section__title">Shipping Address</h2>
+              </div>
+              <button type="button" class="btn btn--ghost btn--small" aria-label="Edit shipping address" onclick="window.location.href='address.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                <span class="review-section__edit-label">Edit</span>
+              </button>
+            </div>
+            <dl class="review-section__details" id="address-details"></dl>
+          </section>
+
+          <section class="review-section review-section--pink">
+            <div class="review-section__header">
+              <div class="review-section__title-group">
+                <div class="review-section__icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </div>
+                <h2 class="review-section__title">Payment Method</h2>
+              </div>
+              <button type="button" class="btn btn--ghost btn--small" aria-label="Edit payment details" onclick="window.location.href='payment.html'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                <span class="review-section__edit-label">Edit</span>
+              </button>
+            </div>
+            <dl class="review-section__details" id="payment-details"></dl>
+          </section>
+
+        </div>
+
+        <!-- Back button -->
+        <div class="form__actions">
+          <button type="button" class="btn btn--secondary" onclick="window.location.href='payment.html'" aria-label="Go back to payment">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            <span>Back</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ══ RIGHT: dark sidebar with confirm CTA ══ -->
+  <aside class="checkout-split__sidebar" aria-label="Order summary">
+
+    <p class="sidebar-summary__label">Order Summary</p>
+
+    <div class="sidebar-summary__items">
+      <div class="sidebar-item">
+        <div class="sidebar-item__badge">
+          <div class="sidebar-item__img-wrap"><img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
+          <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
+        </div>
+        <div class="sidebar-item__body">
+          <p class="sidebar-item__name">Premium Wireless Headphones</p>
+          <p class="sidebar-item__variant">Silver · Default</p>
+        </div>
+        <span class="sidebar-item__price">$249.99</span>
+      </div>
+      <div class="sidebar-item">
+        <div class="sidebar-item__badge">
+          <div class="sidebar-item__img-wrap"><img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
+          <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
+        </div>
+        <div class="sidebar-item__body">
+          <p class="sidebar-item__name">Leather Laptop Bag</p>
+          <p class="sidebar-item__variant">Dark Brown · 15"</p>
+        </div>
+        <span class="sidebar-item__price">$129.99</span>
+      </div>
+    </div>
+
+    <div class="sidebar-summary__divider" aria-hidden="true"></div>
+
+    <dl class="sidebar-summary__rows">
+      <div class="sidebar-summary__row"><dt>Subtotal</dt><dd>$379.98</dd></div>
+      <div class="sidebar-summary__row"><dt>Shipping</dt><dd>$12.99</dd></div>
+    </dl>
+
+    <dl class="sidebar-summary__total">
+      <dt>Total</dt>
+      <dd>$392.97</dd>
+    </dl>
+
+    <!-- Confirm CTA — id="confirm-btn" required by confirmation.js -->
+    <div class="sidebar-summary__cta">
+      <button type="button" class="btn btn--primary btn--full btn--icon-start" id="confirm-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Confirm &amp; Pay $392.97</span>
+      </button>
+      <p class="sidebar-summary__cta-note">You won't be charged until confirmed</p>
+    </div>
+
+    <div class="sidebar-summary__trust">
+      <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/></svg>
+      <span>256-bit SSL encrypted checkout</span>
+    </div>
+
+  </aside>
+
+</div>
+
+<script src="js/shared/state.js"></script>
+<script src="js/shared/progress-steps.js"></script>
+<script src="js/pages/confirmation.js"></script>
+</body>
+</html>

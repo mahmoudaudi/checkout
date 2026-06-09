@@ -1,8 +1,7 @@
 /*
  * components/form.css
- * BEM blocks: form, form-field, billing-checkbox, security-banner
- * Covers all form layout and input styles used in the checkout flow.
- * Handles: default, focused, valid, error, and disabled states.
+ * BEM: form, form-field, billing-checkbox
+ * Stripe-quality bordered inputs with smooth focus transitions.
  */
 
 /* ══════════════════════════════════════
@@ -12,10 +11,10 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
-/* Reset native fieldset border/padding that browsers add by default */
+/* Reset native fieldset */
 .form__group {
   border: none;
   padding: 0;
@@ -23,7 +22,7 @@
   display: contents;
 }
 
-/* Two-column row (country + city, expiry + CVV) */
+/* Two-column row */
 .form__row--two-col {
   display: grid;
   grid-template-columns: 1fr;
@@ -33,50 +32,54 @@
 @media (min-width: 40rem) {
   .form__row--two-col {
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-5);
   }
 }
 
-/* Action buttons row */
+/* Actions row */
 .form__actions {
   display: flex;
   flex-direction: column-reverse;
   gap: var(--space-3);
-  padding-block-start: var(--space-3);
+  padding-block-start: var(--space-2);
 }
 
 @media (min-width: 40rem) {
   .form__actions {
     flex-direction: row;
-    gap: var(--space-3);
-    padding-block-start: var(--space-3);
   }
-
   .form__actions .btn--primary {
     flex: 1;
   }
 }
 
 /* ══════════════════════════════════════
-   FORM FIELD — label + input + error
+   FORM FIELD — label · input · error
    ══════════════════════════════════════ */
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  animation: slideUp var(--transition-slow) ease-out both;
+  gap: 6px;
+  animation: slideUp 0.28s ease-out both;
 }
+
+/* Stagger each field */
+.form-field:nth-child(1)  { animation-delay:  0ms; }
+.form-field:nth-child(2)  { animation-delay: 40ms; }
+.form-field:nth-child(3)  { animation-delay: 80ms; }
+.form-field:nth-child(4)  { animation-delay: 120ms; }
+.form-field:nth-child(5)  { animation-delay: 160ms; }
 
 .form-field__label {
   display: block;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-semibold);
   color: var(--color-gray-700);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
+  line-height: 1.4;
 }
 
-/* Red asterisk on required fields only (skip optional labels) */
+/* Required asterisk */
 .form-field__label:not(:has(.form-field__optional))::after {
   content: ' *';
   color: var(--color-red-400);
@@ -84,220 +87,145 @@
 }
 
 .form-field__optional {
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   font-weight: var(--font-weight-normal);
   color: var(--color-gray-400);
   letter-spacing: 0;
 }
 
-/* Input wrapper (for icon layout) */
+/* ── Input wrapper ── */
 .form-field__input-wrap {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-/* ══════════════════════════════════════
-   PHONE FIELD — prefix select + number input
-   ══════════════════════════════════════ */
-
-.phone-field__wrap {
-  gap: 0;
-  border: none;
+/* ── Input ── */
+.form-field__input {
+  width: 100%;
+  padding: 0.6875rem var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray-900);
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
-  overflow: hidden;
-  background: var(--color-gray-50);
+  box-shadow: var(--shadow-input);
   transition:
-    box-shadow var(--transition-base),
-    background var(--transition-base);
+    border-color  var(--transition-fast),
+    box-shadow    var(--transition-fast),
+    background    var(--transition-fast);
+  appearance: none;
+  line-height: var(--line-height-normal);
 }
 
-.phone-field__wrap:focus-within {
-  box-shadow:
-    0 0 0 2.5px rgba(124, 58, 237, 0.30),
-    0 2px 8px rgba(124, 58, 237, 0.08);
+.form-field__input::placeholder {
+  color: var(--color-gray-400);
+  font-weight: var(--font-weight-normal);
+}
+
+/* With leading icon */
+.form-field__input--with-icon {
+  padding-inline-start: 2.75rem;
+}
+
+/* Mono for card fields */
+.form-field__input--mono {
+  font-family: var(--font-family-mono);
+  letter-spacing: 0.06em;
+}
+
+/* Focus */
+.form-field__input:focus {
+  outline: none;
+  border-color: var(--color-indigo-500);
+  box-shadow: var(--shadow-input-focus);
   background: var(--color-white);
 }
 
-/* Dial-code select */
-.phone-field__prefix {
-  flex-shrink: 0;
-  border: none;
-  border-right: 1px solid var(--color-gray-200);
-  background: transparent;
-  padding-block: var(--space-3);
-  padding-inline: var(--space-3);
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-700);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  appearance: none;
-  /* Small chevron as bg image */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--space-2) center;
-  padding-inline-end: calc(var(--space-2) + 14px);
-  outline: none;
-  transition: background-color var(--transition-base), border-color var(--transition-base);
+/* Valid */
+.form-field__input--valid {
+  border-color: var(--color-gray-200);
 }
 
-.phone-field__prefix:focus {
-  background-color: var(--color-purple-50);
+/* Error */
+.form-field__input--error {
+  border-color: var(--color-red-400);
+  background: var(--color-white);
+  box-shadow: var(--shadow-input-error);
 }
 
-/* Number input — no individual border, inherits from wrapper */
-.phone-field__number {
-  flex: 1;
-  border: none !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  padding-block: var(--space-3);
-  padding-inline: var(--space-3);
+.form-field__input--error:focus {
+  border-color: var(--color-red-500);
+  box-shadow: var(--shadow-input-error);
 }
 
-.phone-field__number:focus {
-  outline: none;
-}
-
-@media (min-width: 40rem) {
-  .phone-field__prefix {
-    font-size: var(--font-size-base);
-    padding-block: var(--space-4);
-    padding-inline: var(--space-4);
-    padding-inline-end: calc(var(--space-3) + 14px);
-  }
-
-  .phone-field__number {
-    padding-block: var(--space-4);
-    padding-inline: var(--space-4);
-  }
-}
-
-/* ── end phone field ── */
-
-.form-field__input-wrap--select {
-  position: relative;
-}
-
-/* Leading icon */
+/* ── Icon (leading) ── */
 .form-field__icon {
   position: absolute;
-  inset-inline-start: var(--space-3);
+  inset-inline-start: 0.875rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   pointer-events: none;
   color: var(--color-gray-300);
-  transition: color var(--transition-base);
+  transition: color var(--transition-fast);
   z-index: var(--z-above);
 }
 
 .form-field__icon--error { color: var(--color-red-400); }
-.form-field__icon--valid { color: var(--color-purple-500); }
+
+/* Field focused — icon brightens */
+.form-field__input-wrap:focus-within .form-field__icon {
+  color: var(--color-indigo-400);
+}
 
 /* Trailing success icon */
 .form-field__success-icon {
   position: absolute;
-  inset-inline-end: var(--space-3);
+  inset-inline-end: 0.875rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   align-items: center;
   pointer-events: none;
-  color: var(--color-purple-500);
-}
-
-/* ── Input ── */
-.form-field__input {
-  width: 100%;
-  padding-block: var(--space-2);
-  padding-inline: var(--space-4);
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-900);
-  background: var(--color-gray-50);
-  border: none;
-  border-radius: var(--radius-lg);
-  transition:
-    box-shadow   var(--transition-base),
-    background   var(--transition-base);
-  appearance: none;
-  min-height: 2.5rem;
-}
-
-/* Input with leading icon */
-.form-field__input--with-icon {
-  padding-inline-start: calc(var(--space-4) * 2 + 20px);
-}
-
-/* Mono font for card fields */
-.form-field__input--mono {
-  font-family: var(--font-family-mono);
-  letter-spacing: 0.05em;
-}
-
-/* States */
-.form-field__input:focus {
-  background: var(--color-white);
-  box-shadow:
-    0 0 0 2.5px rgba(124, 58, 237, 0.30),
-    0 2px 8px rgba(124, 58, 237, 0.08);
-  outline: none;
-}
-
-.form-field__input--valid {
-  background: var(--color-white);
-}
-
-.form-field__input--valid:focus {
-  box-shadow:
-    0 0 0 2.5px rgba(124, 58, 237, 0.30),
-    0 2px 8px rgba(124, 58, 237, 0.08);
-}
-
-.form-field__input--error {
-  background: var(--color-red-50);
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18);
-}
-
-.form-field__input--error:focus {
-  box-shadow:
-    0 0 0 2.5px rgba(239, 68, 68, 0.35),
-    0 2px 8px rgba(239, 68, 68, 0.08);
+  color: var(--color-emerald-500);
 }
 
 /* ── Select ── */
 .form-field__select {
   width: 100%;
-  padding-block: var(--space-2);
-  padding-inline-start: calc(var(--space-4) * 2 + 20px);
-  padding-inline-end: var(--space-8);
+  padding: 0.6875rem var(--space-10) 0.6875rem 2.75rem;
   font-size: var(--font-size-sm);
   color: var(--color-gray-900);
-  background: var(--color-gray-50)
+  background: var(--color-white)
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
-    no-repeat right var(--space-3) center;
-  border: none;
+    no-repeat right 0.875rem center;
+  border: 1.5px solid var(--color-gray-200);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-input);
   appearance: none;
   cursor: pointer;
   transition:
-    box-shadow   var(--transition-base),
-    background   var(--transition-base);
+    border-color  var(--transition-fast),
+    box-shadow    var(--transition-fast);
 }
 
 .form-field__select:focus {
-  background-color: var(--color-white);
-  box-shadow:
-    0 0 0 2.5px rgba(124, 58, 237, 0.30),
-    0 2px 8px rgba(124, 58, 237, 0.08);
   outline: none;
+  border-color: var(--color-indigo-500);
+  box-shadow: var(--shadow-input-focus);
 }
 
 .form-field__select--error {
-  background-color: var(--color-red-50);
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18);
+  border-color: var(--color-red-400);
+  box-shadow: var(--shadow-input-error);
+}
+
+/* ── Select without icon ── */
+.form-field__input-wrap--select .form-field__select {
+  padding-inline-start: 2.75rem;
 }
 
 /* ── Error message ── */
@@ -305,41 +233,121 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-1);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   color: var(--color-red-500);
-  animation: slideUp 0.2s ease-out both;
   font-weight: var(--font-weight-medium);
   line-height: 1.4;
+  animation: slideUp 0.18s ease-out both;
 }
 
-/* display:flex overrides the browser's [hidden]{display:none} — fix that */
 .form-field__error[hidden] {
   display: none;
 }
 
-
-/* ── Responsive input sizing ── */
+/* Responsive */
 @media (min-width: 40rem) {
   .form-field__input,
   .form-field__select {
+    padding-block: 0.8125rem;
     font-size: var(--font-size-base);
-    padding-block: var(--space-4);
-    padding-inline: var(--space-5);
-  }
-
-  .form-field__icon {
-    inset-inline-start: var(--space-4);
-  }
-
-  .form-field__input--with-icon {
-    padding-inline-start: calc(var(--space-4) + var(--space-4) + 20px);
-  }
-
-  .form-field__select {
-    padding-inline-start: calc(var(--space-4) + var(--space-4) + 20px);
   }
 
   .form-field__error {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (min-width: 64rem) {
+  .form {
+    gap: var(--space-2);
+  }
+
+  .form-field {
+    gap: 4px;
+  }
+
+  .form-field__label {
+    font-size: 0.75rem;
+  }
+
+  .form-field__input,
+  .form-field__select {
+    padding-block: 0.4375rem;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* ══════════════════════════════════════
+   PHONE FIELD
+   ══════════════════════════════════════ */
+
+.phone-field__wrap {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-white);
+  box-shadow: var(--shadow-input);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow   var(--transition-fast);
+}
+
+.phone-field__wrap:focus-within {
+  border-color: var(--color-indigo-500);
+  box-shadow: var(--shadow-input-focus);
+}
+
+.phone-field__prefix {
+  flex-shrink: 0;
+  border: none;
+  border-right: 1.5px solid var(--color-gray-200);
+  background: var(--color-gray-50);
+  padding: 0.6875rem var(--space-4) 0.6875rem var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-700);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  padding-inline-end: 1.75rem;
+  outline: none;
+  transition: background-color var(--transition-fast);
+}
+
+.phone-field__prefix:focus {
+  background-color: var(--color-indigo-50);
+}
+
+.phone-field__number {
+  flex: 1;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 0.6875rem var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+.phone-field__number:focus {
+  outline: none;
+}
+
+@media (min-width: 40rem) {
+  .phone-field__prefix,
+  .phone-field__number {
+    padding-block: 0.8125rem;
+    font-size: var(--font-size-base);
+  }
+}
+
+@media (min-width: 64rem) {
+  .phone-field__prefix,
+  .phone-field__number {
+    padding-block: 0.4375rem;
     font-size: var(--font-size-sm);
   }
 }
@@ -353,28 +361,32 @@
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-4);
-  border: none;
-  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
   cursor: pointer;
+  background: var(--color-white);
   transition:
-    background   var(--transition-base),
-    box-shadow   var(--transition-base);
-  background: var(--color-gray-50);
+    border-color var(--transition-fast),
+    background   var(--transition-fast),
+    box-shadow   var(--transition-fast);
+  box-shadow: var(--shadow-input);
 }
 
 .billing-checkbox:hover {
-  background: var(--color-purple-50);
+  border-color: var(--color-indigo-300);
+  background: var(--color-indigo-50);
 }
 
 .billing-checkbox--checked {
-  background: linear-gradient(135deg, var(--color-purple-50), var(--color-blue-50));
-  box-shadow: 0 0 0 2.5px rgba(124,58,237,0.20);
+  border-color: var(--color-indigo-400);
+  background: var(--color-indigo-50);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.10), var(--shadow-input);
 }
 
 .billing-checkbox__input {
   width: 1rem;
   height: 1rem;
-  accent-color: var(--color-purple-600);
+  accent-color: var(--color-indigo-600);
   cursor: pointer;
   flex-shrink: 0;
   margin-block-start: 0.125rem;
@@ -383,7 +395,7 @@
 .billing-checkbox__text {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 2px;
   flex: 1;
   min-width: 0;
 }
@@ -392,30 +404,23 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-gray-800);
+  letter-spacing: -0.005em;
 }
 
 .billing-checkbox__secondary {
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   color: var(--color-gray-500);
 }
 
 @media (min-width: 40rem) {
   .billing-checkbox {
-    gap: var(--space-4);
-    padding: var(--space-5);
+    padding: var(--space-4) var(--space-5);
   }
+}
 
-  .billing-checkbox__input {
-    width: 1.125rem;
-    height: 1.125rem;
-  }
-
-  .billing-checkbox__primary {
-    font-size: var(--font-size-base);
-  }
-
-  .billing-checkbox__secondary {
-    font-size: var(--font-size-sm);
+@media (min-width: 64rem) {
+  .billing-checkbox {
+    padding: var(--space-2) var(--space-4);
   }
 }
 
@@ -423,17 +428,16 @@
    SECURITY BANNER (payment page)
    ══════════════════════════════════════ */
 
-/* Security banner — subtle trust signal, not a promotional element.
-   Stripe/Shopify pattern: green icon + light background, not dominant purple. */
 .security-banner {
-  background: var(--color-gray-50);
-  border: 1px solid var(--color-gray-200);
-  border-radius: var(--radius-xl);
+  background: var(--color-white);
+  border: 1.5px solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
   padding: var(--space-3) var(--space-4);
   color: var(--color-gray-600);
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  box-shadow: var(--shadow-input);
 }
 
 .security-banner__icon {
@@ -447,14 +451,14 @@
 }
 
 .security-banner__title {
-  font-size: var(--font-size-sm);
+  font-size: 0.8125rem;
   font-weight: var(--font-weight-semibold);
   color: var(--color-gray-800);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 .security-banner__subtitle {
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   color: var(--color-gray-500);
   margin-block-start: 2px;
 }
@@ -468,21 +472,10 @@
 
 .security-banner__badge {
   padding: 2px var(--space-2);
-  background: var(--color-white);
+  background: var(--color-gray-50);
   border: 1px solid var(--color-gray-200);
   border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
+  font-size: 0.6875rem;
   font-weight: var(--font-weight-medium);
   color: var(--color-gray-500);
-}
-
-@media (min-width: 40rem) {
-  .security-banner {
-    padding: var(--space-3) var(--space-5);
-    border-radius: var(--radius-xl);
-  }
-
-  .security-banner__title {
-    font-size: var(--font-size-sm);
-  }
 }

@@ -47,7 +47,7 @@
   position: absolute;
   width: 5rem;
   height: 5rem;
-  background: linear-gradient(135deg, var(--color-purple-400), var(--color-blue-400));
+  background: linear-gradient(135deg, var(--color-indigo-400), var(--color-indigo-300));
   border-radius: var(--radius-full);
   opacity: 0.15;
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
@@ -66,7 +66,7 @@
   justify-content: center;
   box-shadow:
     0 1px 0 rgba(255,255,255,0.15) inset,
-    0 4px 16px rgba(124, 58, 237, 0.35);
+    0 4px 16px rgba(79, 70, 229, 0.35);
   color: var(--color-white);
 }
 
@@ -152,7 +152,7 @@
 
 .processing__step-icon--green  { background: var(--color-green-100);  color: var(--color-green-600); }
 .processing__step-icon--blue   { background: var(--color-blue-100);   color: var(--color-blue-600); }
-.processing__step-icon--purple { background: var(--color-purple-100); color: var(--color-purple-600); }
+.processing__step-icon--purple { background: var(--color-indigo-50);  color: var(--color-indigo-600); }
 
 /* ── Warning note ── */
 .processing__warning {
