@@ -56,44 +56,56 @@
   box-shadow: 0 2px 8px rgba(79,70,229,0.35);
 }
 
-/* Active — indigo outline + soft bg */
+/* Active — indigo filled + drop shadow */
 .progress-steps__circle--active {
-  border-color: var(--color-indigo-500);
-  border-width: 2px;
-  background: var(--color-white);
+  background: var(--gradient-brand);
+  border-color: transparent;
+  color: var(--color-white);
   box-shadow:
-    0 0 0 4px rgba(99,102,241,0.12),
-    0 2px 8px rgba(99,102,241,0.15);
-  color: var(--color-indigo-600);
+    0 0 0 4px rgba(99,102,241,0.18),
+    0 4px 12px rgba(99,102,241,0.30);
+}
+
+/* Future — outlined only, very light */
+.progress-steps__circle--future {
+  border-color: var(--color-gray-200);
+  background: var(--color-white);
+  color: var(--color-gray-300);
 }
 
 /* ── Number ── */
 .progress-steps__number {
   font-size: 0.6rem;
   font-weight: var(--font-weight-bold);
-  color: var(--color-gray-400);
+  color: var(--color-gray-300);
   line-height: 1;
 }
 
-.progress-steps__circle--active .progress-steps__number {
-  color: var(--color-indigo-600);
+.progress-steps__circle--active .progress-steps__number,
+.progress-steps__circle--done .progress-steps__number {
+  color: var(--color-white);
 }
 
 /* ── Label ── */
 .progress-steps__label {
   margin-block-start: 4px;
   font-size: 0.625rem;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-gray-400);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray-300);
   text-align: center;
-  transition: color var(--transition-base);
+  transition: color var(--transition-base), font-weight var(--transition-base);
   white-space: nowrap;
   letter-spacing: 0.01em;
 }
 
 .progress-steps__label--active {
-  color: var(--color-gray-800);
-  font-weight: var(--font-weight-semibold);
+  color: var(--color-indigo-700);
+  font-weight: var(--font-weight-bold);
+}
+
+.progress-steps__label--done {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-medium);
 }
 
 /* Short vs full labels */
@@ -135,6 +147,7 @@
   overflow: hidden;
 }
 
+/* Completed connector — solid gradient fill */
 .progress-steps__connector::after {
   content: '';
   position: absolute;
@@ -147,6 +160,20 @@
 
 .progress-steps__connector--done::after {
   width: 100%;
+}
+
+/* Future connector — dashed gray (no fill) */
+.progress-steps__connector--future {
+  background: transparent;
+  border: none;
+  height: 0;
+  border-top: 2px dashed var(--color-gray-200);
+  border-radius: 0;
+  overflow: visible;
+}
+
+.progress-steps__connector--future::after {
+  display: none;
 }
 
 /* ── Tablet ── */

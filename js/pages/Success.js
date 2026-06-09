@@ -12,6 +12,32 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   document.getElementById('order-number').textContent = ordNum;
 
+  // Copy order number button
+  var copyBtn = document.getElementById('copy-order-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      var num = document.getElementById('order-number').textContent;
+      var label = copyBtn.querySelector('span');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(num).then(function () {
+          label.textContent = 'Copied!';
+          setTimeout(function () { label.textContent = 'Copy'; }, 2000);
+        });
+      } else {
+        // Fallback for older browsers
+        var ta = document.createElement('textarea');
+        ta.value = num;
+        ta.style.cssText = 'position:fixed;left:-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        label.textContent = 'Copied!';
+        setTimeout(function () { label.textContent = 'Copy'; }, 2000);
+      }
+    });
+  }
+
   // Delivery estimate: 5–7 business days from today
   var today    = new Date();
   var earliest = new Date(today);
@@ -47,9 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
     var div   = document.createElement('div');
     div.className = 'result__info-card';
     div.innerHTML =
-      '<span class="result__info-icon" aria-hidden="true">' + c.icon + '</span>' +
-      '<span class="result__info-label">' + escapeHtml(c.label) + '</span>' +
-      '<span class="result__info-value">' + escapeHtml(c.value) + '</span>';
+      '<div class="result__info-icon-wrap" aria-hidden="true">' + c.icon + '</div>' +
+      '<div class="result__info-body">' +
+        '<p class="result__info-label">' + escapeHtml(c.label) + '</p>' +
+        '<p class="result__info-value">' + escapeHtml(c.value) + '</p>' +
+      '</div>';
     grid.appendChild(div);
   });
 

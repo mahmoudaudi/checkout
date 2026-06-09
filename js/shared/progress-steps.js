@@ -32,10 +32,13 @@ function buildProgressSteps(containerId, currentStep) {
       li.appendChild(pulse);
     }
 
+    var isFuture = !isDone && !isActive;
+
     var circle = document.createElement('div');
     var circleClasses = ['progress-steps__circle'];
     if (isDone)   circleClasses.push('progress-steps__circle--done');
     if (isActive) circleClasses.push('progress-steps__circle--active');
+    if (isFuture) circleClasses.push('progress-steps__circle--future');
     circle.className = circleClasses.join(' ');
     circle.setAttribute('aria-label', isDone ? step.full + ' completed' : isActive ? step.full + ' (current step)' : step.full);
     circle.innerHTML = isDone
@@ -43,7 +46,10 @@ function buildProgressSteps(containerId, currentStep) {
       : '<span class="progress-steps__number" aria-hidden="true">' + step.id + '</span>';
 
     var label = document.createElement('span');
-    label.className = 'progress-steps__label' + (currentStep >= step.id ? ' progress-steps__label--active' : '');
+    var labelClass = 'progress-steps__label';
+    if (isActive) labelClass += ' progress-steps__label--active';
+    else if (isDone) labelClass += ' progress-steps__label--done';
+    label.className = labelClass;
     label.innerHTML =
       '<span class="progress-steps__label-short">' + step.short + '</span>' +
       '<span class="progress-steps__label-full">'  + step.full  + '</span>';
@@ -57,7 +63,10 @@ function buildProgressSteps(containerId, currentStep) {
       connWrap.className = 'progress-steps__connector-wrap';
       connWrap.setAttribute('aria-hidden', 'true');
       var conn = document.createElement('div');
-      conn.className = 'progress-steps__connector' + (isDone ? ' progress-steps__connector--done' : '');
+      var connClass = 'progress-steps__connector';
+      if (isDone) connClass += ' progress-steps__connector--done';
+      else if (isFuture) connClass += ' progress-steps__connector--future';
+      conn.className = connClass;
       connWrap.appendChild(conn);
       ol.appendChild(connWrap);
     }
