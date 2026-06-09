@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var SHIPPING = 12.99;
   var items    = [];
 
-  // Restore saved quantities (when user navigates back from a later page)
+  // Restore quantities so navigating Back from a later page doesn't reset the cart
   var savedQty = {};
   try {
     var saved = CheckoutState.get().cartInfo;

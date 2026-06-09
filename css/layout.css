@@ -793,13 +793,15 @@
   }
 
   .checkout-split__sidebar {
-    width: 22rem;
+    width: 27rem;
     flex-shrink: 0;
     overflow-y: auto;
-    border-left: 1px solid rgba(255,255,255,0.05);
-    padding: 1.25rem 1.5rem;
+    padding: 1.25rem 1.5rem 1.25rem 9.5rem;
     gap: var(--space-3);
     scrollbar-width: none;
+    /* Diagonal split */
+    clip-path: polygon(8rem 0%, 100% 0%, 100% 100%, 0% 100%);
+    margin-left: -8rem;
   }
 
   .checkout-split__sidebar::-webkit-scrollbar {
@@ -833,7 +835,7 @@
 
 /* "Order Summary" eyebrow label */
 .sidebar-summary__label {
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -899,7 +901,7 @@
 }
 
 .sidebar-item__name {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: var(--font-weight-medium);
   color: rgba(255,255,255,0.88);
   line-height: 1.35;
@@ -910,13 +912,13 @@
 }
 
 .sidebar-item__variant {
-  font-size: 0.6875rem;
+  font-size: 0.8125rem;
   color: rgba(255,255,255,0.35);
   margin-top: 3px;
 }
 
 .sidebar-item__price {
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: var(--font-weight-semibold);
   color: rgba(255,255,255,0.88);
   flex-shrink: 0;
@@ -941,7 +943,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
 }
 
 .sidebar-summary__row dt {
@@ -964,7 +966,7 @@
 }
 
 .sidebar-summary__total dt {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: var(--font-weight-semibold);
   color: rgba(255,255,255,0.42);
   text-transform: uppercase;
@@ -972,7 +974,7 @@
 }
 
 .sidebar-summary__total dd {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.035em;
   /* Platinum shimmer for premium feel */
@@ -1030,7 +1032,7 @@
   }
 
   .sidebar-summary__total dd {
-    font-size: 1.35rem;
+    font-size: 1.75rem;
   }
 
   .sidebar-summary__cta .btn {

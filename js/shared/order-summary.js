@@ -1,3 +1,5 @@
+// Reads cartInfo from CheckoutState and re-renders the order summary
+// on pages 2-5 so totals always reflect the actual cart quantities.
 (function () {
   function fmt(n) { return '$' + n.toFixed(2); }
 
@@ -17,7 +19,7 @@
     var shipping = typeof cart.shipping === 'number' ? cart.shipping : 12.99;
     var total    = subtotal + shipping;
 
-    // ── Desktop sidebar items ─────────────────────────────────────────────────
+    // ── Desktop sidebar ───────────────────────────────────────────────────────
     var itemsEl = document.querySelector('.sidebar-summary__items');
     if (itemsEl) {
       itemsEl.innerHTML = cart.items.map(function (i) {
@@ -35,18 +37,16 @@
       }).join('');
     }
 
-    // ── Sidebar totals ────────────────────────────────────────────────────────
     var ddEls = document.querySelectorAll('.sidebar-summary__rows .sidebar-summary__row dd');
     if (ddEls[0]) ddEls[0].textContent = fmt(subtotal);
     if (ddEls[1]) ddEls[1].textContent = fmt(shipping);
     var totalEl = document.querySelector('.sidebar-summary__total dd');
     if (totalEl) totalEl.textContent = fmt(total);
 
-    // ── Mobile accordion amount ───────────────────────────────────────────────
+    // ── Mobile accordion ──────────────────────────────────────────────────────
     var mstAmount = document.querySelector('.mst-amount');
     if (mstAmount) mstAmount.textContent = fmt(total);
 
-    // ── Mobile accordion body ─────────────────────────────────────────────────
     var mstBody = document.getElementById('mst-body');
     if (mstBody) {
       var itemsHtml = cart.items.map(function (i) {
@@ -70,7 +70,7 @@
         '</div>';
     }
 
-    // ── Confirm & Pay button (confirmation page) ──────────────────────────────
+    // ── Confirm & Pay button (confirmation page only) ─────────────────────────
     var confirmBtn = document.getElementById('confirm-btn');
     if (confirmBtn) {
       var span = confirmBtn.querySelector('span');

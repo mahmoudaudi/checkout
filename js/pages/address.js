@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   buildProgressSteps('progress-steps', 3);
 
-  // Populate country selects
   function populateCountries(selectId, savedValue) {
     var sel = document.getElementById(selectId);
     COUNTRIES.forEach(function (c) {
@@ -13,34 +12,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  var state   = CheckoutState.get();
-  var info    = state.addressInfo;
+  var state = CheckoutState.get();
+  var info  = state.addressInfo;
 
   populateCountries('country',        info.country);
   populateCountries('billingCountry', info.billingCountry);
 
-  // Restore saved values
   if (info.city)         document.getElementById('city').value         = info.city;
   if (info.addressLine1) document.getElementById('addressLine1').value = info.addressLine1;
   if (info.addressLine2) document.getElementById('addressLine2').value = info.addressLine2;
   if (info.postalCode)   document.getElementById('postalCode').value   = info.postalCode;
-
   if (info.billingCity)         document.getElementById('billingCity').value         = info.billingCity;
   if (info.billingAddressLine1) document.getElementById('billingAddressLine1').value = info.billingAddressLine1;
   if (info.billingAddressLine2) document.getElementById('billingAddressLine2').value = info.billingAddressLine2;
   if (info.billingPostalCode)   document.getElementById('billingPostalCode').value   = info.billingPostalCode;
 
-  // Billing checkbox + toggle
-  var checkbox    = document.getElementById('sameAsBilling');
-  var billingForm = document.getElementById('billing-form');
+  var checkbox     = document.getElementById('sameAsBilling');
+  var billingForm  = document.getElementById('billing-form');
   var billingLabel = document.getElementById('billing-label');
 
   function syncBillingVisibility() {
     var same = checkbox.checked;
     billingForm.hidden = same;
     billingLabel.classList.toggle('billing-checkbox--checked', same);
-    // Require billing fields only when visible
-    ['billingCountry','billingCity','billingAddressLine1','billingPostalCode'].forEach(function (id) {
+    // Fields are only required when the billing section is visible
+    ['billingCountry', 'billingCity', 'billingAddressLine1', 'billingPostalCode'].forEach(function (id) {
       var el = document.getElementById(id);
       if (el) el.required = !same;
     });
@@ -50,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
   syncBillingVisibility();
   checkbox.addEventListener('change', syncBillingVisibility);
 
-  // Blur-first validation helper
   function attachValidation(id, isSelect) {
     var input   = document.getElementById(id);
     var errorEl = document.getElementById(id + '-error');
@@ -76,22 +71,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var evt = isSelect ? 'change' : 'blur';
-    input.addEventListener(evt,    function () { touched = true; sync(false); });
+    input.addEventListener(evt, function () { touched = true; sync(false); });
     if (!isSelect) input.addEventListener('input', function () { sync(false); });
     input._forceValidate = function () { touched = true; sync(true); };
     return input;
   }
 
-  var countryInput   = attachValidation('country',        true);
-  var cityInput      = attachValidation('city',           false);
-  var addr1Input     = attachValidation('addressLine1',   false);
-  var postalInput    = attachValidation('postalCode',     false);
-  var bCountryInput  = attachValidation('billingCountry', true);
-  var bCityInput     = attachValidation('billingCity',    false);
-  var bAddr1Input    = attachValidation('billingAddressLine1', false);
-  var bPostalInput   = attachValidation('billingPostalCode',   false);
+  var countryInput  = attachValidation('country',             true);
+  var cityInput     = attachValidation('city',                false);
+  var addr1Input    = attachValidation('addressLine1',        false);
+  var postalInput   = attachValidation('postalCode',          false);
+  var bCountryInput = attachValidation('billingCountry',      true);
+  var bCityInput    = attachValidation('billingCity',         false);
+  var bAddr1Input   = attachValidation('billingAddressLine1', false);
+  var bPostalInput  = attachValidation('billingPostalCode',   false);
 
-  // Form submit
   document.getElementById('addr-form').addEventListener('submit', function (e) {
     e.preventDefault();
 

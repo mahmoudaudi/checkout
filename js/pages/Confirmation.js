@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var addr  = state.addressInfo;
   var pay   = state.paymentInfo;
 
-  // Resolve country code (e.g. "US") → full name (e.g. "United States")
+  // Resolves a country code → "🇺🇸  United States" for display
   function getCountryName(code) {
     if (!code) return '';
     if (typeof COUNTRIES !== 'undefined') {
@@ -31,28 +31,26 @@ document.addEventListener('DOMContentLoaded', function () {
     dl.appendChild(div);
   }
 
-  // Populate personal info
   var personalDl = document.getElementById('personal-details');
   addRow(personalDl, 'Full Name', pi.fullName);
   addRow(personalDl, 'Email',     pi.email);
   addRow(personalDl, 'Phone',     pi.phone);
 
-  // Populate shipping address
   var addressDl = document.getElementById('address-details');
-  addRow(addressDl, 'Address',     [addr.addressLine1, addr.addressLine2].filter(Boolean).join(', '));
-  addRow(addressDl, 'City',        addr.city && addr.postalCode ? addr.city + ', ' + addr.postalCode : addr.city || addr.postalCode);
-  addRow(addressDl, 'Country',     getCountryName(addr.country));
+  addRow(addressDl, 'Address', [addr.addressLine1, addr.addressLine2].filter(Boolean).join(', '));
+  addRow(addressDl, 'City',    addr.city && addr.postalCode ? addr.city + ', ' + addr.postalCode : addr.city || addr.postalCode);
+  addRow(addressDl, 'Country', getCountryName(addr.country));
 
-  // Populate payment (mask card number)
+  // Show last 4 digits only — full card number is never rendered
   var payDl  = document.getElementById('payment-details');
   var last4  = (pay.cardNumber || '').replace(/\D/g, '').slice(-4);
   var masked = '•••• •••• •••• ' + (last4 || '••••');
 
-  addRow(payDl, 'Cardholder', pay.cardholderName || '—');
+  addRow(payDl, 'Cardholder',  pay.cardholderName || '—');
   addRow(payDl, 'Card Number', masked);
   if (pay.expiryDate) addRow(payDl, 'Expires', pay.expiryDate);
 
-  // Confirm payment button
+  // Guard against double-submit if the user clicks rapidly
   var confirming = false;
   document.getElementById('confirm-btn').addEventListener('click', function () {
     if (confirming) return;

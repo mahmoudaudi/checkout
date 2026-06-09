@@ -1,15 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
   buildProgressSteps('progress-steps', 4);
 
-  var state   = CheckoutState.get();
-  var info    = state.paymentInfo;
+  var state = CheckoutState.get();
+  var info  = state.paymentInfo;
 
-  // ── Card type detection & formatting ────────────────────────────────────────
+  // ── Card type detection & live formatting ────────────────────────────────────
 
   function detectType(digits) {
-    if (/^4/.test(digits))              return 'visa';
+    if (/^4/.test(digits))               return 'visa';
     if (/^(5[1-5]|2[2-7])/.test(digits)) return 'mastercard';
-    if (/^3[47]/.test(digits))          return 'amex';
+    if (/^3[47]/.test(digits))           return 'amex';
+    if (/^(6011|64[4-9]|65)/.test(digits)) return 'discover';
     return 'unknown';
   }
 
@@ -36,18 +37,17 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (type === 'amex') {
       brandEl.innerHTML = '<span class="card-preview__brand-text card-preview__brand-text--amex">AMEX</span>';
     } else if (type === 'mastercard') {
-      brandEl.innerHTML = ''; // CSS pseudo-elements draw MC circles
+      brandEl.innerHTML = ''; // MC circles drawn via CSS pseudo-elements
     } else {
       brandEl.innerHTML = CREDIT_CARD_SVG;
     }
-    // Amex CID is on front; flip back if switching to Amex while card is flipped
+    // Amex CID lives on the front face — unflip the card when switching to Amex
     if (amexCid) {
       amexCid.hidden = (type !== 'amex');
       if (type === 'amex' && cardFlip) cardFlip.classList.remove('card-flip--flipped');
     }
   }
 
-  // Restore saved values into preview
   var currentType = detectType((info.cardNumber || '').replace(/\D/g, ''));
   updateBrand(currentType);
 
@@ -85,8 +85,10 @@ document.addEventListener('DOMContentLoaded', function () {
         iconEl.classList.toggle('form-field__icon--valid', valid && hasValue);
       }
       if (showErr) {
-        errorEl.textContent = input.validity.patternMismatch
-          ? (input.dataset.patternMessage || input.validationMessage)
+        errorEl.textContent = input.validity.patternMismatch || input.validity.customError
+          ? (input.dataset.patternMessage && !input.validity.customError
+              ? input.dataset.patternMessage
+              : input.validationMessage)
           : input.validationMessage;
         errorEl.hidden = false;
         input.setAttribute('aria-invalid', 'true');
@@ -98,8 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     input.addEventListener('blur', function () { touched = true; sync(false); });
     input.addEventListener('input', function () {
-      if (touched) sync(false);
       if (onInput) onInput();
+      if (touched) sync(false);
     });
     input._forceValidate = function () { touched = true; sync(true); };
     return input;
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var numberInput   = document.getElementById('cardNumber');
   var numberError   = document.getElementById('cardNumber-error');
   var numberTouched = false;
-  var cvvInput      = document.getElementById('cvv'); // declared early for cross-reference
+  var cvvInput      = document.getElementById('cvv'); // declared early — CVV constraints depend on card type
 
   numberInput.addEventListener('blur', function () {
     numberTouched = true;
@@ -134,15 +136,15 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   numberInput.addEventListener('input', function () {
-    var raw      = numberInput.value.replace(/\D/g, '');
-    var type     = detectType(raw);
-    var maxD     = type === 'amex' ? 15 : 16;
-    var digits   = raw.slice(0, maxD);
+    var raw       = numberInput.value.replace(/\D/g, '');
+    var type      = detectType(raw);
+    var maxD      = type === 'amex' ? 15 : 16;
+    var digits    = raw.slice(0, maxD);
     var formatted = formatNumber(digits, type);
 
-    numberInput.value      = formatted;
-    numberInput.maxLength  = type === 'amex' ? 17 : 19;
-    numberInput.pattern    = type === 'amex' ? '[0-9]{4} [0-9]{6} [0-9]{5}' : '[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}';
+    numberInput.value       = formatted;
+    numberInput.maxLength   = type === 'amex' ? 17 : 19;
+    numberInput.pattern     = type === 'amex' ? '[0-9]{4} [0-9]{6} [0-9]{5}' : '[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}';
     numberInput.placeholder = type === 'amex' ? '1234 567890 12345' : '1234 5678 9012 3456';
 
     previewNumber.textContent = digits
@@ -150,14 +152,14 @@ document.addEventListener('DOMContentLoaded', function () {
       : (type === 'amex' ? '•••• •••••• •••••' : '•••• •••• •••• ••••');
     updateBrand(type);
 
-    // Update CVV constraints for Amex (4 digits) vs others (3 digits)
+    // Amex uses 4-digit CID; all others use 3-digit CVV
     if (type !== currentType) {
       currentType = type;
       var isAmex = type === 'amex';
-      cvvInput.maxLength = 4;
-      cvvInput.pattern   = isAmex ? '[0-9]{4}' : '[0-9]{3,4}';
+      cvvInput.maxLength  = isAmex ? 4 : 4;
+      cvvInput.pattern    = isAmex ? '[0-9]{4}' : '[0-9]{3,4}';
       cvvInput.placeholder = isAmex ? '1234' : '123';
-      cvvInput.dataset.patternMessage = isAmex ? 'Amex CVV is 4 digits' : 'CVV must be 3 or 4 digits';
+      cvvInput.dataset.patternMessage = isAmex ? 'Amex CID is 4 digits' : 'CVV must be 3 or 4 digits';
     }
 
     if (numberTouched) {
@@ -177,27 +179,43 @@ document.addEventListener('DOMContentLoaded', function () {
     var hasValue = numberInput.value.trim().length > 0;
     numberInput.classList.toggle('form-field__input--error', !valid && hasValue);
     numberError.hidden = valid || !hasValue;
-    if (!valid) { numberError.textContent = numberInput.dataset.patternMessage; numberInput.setAttribute('aria-invalid','true'); }
+    if (!valid) { numberError.textContent = numberInput.dataset.patternMessage; numberInput.setAttribute('aria-invalid', 'true'); }
   };
 
   // ── Expiry ───────────────────────────────────────────────────────────────────
 
+  // Set custom validity BEFORE attachValidation's listeners fire so sync() sees it
+  var expiryEl = document.getElementById('expiryDate');
+  function checkExpiryExpired() {
+    var parts = expiryEl.value.match(/^(\d{2})\/(\d{2})$/);
+    if (parts) {
+      var mm = parseInt(parts[1], 10), yy = parseInt(parts[2], 10);
+      var now = new Date(), curMM = now.getMonth() + 1, curYY = now.getFullYear() % 100;
+      var expired = yy < curYY || (yy === curYY && mm < curMM);
+      expiryEl.setCustomValidity(expired ? 'Card has expired' : '');
+    } else {
+      expiryEl.setCustomValidity('');
+    }
+  }
+  expiryEl.addEventListener('input', checkExpiryExpired);
+  expiryEl.addEventListener('blur',  checkExpiryExpired);
+
   var prevLen = (info.expiryDate || '').length;
   var expiryInput = attachValidation('expiryDate', 'expiry-icon', function () {
-    var raw     = document.getElementById('expiryDate').value.replace(/\D/g, '').slice(0,4);
-    var current = document.getElementById('expiryDate').value;
-    var fmt = raw.length > 2 ? raw.slice(0,2) + '/' + raw.slice(2) : raw;
-    if (current.length > prevLen || raw.length > 2) document.getElementById('expiryDate').value = fmt;
-    prevLen = document.getElementById('expiryDate').value.length;
-    previewExpiry.textContent = document.getElementById('expiryDate').value || 'MM/YY';
+    var raw     = expiryEl.value.replace(/\D/g, '').slice(0, 4);
+    var current = expiryEl.value;
+    var fmt     = raw.length > 2 ? raw.slice(0, 2) + '/' + raw.slice(2) : raw;
+    if (current.length > prevLen || raw.length > 2) expiryEl.value = fmt;
+    prevLen = expiryEl.value.length;
+    previewExpiry.textContent = expiryEl.value || 'MM/YY';
   });
 
   // ── CVV + card flip ──────────────────────────────────────────────────────────
 
-  var cardFlip  = document.getElementById('card-flip');
-  var cvcBack   = document.getElementById('card-cvc-back');
-  var cvcFront  = document.getElementById('card-cvc-front');
-  var amexCid   = document.getElementById('amex-cid');
+  var cardFlip = document.getElementById('card-flip');
+  var cvcBack  = document.getElementById('card-cvc-back');
+  var cvcFront = document.getElementById('card-cvc-front');
+  var amexCid  = document.getElementById('amex-cid');
 
   var cvvValidated = attachValidation('cvv', 'cvv-icon', function () {
     var val = document.getElementById('cvv').value;
@@ -211,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('cvv').addEventListener('focus', function () {
     if (currentType !== 'amex') cardFlip.classList.add('card-flip--flipped');
   });
-
   document.getElementById('cvv').addEventListener('blur', function () {
     cardFlip.classList.remove('card-flip--flipped');
   });
@@ -226,19 +243,20 @@ document.addEventListener('DOMContentLoaded', function () {
     expiryInput._forceValidate();
     cvvValidated._forceValidate();
 
-    var invalid = [holderInput, numberInput, expiryInput, cvvValidated].find(function (i) { return !i.checkValidity(); });
+    var invalid = [holderInput, numberInput, expiryInput, cvvValidated]
+      .find(function (i) { return !i.checkValidity(); });
     if (invalid) { invalid.focus(); return; }
 
     var nextBtn = document.getElementById('next-btn');
     nextBtn.disabled = true;
     nextBtn.querySelector('span').textContent = 'Saving…';
 
+    // CVV is intentionally not saved — must never be stored even in sessionStorage
     CheckoutState.set({
       paymentInfo: {
         cardholderName: holderInput.value.trim(),
         cardNumber:     numberInput.value.replace(/\s/g, ''),
         expiryDate:     expiryInput.value.trim(),
-        cvv:            document.getElementById('cvv').value.trim(),
       }
     });
 

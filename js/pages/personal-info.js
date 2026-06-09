@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   buildProgressSteps('progress-steps', 2);
 
-  // Populate dial code select
   var dialSelect = document.getElementById('dialCode');
   COUNTRIES.forEach(function (c) {
     var opt = document.createElement('option');
@@ -10,13 +9,12 @@ document.addEventListener('DOMContentLoaded', function () {
     dialSelect.appendChild(opt);
   });
 
-  // Restore saved state
   var state = CheckoutState.get();
   var info  = state.personalInfo;
   if (info.fullName) document.getElementById('fullName').value = info.fullName;
   if (info.email)    document.getElementById('email').value    = info.email;
   if (info.phone) {
-    // Separate stored "dial number" string back into prefix + number
+    // Stored as "dialCode number" — split back on first space after dial code
     for (var i = 0; i < COUNTRIES.length; i++) {
       var c = COUNTRIES[i];
       if (info.phone.startsWith(c.dial + ' ')) {
@@ -27,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Blur-first validation
+  // Validates on blur (not on first keystroke) then live on every input after touched.
+  // iconId / successId may be null for fields without those elements.
   function attachValidation(inputId, iconId, successId, errorId) {
     var input   = document.getElementById(inputId);
     var icon    = iconId    ? document.getElementById(iconId)    : null;
@@ -65,9 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
     return input;
   }
 
-  // Attach validation to each field
-  var nameInput  = attachValidation('fullName', null, null, 'fullName-error');
-  var emailInput = attachValidation('email',    null, null, 'email-error');
+  var nameInput  = attachValidation('fullName', 'fullName-icon', 'fullName-success', 'fullName-error');
+  var emailInput = attachValidation('email',    'email-icon',    'email-success',    'email-error');
+
+  // Phone has its own wrapper (prefix select + number input) so handled separately
   var phoneInput = (function () {
     var input   = document.getElementById('phone');
     var error   = document.getElementById('phone-error');
@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function () {
     return input;
   })();
 
-  // Form submit
   document.getElementById('pi-form').addEventListener('submit', function (e) {
     e.preventDefault();
 

@@ -1,5 +1,5 @@
-// Builds the 6-step checkout progress indicator into the given container element.
-// currentStep: 1 = Cart, 2 = Personal Info, 3 = Address, 4 = Payment, 5 = Review, 6 = Done
+// Renders the checkout progress stepper into containerId.
+// currentStep: 1=Cart 2=PersonalInfo 3=Address 4=Payment 5=Review 6=Done
 function buildProgressSteps(containerId, currentStep) {
   var container = document.getElementById(containerId);
   if (!container) return;
@@ -21,6 +21,7 @@ function buildProgressSteps(containerId, currentStep) {
   STEPS.forEach(function (step, index) {
     var isDone   = currentStep > step.id;
     var isActive = currentStep === step.id;
+    var isFuture = !isDone && !isActive;
 
     var li = document.createElement('li');
     li.className = 'progress-steps__item';
@@ -31,8 +32,6 @@ function buildProgressSteps(containerId, currentStep) {
       pulse.setAttribute('aria-hidden', 'true');
       li.appendChild(pulse);
     }
-
-    var isFuture = !isDone && !isActive;
 
     var circle = document.createElement('div');
     var circleClasses = ['progress-steps__circle'];
@@ -64,8 +63,8 @@ function buildProgressSteps(containerId, currentStep) {
       connWrap.setAttribute('aria-hidden', 'true');
       var conn = document.createElement('div');
       var connClass = 'progress-steps__connector';
-      if (isDone) connClass += ' progress-steps__connector--done';
-      else if (isFuture) connClass += ' progress-steps__connector--future';
+      if (isDone)   connClass += ' progress-steps__connector--done';
+      if (isFuture) connClass += ' progress-steps__connector--future';
       conn.className = connClass;
       connWrap.appendChild(conn);
       ol.appendChild(connWrap);
