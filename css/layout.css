@@ -766,7 +766,7 @@
   .checkout-split__form-area {
     flex: 1;
     min-height: 0;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
 
   /* Form fills height — actions pushed to bottom */
@@ -774,7 +774,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-5);
   }
 
   .checkout-split__form-area > .form .form__actions {

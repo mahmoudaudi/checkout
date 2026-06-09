@@ -260,11 +260,11 @@
 
 @media (min-width: 64rem) {
   .form {
-    gap: var(--space-4);
+    gap: var(--space-5);
   }
 
   .form-field {
-    gap: 4px;
+    gap: 6px;
   }
 
   .form-field__label {
@@ -273,7 +273,7 @@
 
   .form-field__input,
   .form-field__select {
-    padding-block: 0.4375rem;
+    padding-block: 0.625rem;
     font-size: var(--font-size-sm);
   }
 }
@@ -348,7 +348,7 @@
 @media (min-width: 64rem) {
   .phone-field__prefix,
   .phone-field__number {
-    padding-block: 0.4375rem;
+    padding-block: 0.625rem;
     font-size: var(--font-size-sm);
   }
 }
@@ -422,7 +422,7 @@
 
 @media (min-width: 64rem) {
   .billing-checkbox {
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-3) var(--space-4);
   }
 }
 
