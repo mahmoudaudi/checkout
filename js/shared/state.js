@@ -12,6 +12,7 @@ const CheckoutState = (function () {
     },
     paymentInfo: { cardholderName: '', cardNumber: '', expiryDate: '' }, // cvv intentionally excluded
     confirmed: false,
+    step: 0,
     cartInfo: {
       items: [
         { id: '1', name: 'Premium Wireless Headphones', variant: 'Black · Default Title', img: 'assets/images/headphone.avif', unitPrice: 80.00, qty: 1 },

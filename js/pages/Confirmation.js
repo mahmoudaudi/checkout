@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
       btn.disabled = true;
       btn.querySelector('span').textContent = 'Processing…';
     });
-    CheckoutState.set({ confirmed: true });
+    CheckoutState.set({ confirmed: true, step: 4 });
     window.location.href = 'processing.html';
   }
   document.getElementById('confirm-btn').addEventListener('click', handleConfirm);

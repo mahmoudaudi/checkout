@@ -274,7 +274,8 @@ document.addEventListener('DOMContentLoaded', function () {
           cardholderName: holderInput.value.trim(),
           cardNumber:     numberInput.value.replace(/\D/g, '').slice(-4),
           expiryDate:     expiryInput.value.trim(),
-        }
+        },
+        step: 3,
       });
       window.location.href = 'confirmation.html';
     } catch (err) {

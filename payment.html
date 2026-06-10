@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/components/form.css">
   <link rel="stylesheet" href="css/components/progress-steps.css">
   <link rel="stylesheet" href="css/components/card-preview.css">
-  <script>(function(){try{const s=JSON.parse(sessionStorage.getItem('checkout')||'{}');const pi=s.personalInfo||{},ai=s.addressInfo||{};if(!pi.fullName)location.replace('personal-info.html');else if(!ai.addressLine1)location.replace('address.html');}catch(e){location.replace('personal-info.html');}})();</script>
+  <script>(function(){try{const s=JSON.parse(sessionStorage.getItem('checkout')||'{}}');const step=s.step||0;if(step<1)location.replace('personal-info.html');else if(step<2)location.replace('address.html');}catch(e){location.replace('personal-info.html');}})();</script>
 </head>
 <body>
 <div class="checkout-split">

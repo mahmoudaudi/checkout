@@ -117,7 +117,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fullName: nameInput.value.trim(),
         email:    emailInput.value.trim(),
         phone:    dialSelect.value + ' ' + phoneInput.value.trim(),
-      }
+      },
+      step: 1,
     });
 
     window.location.href = 'address.html';

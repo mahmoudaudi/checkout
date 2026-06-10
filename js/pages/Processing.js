@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
   setTimeout(function () {
     clearInterval(dotsTimer);
     const success = Math.random() < 0.7;
+    CheckoutState.set({ step: 5 });
     window.location.href = success ? 'success.html' : 'failure.html';
   }, DURATION + 200);
 

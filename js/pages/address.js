@@ -122,7 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
         billingAddressLine1: document.getElementById('billingAddressLine1').value.trim(),
         billingAddressLine2: document.getElementById('billingAddressLine2').value.trim(),
         billingPostalCode:   document.getElementById('billingPostalCode').value.trim(),
-      }
+      },
+      step: 2,
     });
 
     window.location.href = 'payment.html';
