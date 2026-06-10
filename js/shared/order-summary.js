@@ -12,15 +12,15 @@
   }
 
   function renderOrderSummary() {
-    var cart = CheckoutState.get().cartInfo;
+    const cart = CheckoutState.get().cartInfo;
     if (!cart || !Array.isArray(cart.items) || !cart.items.length) return;
 
-    var subtotal = cart.items.reduce(function (s, i) { return s + i.unitPrice * i.qty; }, 0);
-    var shipping = typeof cart.shipping === 'number' ? cart.shipping : 12.99;
-    var total    = subtotal + shipping;
+    const subtotal = cart.items.reduce(function (s, i) { return s + i.unitPrice * i.qty; }, 0);
+    const shipping = typeof cart.shipping === 'number' ? cart.shipping : 12.99;
+    const total    = subtotal + shipping;
 
     // ── Desktop sidebar ───────────────────────────────────────────────────────
-    var itemsEl = document.querySelector('.sidebar-summary__items');
+    const itemsEl = document.querySelector('.sidebar-summary__items');
     if (itemsEl) {
       itemsEl.innerHTML = cart.items.map(function (i) {
         return '<div class="sidebar-item">' +
@@ -37,19 +37,19 @@
       }).join('');
     }
 
-    var ddEls = document.querySelectorAll('.sidebar-summary__rows .sidebar-summary__row dd');
+    const ddEls = document.querySelectorAll('.sidebar-summary__rows .sidebar-summary__row dd');
     if (ddEls[0]) ddEls[0].textContent = fmt(subtotal);
     if (ddEls[1]) ddEls[1].textContent = fmt(shipping);
-    var totalEl = document.querySelector('.sidebar-summary__total dd');
+    const totalEl = document.querySelector('.sidebar-summary__total dd');
     if (totalEl) totalEl.textContent = fmt(total);
 
     // ── Mobile accordion ──────────────────────────────────────────────────────
-    var mstAmount = document.querySelector('.mst-amount');
+    const mstAmount = document.querySelector('.mst-amount');
     if (mstAmount) mstAmount.textContent = fmt(total);
 
-    var mstBody = document.getElementById('mst-body');
+    const mstBody = document.getElementById('mst-body');
     if (mstBody) {
-      var itemsHtml = cart.items.map(function (i) {
+      const itemsHtml = cart.items.map(function (i) {
         return '<div style="display:flex;align-items:center;gap:0.75rem;">' +
           '<img src="' + esc(i.img) + '" alt="" width="44" height="44" style="border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy">' +
           '<div style="flex:1;min-width:0;">' +
@@ -71,9 +71,9 @@
     }
 
     // ── Confirm & Pay button (confirmation page only) ─────────────────────────
-    var confirmBtn = document.getElementById('confirm-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
     if (confirmBtn) {
-      var span = confirmBtn.querySelector('span');
+      const span = confirmBtn.querySelector('span');
       if (span) span.textContent = 'Confirm & Pay ' + fmt(total);
     }
   }

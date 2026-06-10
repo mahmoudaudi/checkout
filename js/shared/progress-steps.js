@@ -1,10 +1,10 @@
 // Renders the checkout progress stepper into containerId.
 // currentStep: 1=Cart 2=PersonalInfo 3=Address 4=Payment 5=Review 6=Done
 function buildProgressSteps(containerId, currentStep) {
-  var container = document.getElementById(containerId);
+  const container = document.getElementById(containerId);
   if (!container) return;
 
-  var STEPS = [
+  const STEPS = [
     { id: 1, short: 'Cart',    full: 'Cart' },
     { id: 2, short: 'Contact', full: 'Personal Info' },
     { id: 3, short: 'Address', full: 'Address' },
@@ -13,28 +13,28 @@ function buildProgressSteps(containerId, currentStep) {
     { id: 6, short: 'Done',    full: 'Confirmation' },
   ];
 
-  var CHECK = '<i data-lucide="check" width="12" height="12" stroke-width="2.5" aria-hidden="true"></i>';
+  const CHECK = '<i data-lucide="check" width="12" height="12" stroke-width="2.5" aria-hidden="true"></i>';
 
-  var ol = document.createElement('ol');
+  const ol = document.createElement('ol');
   ol.className = 'progress-steps__list';
 
   STEPS.forEach(function (step, index) {
-    var isDone   = currentStep > step.id;
-    var isActive = currentStep === step.id;
-    var isFuture = !isDone && !isActive;
+    const isDone   = currentStep > step.id;
+    const isActive = currentStep === step.id;
+    const isFuture = !isDone && !isActive;
 
-    var li = document.createElement('li');
+    const li = document.createElement('li');
     li.className = 'progress-steps__item';
 
     if (isActive) {
-      var pulse = document.createElement('div');
+      const pulse = document.createElement('div');
       pulse.className = 'progress-steps__pulse';
       pulse.setAttribute('aria-hidden', 'true');
       li.appendChild(pulse);
     }
 
-    var circle = document.createElement('div');
-    var circleClasses = ['progress-steps__circle'];
+    const circle = document.createElement('div');
+    const circleClasses = ['progress-steps__circle'];
     if (isDone)   circleClasses.push('progress-steps__circle--done');
     if (isActive) circleClasses.push('progress-steps__circle--active');
     if (isFuture) circleClasses.push('progress-steps__circle--future');
@@ -44,8 +44,8 @@ function buildProgressSteps(containerId, currentStep) {
       ? CHECK
       : '<span class="progress-steps__number" aria-hidden="true">' + step.id + '</span>';
 
-    var label = document.createElement('span');
-    var labelClass = 'progress-steps__label';
+    const label = document.createElement('span');
+    let labelClass = 'progress-steps__label';
     if (isActive) labelClass += ' progress-steps__label--active';
     else if (isDone) labelClass += ' progress-steps__label--done';
     label.className = labelClass;
@@ -58,11 +58,11 @@ function buildProgressSteps(containerId, currentStep) {
     ol.appendChild(li);
 
     if (index < STEPS.length - 1) {
-      var connWrap = document.createElement('li');
+      const connWrap = document.createElement('li');
       connWrap.className = 'progress-steps__connector-wrap';
       connWrap.setAttribute('aria-hidden', 'true');
-      var conn = document.createElement('div');
-      var connClass = 'progress-steps__connector';
+      const conn = document.createElement('div');
+      let connClass = 'progress-steps__connector';
       if (isDone)   connClass += ' progress-steps__connector--done';
       if (isFuture) connClass += ' progress-steps__connector--future';
       conn.className = connClass;

@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/components/button.css">
   <link rel="stylesheet" href="css/components/form.css">
   <link rel="stylesheet" href="css/components/progress-steps.css">
+  <script>(function(){try{const s=JSON.parse(sessionStorage.getItem('checkout')||'{}');const pi=s.personalInfo||{},ai=s.addressInfo||{},pay=s.paymentInfo||{};if(!pi.fullName)location.replace('personal-info.html');else if(!ai.addressLine1)location.replace('address.html');else if(!pay.cardholderName)location.replace('payment.html');}catch(e){location.replace('personal-info.html');}})();</script>
 </head>
 <body>
 <div class="checkout-split">

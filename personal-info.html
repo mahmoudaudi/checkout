@@ -232,8 +232,8 @@
 <script>
   // Mobile order summary toggle
   document.getElementById('mst-btn').addEventListener('click', function() {
-    var body = document.getElementById('mst-body');
-    var open = this.getAttribute('aria-expanded') === 'true';
+    const body = document.getElementById('mst-body');
+    const open = this.getAttribute('aria-expanded') === 'true';
     this.setAttribute('aria-expanded', String(!open));
     body.hidden = open;
     this.querySelector('.mst-chevron').style.transform = open ? '' : 'rotate(180deg)';

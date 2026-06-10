@@ -1,22 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
   buildProgressSteps('progress-steps', 2);
 
-  var dialSelect = document.getElementById('dialCode');
+  const dialSelect = document.getElementById('dialCode');
   COUNTRIES.forEach(function (c) {
-    var opt = document.createElement('option');
+    const opt = document.createElement('option');
     opt.value = c.dial;
     opt.textContent = c.flag + ' ' + c.dial;
     dialSelect.appendChild(opt);
   });
 
-  var state = CheckoutState.get();
-  var info  = state.personalInfo;
+  const state = CheckoutState.get();
+  const info  = state.personalInfo;
   if (info.fullName) document.getElementById('fullName').value = info.fullName;
   if (info.email)    document.getElementById('email').value    = info.email;
   if (info.phone) {
     // Stored as "dialCode number" — split back on first space after dial code
-    for (var i = 0; i < COUNTRIES.length; i++) {
-      var c = COUNTRIES[i];
+    for (let i = 0; i < COUNTRIES.length; i++) {
+      const c = COUNTRIES[i];
       if (info.phone.startsWith(c.dial + ' ')) {
         dialSelect.value = c.dial;
         document.getElementById('phone').value = info.phone.slice(c.dial.length).trim();
@@ -28,16 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
   // Validates on blur (not on first keystroke) then live on every input after touched.
   // iconId / successId may be null for fields without those elements.
   function attachValidation(inputId, iconId, successId, errorId) {
-    var input   = document.getElementById(inputId);
-    var icon    = iconId    ? document.getElementById(iconId)    : null;
-    var success = successId ? document.getElementById(successId) : null;
-    var error   = document.getElementById(errorId);
-    var touched = false;
+    const input   = document.getElementById(inputId);
+    const icon    = iconId    ? document.getElementById(iconId)    : null;
+    const success = successId ? document.getElementById(successId) : null;
+    const error   = document.getElementById(errorId);
+    let touched = false;
 
     function sync(force) {
-      var hasValue = input.value.trim().length > 0;
-      var valid    = input.checkValidity();
-      var showErr  = !valid && (hasValue || force) && (touched || force);
+      const hasValue = input.value.trim().length > 0;
+      const valid    = input.checkValidity();
+      const showErr  = !valid && (hasValue || force) && (touched || force);
 
       input.classList.toggle('form-field__input--error', showErr);
       input.classList.toggle('form-field__input--valid', valid && hasValue);
@@ -64,19 +64,19 @@ document.addEventListener('DOMContentLoaded', function () {
     return input;
   }
 
-  var nameInput  = attachValidation('fullName', 'fullName-icon', 'fullName-success', 'fullName-error');
-  var emailInput = attachValidation('email',    'email-icon',    'email-success',    'email-error');
+  const nameInput  = attachValidation('fullName', 'fullName-icon', 'fullName-success', 'fullName-error');
+  const emailInput = attachValidation('email',    'email-icon',    'email-success',    'email-error');
 
   // Phone has its own wrapper (prefix select + number input) so handled separately
-  var phoneInput = (function () {
-    var input   = document.getElementById('phone');
-    var error   = document.getElementById('phone-error');
-    var touched = false;
+  const phoneInput = (function () {
+    const input   = document.getElementById('phone');
+    const error   = document.getElementById('phone-error');
+    let touched = false;
 
     function sync(force) {
-      var hasValue = input.value.trim().length > 0;
-      var valid    = input.checkValidity() && hasValue;
-      var showErr  = !valid && (hasValue || force) && (touched || force);
+      const hasValue = input.value.trim().length > 0;
+      const valid    = input.checkValidity() && hasValue;
+      const showErr  = !valid && (hasValue || force) && (touched || force);
       input.classList.toggle('form-field__input--error', showErr);
       input.classList.toggle('form-field__input--valid', valid);
       if (showErr) {
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!emailInput.checkValidity()) { emailInput.focus(); return; }
     if (!phoneInput.checkValidity()) { phoneInput.focus(); return; }
 
-    var nextBtn = document.getElementById('next-btn');
+    const nextBtn = document.getElementById('next-btn');
     nextBtn.disabled = true;
     nextBtn.querySelector('span').textContent = 'Saving…';
 

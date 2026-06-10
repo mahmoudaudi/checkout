@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
   buildProgressSteps('progress-steps', 4);
 
-  var state = CheckoutState.get();
-  var info  = state.paymentInfo;
+  const state = CheckoutState.get();
+  const info  = state.paymentInfo;
 
   // ── Card type detection & live formatting ────────────────────────────────────
 
@@ -23,12 +23,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Live card preview ────────────────────────────────────────────────────────
 
-  var previewName   = document.getElementById('card-name-preview');
-  var previewNumber = document.getElementById('card-number-preview');
-  var previewExpiry = document.getElementById('card-expiry-preview');
-  var brandEl       = document.getElementById('card-brand');
+  const previewName   = document.getElementById('card-name-preview');
+  const previewNumber = document.getElementById('card-number-preview');
+  const previewExpiry = document.getElementById('card-expiry-preview');
+  const brandEl       = document.getElementById('card-brand');
+  const cardFlip      = document.getElementById('card-flip');
+  const cvcBack       = document.getElementById('card-cvc-back');
+  const cvcFront      = document.getElementById('card-cvc-front');
+  const amexCid       = document.getElementById('amex-cid');
 
-  var CREDIT_CARD_SVG = '<i data-lucide="credit-card" width="22" height="22" aria-hidden="true"></i>';
+  const CREDIT_CARD_SVG = '<i data-lucide="credit-card" width="22" height="22" aria-hidden="true"></i>';
 
   function updateBrand(type) {
     if (brandEl.getAttribute('data-card-type') === type) return;
@@ -51,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Only last 4 digits are stored — cannot reliably detect type from them
-  var currentType = 'unknown';
+  let currentType = 'unknown';
   updateBrand(currentType);
 
   if (info.cardholderName) {
@@ -67,15 +71,15 @@ document.addEventListener('DOMContentLoaded', function () {
   // ── Validation helper ────────────────────────────────────────────────────────
 
   function attachValidation(inputId, iconId, onInput) {
-    var input   = document.getElementById(inputId);
-    var iconEl  = iconId ? document.getElementById(iconId) : null;
-    var errorEl = document.getElementById(inputId + '-error');
-    var touched = false;
+    const input   = document.getElementById(inputId);
+    const iconEl  = iconId ? document.getElementById(iconId) : null;
+    const errorEl = document.getElementById(inputId + '-error');
+    let touched = false;
 
     function sync(force) {
-      var hasValue = input.value.trim().length > 0;
-      var valid    = input.checkValidity();
-      var showErr  = !valid && (hasValue || force) && (touched || force);
+      const hasValue = input.value.trim().length > 0;
+      const valid    = input.checkValidity();
+      const showErr  = !valid && (hasValue || force) && (touched || force);
 
       input.classList.toggle('form-field__input--error', showErr);
       input.classList.toggle('form-field__input--valid', valid && hasValue);
@@ -108,21 +112,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Cardholder name ──────────────────────────────────────────────────────────
 
-  var holderInput = attachValidation('cardholderName', 'holder-icon', function () {
+  const holderInput = attachValidation('cardholderName', 'holder-icon', function () {
     previewName.textContent = document.getElementById('cardholderName').value || 'FULL NAME';
   });
 
   // ── Card number ──────────────────────────────────────────────────────────────
 
-  var numberInput   = document.getElementById('cardNumber');
-  var numberError   = document.getElementById('cardNumber-error');
-  var numberTouched = false;
-  var cvvInput      = document.getElementById('cvv'); // declared early — CVV constraints depend on card type
+  const numberInput   = document.getElementById('cardNumber');
+  const numberError   = document.getElementById('cardNumber-error');
+  let numberTouched = false;
+  const cvvInput      = document.getElementById('cvv'); // declared early — CVV constraints depend on card type
 
   numberInput.addEventListener('blur', function () {
     numberTouched = true;
-    var valid    = numberInput.checkValidity();
-    var hasValue = numberInput.value.trim().length > 0;
+    const valid    = numberInput.checkValidity();
+    const hasValue = numberInput.value.trim().length > 0;
     numberInput.classList.toggle('form-field__input--error', !valid && hasValue);
     numberInput.classList.toggle('form-field__input--valid',  valid && hasValue);
     numberError.hidden = valid || !hasValue;
@@ -135,11 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   numberInput.addEventListener('input', function () {
-    var raw       = numberInput.value.replace(/\D/g, '');
-    var type      = detectType(raw);
-    var maxD      = type === 'amex' ? 15 : 16;
-    var digits    = raw.slice(0, maxD);
-    var formatted = formatNumber(digits, type);
+    const raw       = numberInput.value.replace(/\D/g, '');
+    const type      = detectType(raw);
+    const maxD      = type === 'amex' ? 15 : 16;
+    const digits    = raw.slice(0, maxD);
+    const formatted = formatNumber(digits, type);
 
     numberInput.value       = formatted;
     numberInput.maxLength   = type === 'amex' ? 17 : 19;
@@ -154,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Amex uses 4-digit CID; all others use 3-digit CVV
     if (type !== currentType) {
       currentType = type;
-      var isAmex = type === 'amex';
+      const isAmex = type === 'amex';
       cvvInput.maxLength  = 4;
       cvvInput.pattern    = isAmex ? '[0-9]{4}' : '[0-9]{3,4}';
       cvvInput.placeholder = isAmex ? '1234' : '123';
@@ -162,8 +166,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     if (numberTouched) {
-      var valid    = numberInput.checkValidity();
-      var hasValue = digits.length > 0;
+      const valid    = numberInput.checkValidity();
+      const hasValue = digits.length > 0;
       numberInput.classList.toggle('form-field__input--error', !valid && hasValue);
       numberInput.classList.toggle('form-field__input--valid',  valid && hasValue);
       numberError.hidden = valid || !hasValue;
@@ -174,8 +178,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   numberInput._forceValidate = function () {
     numberTouched = true;
-    var valid    = numberInput.checkValidity();
-    var hasValue = numberInput.value.trim().length > 0;
+    const valid    = numberInput.checkValidity();
+    const hasValue = numberInput.value.trim().length > 0;
     numberInput.classList.toggle('form-field__input--error', !valid && hasValue);
     numberError.hidden = valid || !hasValue;
     if (!valid) { numberError.textContent = numberInput.dataset.patternMessage; numberInput.setAttribute('aria-invalid', 'true'); }
@@ -184,13 +188,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // ── Expiry ───────────────────────────────────────────────────────────────────
 
   // Set custom validity BEFORE attachValidation's listeners fire so sync() sees it
-  var expiryEl = document.getElementById('expiryDate');
+  const expiryEl = document.getElementById('expiryDate');
   function checkExpiryExpired() {
-    var parts = expiryEl.value.match(/^(\d{2})\/(\d{2})$/);
+    const parts = expiryEl.value.match(/^(\d{2})\/(\d{2})$/);
     if (parts) {
-      var mm = parseInt(parts[1], 10), yy = parseInt(parts[2], 10);
-      var now = new Date(), curMM = now.getMonth() + 1, curYY = now.getFullYear() % 100;
-      var expired = yy < curYY || (yy === curYY && mm < curMM);
+      const mm = parseInt(parts[1], 10), yy = parseInt(parts[2], 10);
+      const now = new Date(), curMM = now.getMonth() + 1, curYY = now.getFullYear() % 100;
+      const expired = yy < curYY || (yy === curYY && mm < curMM);
       expiryEl.setCustomValidity(expired ? 'Card has expired' : '');
     } else {
       expiryEl.setCustomValidity('');
@@ -199,11 +203,11 @@ document.addEventListener('DOMContentLoaded', function () {
   expiryEl.addEventListener('input', checkExpiryExpired);
   expiryEl.addEventListener('blur',  checkExpiryExpired);
 
-  var prevLen = (info.expiryDate || '').length;
-  var expiryInput = attachValidation('expiryDate', 'expiry-icon', function () {
-    var raw     = expiryEl.value.replace(/\D/g, '').slice(0, 4);
-    var current = expiryEl.value;
-    var fmt     = raw.length > 2 ? raw.slice(0, 2) + '/' + raw.slice(2) : raw;
+  let prevLen = (info.expiryDate || '').length;
+  const expiryInput = attachValidation('expiryDate', 'expiry-icon', function () {
+    const raw     = expiryEl.value.replace(/\D/g, '').slice(0, 4);
+    const current = expiryEl.value;
+    const fmt     = raw.length > 2 ? raw.slice(0, 2) + '/' + raw.slice(2) : raw;
     if (current.length > prevLen || raw.length > 2) expiryEl.value = fmt;
     prevLen = expiryEl.value.length;
     previewExpiry.textContent = expiryEl.value || 'MM/YY';
@@ -211,13 +215,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── CVV + card flip ──────────────────────────────────────────────────────────
 
-  var cardFlip = document.getElementById('card-flip');
-  var cvcBack  = document.getElementById('card-cvc-back');
-  var cvcFront = document.getElementById('card-cvc-front');
-  var amexCid  = document.getElementById('amex-cid');
-
-  var cvvValidated = attachValidation('cvv', 'cvv-icon', function () {
-    var val = document.getElementById('cvv').value;
+  const cvvValidated = attachValidation('cvv', 'cvv-icon', function () {
+    const val = document.getElementById('cvv').value;
     if (currentType === 'amex') {
       cvcFront.textContent = val || '••••';
     } else {
@@ -232,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // pointerdown on the submit button fires before CVV blur — setting this flag
   // prevents the 0.65s 3D flip animation from starting at the same time as form
   // validation DOM updates, which causes a visible freeze on mobile
-  var submitting = false;
+  let submitting = false;
   document.getElementById('cvv').addEventListener('blur', function () {
     if (!submitting) cardFlip.classList.remove('card-flip--flipped');
   });
@@ -251,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
     expiryInput._forceValidate();
     cvvValidated._forceValidate();
 
-    var invalid = [holderInput, numberInput, expiryInput, cvvValidated]
+    const invalid = [holderInput, numberInput, expiryInput, cvvValidated]
       .find(function (i) { return !i.checkValidity(); });
     if (invalid) {
       submitting = false;
@@ -263,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    var nextBtn = document.getElementById('next-btn');
+    const nextBtn = document.getElementById('next-btn');
     nextBtn.disabled = true;
     nextBtn.querySelector('span').textContent = 'Saving…';
 

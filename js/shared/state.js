@@ -11,6 +11,7 @@ const CheckoutState = (function () {
       billingAddressLine1: '', billingAddressLine2: '', billingPostalCode: '',
     },
     paymentInfo: { cardholderName: '', cardNumber: '', expiryDate: '' }, // cvv intentionally excluded
+    confirmed: false,
     cartInfo: {
       items: [
         { id: '1', name: 'Premium Wireless Headphones', variant: 'Black · Default Title', img: 'assets/images/headphone.avif', unitPrice: 80.00, qty: 1 },
@@ -23,7 +24,7 @@ const CheckoutState = (function () {
   return {
     get: function () {
       try {
-        var s = sessionStorage.getItem(KEY);
+        const s = sessionStorage.getItem(KEY);
         return s ? Object.assign({}, DEFAULTS, JSON.parse(s)) : Object.assign({}, DEFAULTS);
       } catch (e) { return Object.assign({}, DEFAULTS); }
     },

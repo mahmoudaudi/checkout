@@ -1,23 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
-  var state = CheckoutState.get();
-  var pi    = state.personalInfo;
-  var pay   = state.paymentInfo;
+  const state = CheckoutState.get();
+  const pi    = state.personalInfo;
+  const pay   = state.paymentInfo;
 
   // Generate random order number
-  var chars  = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var ordNum = '';
-  for (var i = 0; i < 12; i++) {
+  const chars  = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let ordNum = '';
+  for (let i = 0; i < 12; i++) {
     if (i === 4 || i === 8) ordNum += '-';
     ordNum += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   document.getElementById('order-number').textContent = ordNum;
 
   // Copy order number button
-  var copyBtn = document.getElementById('copy-order-btn');
+  const copyBtn = document.getElementById('copy-order-btn');
   if (copyBtn) {
     copyBtn.addEventListener('click', function () {
-      var num = document.getElementById('order-number').textContent;
-      var label = copyBtn.querySelector('span');
+      const num = document.getElementById('order-number').textContent;
+      const label = copyBtn.querySelector('span');
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(num).then(function () {
           label.textContent = 'Copied!';
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       } else {
         // Fallback for older browsers
-        var ta = document.createElement('textarea');
+        const ta = document.createElement('textarea');
         ta.value = num;
         ta.style.cssText = 'position:fixed;left:-9999px';
         document.body.appendChild(ta);
@@ -39,24 +39,24 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Delivery estimate: 5–7 business days from today
-  var today    = new Date();
-  var earliest = new Date(today);
-  var latest   = new Date(today);
+  const today    = new Date();
+  const earliest = new Date(today);
+  const latest   = new Date(today);
   earliest.setDate(today.getDate() + 5);
   latest.setDate(today.getDate() + 7);
 
-  var fmt = { month: 'short', day: 'numeric' };
-  var earlyStr = earliest.toLocaleDateString('en-US', fmt);
-  var lateStr  = latest.toLocaleDateString('en-US', Object.assign({ year: 'numeric' }, fmt));
+  const fmt = { month: 'short', day: 'numeric' };
+  const earlyStr = earliest.toLocaleDateString('en-US', fmt);
+  const lateStr  = latest.toLocaleDateString('en-US', Object.assign({ year: 'numeric' }, fmt));
   document.getElementById('delivery-date').textContent = earlyStr + ' – ' + lateStr;
 
   // Populate info cards (email + last4)
-  var grid     = document.getElementById('info-grid');
-  var email    = pi.email || '—';
-  var last4    = (pay.cardNumber || '').replace(/\D/g, '').slice(-4) || '••••';
-  var cardMask = '•••• ' + last4;
+  const grid     = document.getElementById('info-grid');
+  const email    = pi.email || '—';
+  const last4    = (pay.cardNumber || '').replace(/\D/g, '').slice(-4) || '••••';
+  const cardMask = '•••• ' + last4;
 
-  var cards = [
+  const cards = [
     {
       icon: '<i data-lucide="mail" width="18" height="18" aria-hidden="true"></i>',
       label: 'Confirmation sent to',
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
   ];
 
   cards.forEach(function (c) {
-    var div   = document.createElement('div');
+    const div   = document.createElement('div');
     div.className = 'result__info-card';
     div.innerHTML =
       '<div class="result__info-icon-wrap" aria-hidden="true">' + c.icon + '</div>' +
@@ -95,22 +95,22 @@ function escapeHtml(str) {
 }
 
 function spawnConfetti() {
-  var COLORS = ['#7c3aed', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#06b6d4'];
-  var COUNT  = 60;
+  const COLORS = ['#7c3aed', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#06b6d4'];
+  const COUNT  = 60;
 
-  var container = document.createElement('div');
+  const container = document.createElement('div');
   container.setAttribute('aria-hidden', 'true');
   container.style.cssText = 'position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9999;';
   document.body.appendChild(container);
 
-  for (var i = 0; i < COUNT; i++) {
+  for (let i = 0; i < COUNT; i++) {
     (function (idx) {
-      var el   = document.createElement('div');
-      var size = 6 + Math.random() * 6;
-      var x    = Math.random() * 100;
-      var delay = Math.random() * 800;
-      var dur   = 1000 + Math.random() * 1200;
-      var color = COLORS[idx % COLORS.length];
+      const el   = document.createElement('div');
+      const size = 6 + Math.random() * 6;
+      const x    = Math.random() * 100;
+      const delay = Math.random() * 800;
+      const dur   = 1000 + Math.random() * 1200;
+      const color = COLORS[idx % COLORS.length];
 
       el.style.cssText = [
         'position:absolute',
@@ -128,7 +128,7 @@ function spawnConfetti() {
   }
 
   if (!document.getElementById('confetti-style')) {
-    var style = document.createElement('style');
+    const style = document.createElement('style');
     style.id = 'confetti-style';
     style.textContent = '@keyframes confetti-fall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(360deg)}}';
     document.head.appendChild(style);

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/components/form.css">
   <link rel="stylesheet" href="css/components/progress-steps.css">
   <link rel="stylesheet" href="css/components/card-preview.css">
+  <script>(function(){try{const s=JSON.parse(sessionStorage.getItem('checkout')||'{}');const pi=s.personalInfo||{},ai=s.addressInfo||{};if(!pi.fullName)location.replace('personal-info.html');else if(!ai.addressLine1)location.replace('address.html');}catch(e){location.replace('personal-info.html');}})();</script>
 </head>
 <body>
 <div class="checkout-split">
@@ -261,8 +262,8 @@
 <script src="js/pages/payment.js"></script>
 <script>
   document.getElementById('mst-btn').addEventListener('click', function() {
-    var body = document.getElementById('mst-body');
-    var open = this.getAttribute('aria-expanded') === 'true';
+    const body = document.getElementById('mst-body');
+    const open = this.getAttribute('aria-expanded') === 'true';
     this.setAttribute('aria-expanded', String(!open));
     body.hidden = open;
     this.querySelector('.mst-chevron').style.transform = open ? '' : 'rotate(180deg)';

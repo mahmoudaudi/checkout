@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
   buildProgressSteps('progress-steps', 3);
 
   function populateCountries(selectId, savedValue) {
-    var sel = document.getElementById(selectId);
+    const sel = document.getElementById(selectId);
     COUNTRIES.forEach(function (c) {
-      var opt = document.createElement('option');
+      const opt = document.createElement('option');
       opt.value = c.code;
       opt.textContent = c.flag + '  ' + c.name;
       if (c.code === savedValue) opt.selected = true;
@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  var state = CheckoutState.get();
-  var info  = state.addressInfo;
+  const state = CheckoutState.get();
+  const info  = state.addressInfo;
 
   populateCountries('country',        info.country);
   populateCountries('billingCountry', info.billingCountry);
@@ -27,17 +27,17 @@ document.addEventListener('DOMContentLoaded', function () {
   if (info.billingAddressLine2) document.getElementById('billingAddressLine2').value = info.billingAddressLine2;
   if (info.billingPostalCode)   document.getElementById('billingPostalCode').value   = info.billingPostalCode;
 
-  var checkbox     = document.getElementById('sameAsBilling');
-  var billingForm  = document.getElementById('billing-form');
-  var billingLabel = document.getElementById('billing-label');
+  const checkbox     = document.getElementById('sameAsBilling');
+  const billingForm  = document.getElementById('billing-form');
+  const billingLabel = document.getElementById('billing-label');
 
   function syncBillingVisibility() {
-    var same = checkbox.checked;
+    const same = checkbox.checked;
     billingForm.hidden = same;
     billingLabel.classList.toggle('billing-checkbox--checked', same);
     // Fields are only required when the billing section is visible
     ['billingCountry', 'billingCity', 'billingAddressLine1', 'billingPostalCode'].forEach(function (id) {
-      var el = document.getElementById(id);
+      const el = document.getElementById(id);
       if (el) el.required = !same;
     });
   }
@@ -47,15 +47,15 @@ document.addEventListener('DOMContentLoaded', function () {
   checkbox.addEventListener('change', syncBillingVisibility);
 
   function attachValidation(id, isSelect) {
-    var input   = document.getElementById(id);
-    var errorEl = document.getElementById(id + '-error');
+    const input   = document.getElementById(id);
+    const errorEl = document.getElementById(id + '-error');
     if (!input || !errorEl) return input;
-    var touched = false;
+    let touched = false;
 
     function sync(force) {
-      var hasValue = isSelect ? input.value !== '' : input.value.trim().length > 0;
-      var valid    = input.checkValidity();
-      var showErr  = !valid && (hasValue || force) && (touched || force);
+      const hasValue = isSelect ? input.value !== '' : input.value.trim().length > 0;
+      const valid    = input.checkValidity();
+      const showErr  = !valid && (hasValue || force) && (touched || force);
 
       input.classList.toggle(isSelect ? 'form-field__select--error' : 'form-field__input--error', showErr);
       if (!isSelect) input.classList.toggle('form-field__input--valid', valid && hasValue);
@@ -70,30 +70,30 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    var evt = isSelect ? 'change' : 'blur';
+    const evt = isSelect ? 'change' : 'blur';
     input.addEventListener(evt, function () { touched = true; sync(false); });
     if (!isSelect) input.addEventListener('input', function () { sync(false); });
     input._forceValidate = function () { touched = true; sync(true); };
     return input;
   }
 
-  var countryInput  = attachValidation('country',             true);
-  var cityInput     = attachValidation('city',                false);
-  var addr1Input    = attachValidation('addressLine1',        false);
-  var postalInput   = attachValidation('postalCode',          false);
-  var bCountryInput = attachValidation('billingCountry',      true);
-  var bCityInput    = attachValidation('billingCity',         false);
-  var bAddr1Input   = attachValidation('billingAddressLine1', false);
-  var bPostalInput  = attachValidation('billingPostalCode',   false);
+  const countryInput  = attachValidation('country',             true);
+  const cityInput     = attachValidation('city',                false);
+  const addr1Input    = attachValidation('addressLine1',        false);
+  const postalInput   = attachValidation('postalCode',          false);
+  const bCountryInput = attachValidation('billingCountry',      true);
+  const bCityInput    = attachValidation('billingCity',         false);
+  const bAddr1Input   = attachValidation('billingAddressLine1', false);
+  const bPostalInput  = attachValidation('billingPostalCode',   false);
 
   document.getElementById('addr-form').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    var shipping = [countryInput, cityInput, addr1Input, postalInput];
-    var billing  = [bCountryInput, bCityInput, bAddr1Input, bPostalInput];
-    var active   = checkbox.checked ? shipping : shipping.concat(billing);
-    var allValid = true;
-    var firstErr = null;
+    const shipping = [countryInput, cityInput, addr1Input, postalInput];
+    const billing  = [bCountryInput, bCityInput, bAddr1Input, bPostalInput];
+    const active   = checkbox.checked ? shipping : shipping.concat(billing);
+    let allValid = true;
+    let firstErr = null;
 
     active.forEach(function (input) {
       if (input && !input.checkValidity()) {
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!allValid) { if (firstErr) firstErr.focus(); return; }
 
-    var nextBtn = document.getElementById('next-btn');
+    const nextBtn = document.getElementById('next-btn');
     nextBtn.disabled = true;
     nextBtn.querySelector('span').textContent = 'Saving…';
 
