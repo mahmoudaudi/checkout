@@ -18,7 +18,7 @@
   width: 100%;
   max-width: 42rem;
   position: relative;
-  overflow: hidden;
+  clip-path: inset(0 round var(--radius-2xl));
   animation: fadeIn var(--transition-slow) ease-out both;
 }
 
@@ -417,6 +417,7 @@
 @media (min-width: 40rem) {
   .result {
     border-radius: var(--radius-3xl);
+    clip-path: inset(0 round var(--radius-3xl));
     padding: var(--space-7);
   }
 
@@ -466,12 +467,72 @@
   }
 }
 
-/* ── Desktop: override the page-lock so result cards can scroll ── */
+/* ── Desktop: compact card so it fits in 100dvh without scrolling ── */
 @media (min-width: 64rem) {
-  .page:has(.result) {
-    height: auto;
-    min-height: 100dvh;
-    overflow-y: auto;
+  .result {
+    padding: var(--space-4) var(--space-6);
+  }
+
+  .result__icon-wrap {
+    height: 4rem;
+    margin-block-end: var(--space-3);
+  }
+
+  .result__pulse {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .result__icon-circle {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .result__title {
+    font-size: var(--font-size-2xl);
+    margin-block-end: var(--space-2);
+  }
+
+  .result__subtitle {
+    font-size: var(--font-size-base);
+    margin-block-end: var(--space-3);
+  }
+
+  .result__order-card {
+    padding: var(--space-3) var(--space-4);
+    margin-block-end: var(--space-3);
+  }
+
+  .result__info-grid {
+    gap: var(--space-2);
+    margin-block-end: var(--space-3);
+  }
+
+  .result__info-card {
+    padding: var(--space-3);
+  }
+
+  .result__delivery {
+    padding: var(--space-3) var(--space-4);
+    margin-block-end: var(--space-3);
+  }
+
+  .result__delivery-value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .result__actions {
+    gap: var(--space-2);
+  }
+
+  .failure-issues {
+    padding: var(--space-3) var(--space-4);
+    margin-block-end: var(--space-3);
+  }
+
+  .failure-help {
+    padding: var(--space-3) var(--space-4);
+    margin-block-end: var(--space-3);
   }
 }
 
