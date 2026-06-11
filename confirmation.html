@@ -1,186 +1,312 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Review Your Order — Checkout</title>
-  <link rel="icon" type="image/png" href="/assets/images/e-commerce%20with%20name.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/base/base.css">
-  <link rel="stylesheet" href="css/layout/layout.css">
-  <link rel="stylesheet" href="css/components/button.css">
-  <link rel="stylesheet" href="css/components/form.css">
-  <link rel="stylesheet" href="css/components/progress-steps.css">
-  <script>(function(){try{const s=JSON.parse(sessionStorage.getItem('checkout')||'{}');const step=s.step||0;if(step<1)location.replace('personal-info.html');else if(step<2)location.replace('address.html');else if(step<3)location.replace('payment.html');}catch(e){location.replace('personal-info.html');}})();</script>
-</head>
-<body>
-<div class="checkout-split">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review Your Order — Checkout</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/images/e-commerce%20with%20name.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/base/base.css" />
+    <link rel="stylesheet" href="css/layout/layout.css" />
+    <link rel="stylesheet" href="css/components/button.css" />
+    <link rel="stylesheet" href="css/components/form.css" />
+    <link rel="stylesheet" href="css/components/progress-steps.css" />
+    <script>
+      (function () {
+        try {
+          const s = JSON.parse(sessionStorage.getItem("checkout") || "{}");
+          const step = s.step || 0;
+          if (step < 1) location.replace("personal-info.html");
+          else if (step < 2) location.replace("address.html");
+          else if (step < 3) location.replace("payment.html");
+        } catch (e) {
+          location.replace("personal-info.html");
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="checkout-split">
+      <!-- ══ LEFT: review sections ══ -->
+      <main class="checkout-split__main" id="app">
+        <div class="checkout-split__inner">
+          <header class="checkout-split__header">
+            <div class="checkout-header__brand">
+              <img
+                src="/assets/images/e-commerce%20with%20name.png"
+                alt="Audi Online Shopping"
+                class="checkout-header__logo"
+                width="240"
+                height="96"
+                loading="eager"
+              />
+            </div>
+            <div class="checkout-header__secure" aria-label="Secure checkout">
+              <i
+                data-lucide="lock"
+                width="13"
+                height="13"
+                aria-hidden="true"
+              ></i>
+              <span>Secure Checkout</span>
+            </div>
+          </header>
 
-  <!-- ══ LEFT: review sections ══ -->
-  <main class="checkout-split__main" id="app">
-    <div class="checkout-split__inner">
+          <nav
+            class="progress-steps"
+            aria-label="Checkout progress"
+            id="progress-steps"
+          ></nav>
 
-      <header class="checkout-split__header">
-        <div class="checkout-header__brand">
-          <img src="/assets/images/e-commerce%20with%20name.png" alt="Audi Online Shopping"
-               class="checkout-header__logo" width="240" height="96" loading="eager">
-        </div>
-        <div class="checkout-header__secure" aria-label="Secure checkout">
-          <i data-lucide="lock" width="13" height="13" aria-hidden="true"></i>
-          <span>Secure Checkout</span>
-        </div>
-      </header>
+          <div class="checkout-split__form-area">
+            <header class="checkout-split__form-header">
+              <div class="form-page__header-icon" aria-hidden="true">
+                <i
+                  data-lucide="clipboard-check"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                ></i>
+              </div>
+              <div>
+                <h1 class="checkout-split__form-title">Review Your Order</h1>
+                <p class="checkout-split__form-subtitle">
+                  Confirm all details before placing your order
+                </p>
+              </div>
+            </header>
 
-      <nav class="progress-steps" aria-label="Checkout progress" id="progress-steps"></nav>
+            <!-- Review sections — populated by confirmation.js -->
+            <div class="checkout-split__review-body">
+              <section class="review-section review-section--purple">
+                <div class="review-section__header">
+                  <div class="review-section__title-group">
+                    <div class="review-section__icon" aria-hidden="true">
+                      <i
+                        data-lucide="user"
+                        width="18"
+                        height="18"
+                        aria-hidden="true"
+                      ></i>
+                    </div>
+                    <h2 class="review-section__title">Personal Information</h2>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn--ghost btn--small"
+                    id="edit-personal-btn"
+                    aria-label="Edit personal information"
+                  >
+                    <i
+                      data-lucide="pen"
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                    ></i>
+                    <span class="review-section__edit-label">Edit</span>
+                  </button>
+                </div>
+                <dl class="review-section__details" id="personal-details"></dl>
+              </section>
 
-      <div class="checkout-split__form-area">
+              <section class="review-section review-section--blue">
+                <div class="review-section__header">
+                  <div class="review-section__title-group">
+                    <div class="review-section__icon" aria-hidden="true">
+                      <i
+                        data-lucide="map-pin"
+                        width="18"
+                        height="18"
+                        aria-hidden="true"
+                      ></i>
+                    </div>
+                    <h2 class="review-section__title">Shipping Address</h2>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn--ghost btn--small"
+                    id="edit-address-btn"
+                    aria-label="Edit shipping address"
+                  >
+                    <i
+                      data-lucide="pen"
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                    ></i>
+                    <span class="review-section__edit-label">Edit</span>
+                  </button>
+                </div>
+                <dl class="review-section__details" id="address-details"></dl>
+              </section>
 
-        <header class="checkout-split__form-header">
-          <div class="form-page__header-icon" aria-hidden="true">
-            <i data-lucide="clipboard-check" width="18" height="18" aria-hidden="true"></i>
+              <section class="review-section review-section--pink">
+                <div class="review-section__header">
+                  <div class="review-section__title-group">
+                    <div class="review-section__icon" aria-hidden="true">
+                      <i
+                        data-lucide="credit-card"
+                        width="18"
+                        height="18"
+                        aria-hidden="true"
+                      ></i>
+                    </div>
+                    <h2 class="review-section__title">Payment Method</h2>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn--ghost btn--small"
+                    id="edit-payment-btn"
+                    aria-label="Edit payment details"
+                  >
+                    <i
+                      data-lucide="pen"
+                      width="14"
+                      height="14"
+                      aria-hidden="true"
+                    ></i>
+                    <span class="review-section__edit-label">Edit</span>
+                  </button>
+                </div>
+                <dl class="review-section__details" id="payment-details"></dl>
+              </section>
+            </div>
+
+            <!-- Actions — Back always visible; Confirm shown on mobile/tablet only (sidebar handles desktop) -->
+            <div class="form__actions">
+              <button
+                type="button"
+                class="btn btn--secondary"
+                id="back-btn"
+                aria-label="Go back to payment"
+              >
+                <i
+                  data-lucide="arrow-left"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                ></i>
+                <span>Back</span>
+              </button>
+              <button
+                type="button"
+                class="btn btn--primary btn--icon-start btn--confirm btn--confirm-mobile"
+                id="confirm-btn-mobile"
+              >
+                <i
+                  data-lucide="lock"
+                  width="18"
+                  height="18"
+                  aria-hidden="true"
+                ></i>
+                <span>Confirm &amp; Pay $142.99</span>
+              </button>
+            </div>
           </div>
-          <div>
-            <h1 class="checkout-split__form-title">Review Your Order</h1>
-            <p class="checkout-split__form-subtitle">Confirm all details before placing your order</p>
+        </div>
+      </main>
+
+      <!-- ══ RIGHT: dark sidebar with confirm CTA ══ -->
+      <aside class="checkout-split__sidebar" aria-label="Order summary">
+        <p class="sidebar-summary__label">Order Summary</p>
+
+        <div class="sidebar-summary__items">
+          <div class="sidebar-item">
+            <div class="sidebar-item__badge">
+              <div class="sidebar-item__img-wrap">
+                <img
+                  src="assets/images/headphone.avif"
+                  alt=""
+                  class="sidebar-item__img"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                />
+              </div>
+              <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
+            </div>
+            <div class="sidebar-item__body">
+              <p class="sidebar-item__name">Premium Wireless Headphones</p>
+              <p class="sidebar-item__variant">Black · Default Title</p>
+            </div>
+            <span class="sidebar-item__price">$80.00</span>
           </div>
-        </header>
-
-        <!-- Review sections — populated by confirmation.js -->
-        <div class="checkout-split__review-body">
-
-          <section class="review-section review-section--purple">
-            <div class="review-section__header">
-              <div class="review-section__title-group">
-                <div class="review-section__icon" aria-hidden="true">
-                  <i data-lucide="user" width="18" height="18" aria-hidden="true"></i>
-                </div>
-                <h2 class="review-section__title">Personal Information</h2>
+          <div class="sidebar-item">
+            <div class="sidebar-item__badge">
+              <div class="sidebar-item__img-wrap">
+                <img
+                  src="assets/images/wear.avif"
+                  alt=""
+                  class="sidebar-item__img"
+                  width="56"
+                  height="56"
+                  loading="lazy"
+                />
               </div>
-              <button type="button" class="btn btn--ghost btn--small" id="edit-personal-btn" aria-label="Edit personal information">
-                <i data-lucide="pen" width="14" height="14" aria-hidden="true"></i>
-                <span class="review-section__edit-label">Edit</span>
-              </button>
+              <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
             </div>
-            <dl class="review-section__details" id="personal-details"></dl>
-          </section>
-
-          <section class="review-section review-section--blue">
-            <div class="review-section__header">
-              <div class="review-section__title-group">
-                <div class="review-section__icon" aria-hidden="true">
-                  <i data-lucide="map-pin" width="18" height="18" aria-hidden="true"></i>
-                </div>
-                <h2 class="review-section__title">Shipping Address</h2>
-              </div>
-              <button type="button" class="btn btn--ghost btn--small" id="edit-address-btn" aria-label="Edit shipping address">
-                <i data-lucide="pen" width="14" height="14" aria-hidden="true"></i>
-                <span class="review-section__edit-label">Edit</span>
-              </button>
+            <div class="sidebar-item__body">
+              <p class="sidebar-item__name">Smart Watch</p>
+              <p class="sidebar-item__variant">White · Default Title</p>
             </div>
-            <dl class="review-section__details" id="address-details"></dl>
-          </section>
-
-          <section class="review-section review-section--pink">
-            <div class="review-section__header">
-              <div class="review-section__title-group">
-                <div class="review-section__icon" aria-hidden="true">
-                  <i data-lucide="credit-card" width="18" height="18" aria-hidden="true"></i>
-                </div>
-                <h2 class="review-section__title">Payment Method</h2>
-              </div>
-              <button type="button" class="btn btn--ghost btn--small" id="edit-payment-btn" aria-label="Edit payment details">
-                <i data-lucide="pen" width="14" height="14" aria-hidden="true"></i>
-                <span class="review-section__edit-label">Edit</span>
-              </button>
-            </div>
-            <dl class="review-section__details" id="payment-details"></dl>
-          </section>
-
+            <span class="sidebar-item__price">$50.00</span>
+          </div>
         </div>
 
-        <!-- Actions — Back always visible; Confirm shown on mobile/tablet only (sidebar handles desktop) -->
-        <div class="form__actions">
-          <button type="button" class="btn btn--secondary" id="back-btn" aria-label="Go back to payment">
-            <i data-lucide="arrow-left" width="18" height="18" aria-hidden="true"></i>
-            <span>Back</span>
-          </button>
-          <button type="button" class="btn btn--primary btn--icon-start btn--confirm btn--confirm-mobile" id="confirm-btn-mobile">
+        <div class="sidebar-summary__divider" aria-hidden="true"></div>
+
+        <dl class="sidebar-summary__rows">
+          <div class="sidebar-summary__row">
+            <dt>Subtotal</dt>
+            <dd>$130.00</dd>
+          </div>
+          <div class="sidebar-summary__row">
+            <dt>Shipping</dt>
+            <dd>$12.99</dd>
+          </div>
+        </dl>
+
+        <dl class="sidebar-summary__total">
+          <dt>Total</dt>
+          <dd>$142.99</dd>
+        </dl>
+
+        <!-- Confirm CTA — id="confirm-btn" required by confirmation.js -->
+        <div class="sidebar-summary__cta">
+          <button
+            type="button"
+            class="btn btn--primary btn--full btn--icon-start btn--confirm"
+            id="confirm-btn"
+          >
             <i data-lucide="lock" width="18" height="18" aria-hidden="true"></i>
             <span>Confirm &amp; Pay $142.99</span>
           </button>
+          <p class="sidebar-summary__cta-note">
+            You won't be charged until confirmed
+          </p>
         </div>
 
-      </div>
-    </div>
-  </main>
-
-  <!-- ══ RIGHT: dark sidebar with confirm CTA ══ -->
-  <aside class="checkout-split__sidebar" aria-label="Order summary">
-
-    <p class="sidebar-summary__label">Order Summary</p>
-
-    <div class="sidebar-summary__items">
-      <div class="sidebar-item">
-        <div class="sidebar-item__badge">
-          <div class="sidebar-item__img-wrap"><img src="assets/images/headphone.avif" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
-          <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
+        <div class="sidebar-summary__trust">
+          <i data-lucide="lock" width="11" height="11" aria-hidden="true"></i>
+          <span>256-bit SSL encrypted checkout</span>
         </div>
-        <div class="sidebar-item__body">
-          <p class="sidebar-item__name">Premium Wireless Headphones</p>
-          <p class="sidebar-item__variant">Black · Default Title</p>
-        </div>
-        <span class="sidebar-item__price">$80.00</span>
-      </div>
-      <div class="sidebar-item">
-        <div class="sidebar-item__badge">
-          <div class="sidebar-item__img-wrap"><img src="assets/images/wear.avif" alt="" class="sidebar-item__img" width="56" height="56" loading="lazy"></div>
-          <span class="sidebar-item__qty-badge" aria-hidden="true">1</span>
-        </div>
-        <div class="sidebar-item__body">
-          <p class="sidebar-item__name">Smart Watch</p>
-          <p class="sidebar-item__variant">White · Default Title</p>
-        </div>
-        <span class="sidebar-item__price">$50.00</span>
-      </div>
+      </aside>
     </div>
 
-    <div class="sidebar-summary__divider" aria-hidden="true"></div>
-
-    <dl class="sidebar-summary__rows">
-      <div class="sidebar-summary__row"><dt>Subtotal</dt><dd>$130.00</dd></div>
-      <div class="sidebar-summary__row"><dt>Shipping</dt><dd>$12.99</dd></div>
-    </dl>
-
-    <dl class="sidebar-summary__total">
-      <dt>Total</dt>
-      <dd>$142.99</dd>
-    </dl>
-
-    <!-- Confirm CTA — id="confirm-btn" required by confirmation.js -->
-    <div class="sidebar-summary__cta">
-      <button type="button" class="btn btn--primary btn--full btn--icon-start btn--confirm" id="confirm-btn">
-        <i data-lucide="lock" width="18" height="18" aria-hidden="true"></i>
-        <span>Confirm &amp; Pay $142.99</span>
-      </button>
-      <p class="sidebar-summary__cta-note">You won't be charged until confirmed</p>
-    </div>
-
-    <div class="sidebar-summary__trust">
-      <i data-lucide="lock" width="11" height="11" aria-hidden="true"></i>
-      <span>256-bit SSL encrypted checkout</span>
-    </div>
-
-  </aside>
-
-</div>
-
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script src="js/data/countries.js"></script>
-<script src="js/shared/state.js"></script>
-<script src="js/shared/order-summary.js"></script>
-<script src="js/shared/progress-steps.js"></script>
-<script src="js/pages/confirmation.js"></script>
-</body>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script src="js/data/countries.js"></script>
+    <script src="js/shared/state.js"></script>
+    <script src="js/shared/order-summary.js"></script>
+    <script src="js/shared/progress-steps.js"></script>
+    <script src="js/pages/confirmation.js"></script>
+  </body>
 </html>

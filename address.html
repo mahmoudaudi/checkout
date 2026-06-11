@@ -46,15 +46,29 @@
           <span class="mst-amount">$142.99</span>
         </button>
         <div class="mst-body" id="mst-body" hidden>
-          <div style="display:flex;flex-direction:column;gap:0.75rem;">
-            <div style="display:flex;align-items:center;gap:0.75rem;"><img src="assets/images/headphone.avif" alt="" width="44" height="44" style="border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy"><div style="flex:1;min-width:0;"><p style="font-size:0.8125rem;font-weight:600;color:#111827;">Premium Wireless Headphones</p><p style="font-size:0.6875rem;color:#9ca3af;margin-top:2px;">Black · Default Title</p></div><span style="font-size:0.8125rem;font-weight:700;color:#111827;flex-shrink:0;">$80.00</span></div>
-            <div style="display:flex;align-items:center;gap:0.75rem;"><img src="assets/images/wear.avif" alt="" width="44" height="44" style="border-radius:8px;object-fit:cover;flex-shrink:0;" loading="lazy"><div style="flex:1;min-width:0;"><p style="font-size:0.8125rem;font-weight:600;color:#111827;">Smart Watch</p><p style="font-size:0.6875rem;color:#9ca3af;margin-top:2px;">White · Default Title</p></div><span style="font-size:0.8125rem;font-weight:700;color:#111827;flex-shrink:0;">$50.00</span></div>
+          <div class="mst-items">
+            <div class="mst-item">
+              <img src="assets/images/headphone.avif" alt="" width="44" height="44" class="mst-item__img" loading="lazy">
+              <div class="mst-item__info">
+                <p class="mst-item__name">Premium Wireless Headphones</p>
+                <p class="mst-item__variant">Black · Default Title</p>
+              </div>
+              <span class="mst-item__price">$80.00</span>
+            </div>
+            <div class="mst-item">
+              <img src="assets/images/wear.avif" alt="" width="44" height="44" class="mst-item__img" loading="lazy">
+              <div class="mst-item__info">
+                <p class="mst-item__name">Smart Watch</p>
+                <p class="mst-item__variant">White · Default Title</p>
+              </div>
+              <span class="mst-item__price">$50.00</span>
+            </div>
           </div>
-          <div style="height:1px;background:#f3f4f6;margin-block:0.75rem;"></div>
-          <div style="display:flex;flex-direction:column;gap:0.375rem;">
-            <div style="display:flex;justify-content:space-between;font-size:0.875rem;color:#6b7280;"><span>Subtotal</span><span style="font-weight:600;color:#374151;">$130.00</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:0.875rem;color:#6b7280;"><span>Shipping</span><span style="font-weight:600;color:#374151;">$12.99</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:1rem;font-weight:700;color:#111827;margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid #f3f4f6;"><span>Total</span><span>$142.99</span></div>
+          <div class="mst-divider"></div>
+          <div class="mst-totals">
+            <div class="mst-totals__row"><span>Subtotal</span><span class="mst-totals__value">$130.00</span></div>
+            <div class="mst-totals__row"><span>Shipping</span><span class="mst-totals__value">$12.99</span></div>
+            <div class="mst-totals__row mst-totals__row--total"><span>Total</span><span>$142.99</span></div>
           </div>
         </div>
       </div>

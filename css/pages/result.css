@@ -470,22 +470,22 @@
 /* ── Desktop: compact card so it fits in 100dvh without scrolling ── */
 @media (min-width: 64rem) {
   .result {
-    padding: var(--space-4) var(--space-6);
+    padding: var(--space-3) var(--space-6);
   }
 
   .result__icon-wrap {
-    height: 4rem;
-    margin-block-end: var(--space-3);
+    height: 3rem;
+    margin-block-end: var(--space-2);
   }
 
   .result__pulse {
-    width: 4rem;
-    height: 4rem;
+    width: 3rem;
+    height: 3rem;
   }
 
   .result__icon-circle {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .result__title {
@@ -495,7 +495,7 @@
 
   .result__subtitle {
     font-size: var(--font-size-base);
-    margin-block-end: var(--space-3);
+    margin-block-end: var(--space-2);
   }
 
   .result__order-card {
@@ -526,13 +526,13 @@
   }
 
   .failure-issues {
-    padding: var(--space-3) var(--space-4);
-    margin-block-end: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    margin-block-end: var(--space-2);
   }
 
   .failure-help {
-    padding: var(--space-3) var(--space-4);
-    margin-block-end: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    margin-block-end: var(--space-2);
   }
 }
 
