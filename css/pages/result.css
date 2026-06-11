@@ -120,6 +120,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  transform: translateZ(0);
 }
 
 .result__title--success {
@@ -462,6 +463,15 @@
 
   .failure-help__title {
     font-size: var(--font-size-base);
+  }
+}
+
+/* ── Desktop: override the page-lock so result cards can scroll ── */
+@media (min-width: 64rem) {
+  .page:has(.result) {
+    height: auto;
+    min-height: 100dvh;
+    overflow-y: auto;
   }
 }
 
