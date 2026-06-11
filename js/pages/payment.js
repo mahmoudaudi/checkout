@@ -187,21 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── Expiry ───────────────────────────────────────────────────────────────────
 
-  // Set custom validity BEFORE attachValidation's listeners fire so sync() sees it
   const expiryEl = document.getElementById('expiryDate');
-  function checkExpiryExpired() {
-    const parts = expiryEl.value.match(/^(\d{2})\/(\d{2})$/);
-    if (parts) {
-      const mm = parseInt(parts[1], 10), yy = parseInt(parts[2], 10);
-      const now = new Date(), curMM = now.getMonth() + 1, curYY = now.getFullYear() % 100;
-      const expired = yy < curYY || (yy === curYY && mm < curMM);
-      expiryEl.setCustomValidity(expired ? 'Card has expired' : '');
-    } else {
-      expiryEl.setCustomValidity('');
-    }
-  }
-  expiryEl.addEventListener('input', checkExpiryExpired);
-  expiryEl.addEventListener('blur',  checkExpiryExpired);
 
   let prevLen = (info.expiryDate || '').length;
   const expiryInput = attachValidation('expiryDate', 'expiry-icon', function () {
