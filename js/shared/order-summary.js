@@ -70,12 +70,13 @@
         '</div>';
     }
 
-    // ── Confirm & Pay button (confirmation page only) ─────────────────────────
-    const confirmBtn = document.getElementById('confirm-btn');
-    if (confirmBtn) {
-      const span = confirmBtn.querySelector('span');
+    // ── Confirm & Pay buttons (confirmation page only) ────────────────────────
+    ['confirm-btn', 'confirm-btn-mobile'].forEach(function (id) {
+      const btn = document.getElementById(id);
+      if (!btn) return;
+      const span = btn.querySelector('span');
       if (span) span.textContent = 'Confirm & Pay ' + fmt(total);
-    }
+    });
   }
 
   document.addEventListener('DOMContentLoaded', renderOrderSummary);
