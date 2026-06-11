@@ -74,7 +74,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let touched = false;
 
     function sync(force) {
-      const hasValue = input.value.trim().length > 0;
+      const val      = input.value.trim();
+      const digits   = (val.match(/\d/g) || []).length;
+      input.setCustomValidity(
+        val.length > 0 && (digits < 6 || digits > 15)
+          ? 'Please enter a valid phone number (6–15 digits)'
+          : ''
+      );
+      const hasValue = val.length > 0;
       const valid    = input.checkValidity() && hasValue;
       const showErr  = !valid && (hasValue || force) && (touched || force);
       input.classList.toggle('form-field__input--error', showErr);

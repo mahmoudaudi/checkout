@@ -143,8 +143,8 @@
                        class="form-field__input phone-field__number"
                        placeholder="555 123 4567" autocomplete="tel-national"
                        required
-                       pattern="([0-9][0-9\s\-().]*){6,15}"
-                       data-pattern-message="Please enter a valid phone number (6–15 digits)"
+                       pattern="[0-9\s\-().+]+"
+                       data-pattern-message="Please use only digits, spaces, +, -, ( ) or ."
                        aria-describedby="phone-error">
               </div>
               <p class="form-field__error" id="phone-error" aria-live="polite" hidden></p>
