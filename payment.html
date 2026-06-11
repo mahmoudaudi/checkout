@@ -142,7 +142,10 @@
                 <input type="text" id="cardholderName" name="cardholderName"
                        class="form-field__input form-field__input--with-icon"
                        placeholder="John Doe" autocomplete="cc-name"
-                       required aria-describedby="cardholderName-error">
+                       required
+                       pattern="[A-Za-z\s\-']{2,50}"
+                       data-pattern-message="Please enter the name as it appears on the card"
+                       aria-describedby="cardholderName-error">
               </div>
               <p class="form-field__error" id="cardholderName-error" aria-live="polite" hidden></p>
             </div>

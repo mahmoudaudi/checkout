@@ -101,7 +101,10 @@
                   <input type="text" id="city" name="city"
                          class="form-field__input form-field__input--with-icon"
                          placeholder="New York" autocomplete="address-level2"
-                         required aria-describedby="city-error">
+                         required
+                         pattern="[A-Za-z\s\-']{2,50}"
+                         data-pattern-message="Please enter a valid city name"
+                         aria-describedby="city-error">
                 </div>
                 <p class="form-field__error" id="city-error" aria-live="polite" hidden></p>
               </div>
@@ -115,7 +118,10 @@
                   <input type="text" id="postalCode" name="postalCode"
                          class="form-field__input form-field__input--with-icon"
                          placeholder="10001" autocomplete="postal-code"
-                         required aria-describedby="postalCode-error">
+                         required
+                         pattern="[A-Z0-9\s\-]{3,10}"
+                         data-pattern-message="Please enter a valid postal code"
+                         aria-describedby="postalCode-error">
                 </div>
                 <p class="form-field__error" id="postalCode-error" aria-live="polite" hidden></p>
               </div>
@@ -130,7 +136,7 @@
                 <input type="text" id="addressLine1" name="addressLine1"
                        class="form-field__input form-field__input--with-icon"
                        placeholder="123 Main Street" autocomplete="address-line1"
-                       required aria-describedby="addressLine1-error">
+                       required minlength="5" aria-describedby="addressLine1-error">
               </div>
               <p class="form-field__error" id="addressLine1-error" aria-live="polite" hidden></p>
             </div>
