@@ -129,5 +129,8 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = 'payment.html';
   });
 
+  const backBtn = document.getElementById('back-btn');
+  if (backBtn) backBtn.addEventListener('click', function () { window.location.href = 'personal-info.html'; });
+
   if (typeof lucide !== 'undefined') lucide.createIcons();
 });

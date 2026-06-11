@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   document.getElementById('order-number').textContent = ordNum;
 
+  const continueBtn = document.getElementById('continue-shopping-btn');
+  if (continueBtn) continueBtn.addEventListener('click', function () { window.location.href = 'index.html'; });
+  const printBtn = document.getElementById('print-receipt-btn');
+  if (printBtn) printBtn.addEventListener('click', function () { window.print(); });
+
   // Copy order number button
   const copyBtn = document.getElementById('copy-order-btn');
   if (copyBtn) {
@@ -104,27 +109,25 @@ function spawnConfetti() {
   document.body.appendChild(container);
 
   for (let i = 0; i < COUNT; i++) {
-    (function (idx) {
-      const el   = document.createElement('div');
-      const size = 6 + Math.random() * 6;
-      const x    = Math.random() * 100;
-      const delay = Math.random() * 800;
-      const dur   = 1000 + Math.random() * 1200;
-      const color = COLORS[idx % COLORS.length];
+    const el    = document.createElement('div');
+    const size  = 6 + Math.random() * 6;
+    const x     = Math.random() * 100;
+    const delay = Math.random() * 800;
+    const dur   = 1000 + Math.random() * 1200;
+    const color = COLORS[i % COLORS.length];
 
-      el.style.cssText = [
-        'position:absolute',
-        'top:-' + size + 'px',
-        'left:' + x + '%',
-        'width:' + size + 'px',
-        'height:' + size + 'px',
-        'background:' + color,
-        'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
-        'opacity:0',
-        'animation:confetti-fall ' + dur + 'ms ' + delay + 'ms ease-in forwards',
-      ].join(';');
-      container.appendChild(el);
-    })(i);
+    el.style.cssText = [
+      'position:absolute',
+      'top:-' + size + 'px',
+      'left:' + x + '%',
+      'width:' + size + 'px',
+      'height:' + size + 'px',
+      'background:' + color,
+      'border-radius:' + (Math.random() > 0.5 ? '50%' : '2px'),
+      'opacity:0',
+      'animation:confetti-fall ' + dur + 'ms ' + delay + 'ms ease-in forwards',
+    ].join(';');
+    container.appendChild(el);
   }
 
   if (!document.getElementById('confetti-style')) {

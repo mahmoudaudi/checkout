@@ -131,5 +131,8 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = 'address.html';
   });
 
+  const backBtn = document.getElementById('back-btn');
+  if (backBtn) backBtn.addEventListener('click', function () { window.location.href = 'index.html'; });
+
   if (typeof lucide !== 'undefined') lucide.createIcons();
 });

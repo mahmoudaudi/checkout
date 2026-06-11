@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
   try { buildProgressSteps('progress-steps', 5); } catch (e) {}
 
-  var state = CheckoutState.get();
-  var pi    = state.personalInfo;
-  var addr  = state.addressInfo;
-  var pay   = state.paymentInfo;
+  const state       = CheckoutState.get();
+  const personalInfo = state.personalInfo;
+  const addressInfo  = state.addressInfo;
+  const paymentInfo  = state.paymentInfo;
 
   // Resolves a country code → "🇺🇸  United States" for display
   function getCountryName(code) {
     if (!code) return '';
     if (typeof COUNTRIES !== 'undefined') {
-      var match = COUNTRIES.find(function (c) { return c.code === code; });
+      const match = COUNTRIES.find(function (c) { return c.code === code; });
       if (match) return match.flag + '  ' + match.name;
     }
     return code;
@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function addRow(dl, label, value) {
     if (!value) return;
-    var div = document.createElement('div');
+    const div = document.createElement('div');
     div.className = 'review-section__row';
-    var dt = document.createElement('dt');
+    const dt = document.createElement('dt');
     dt.className = 'review-section__row-label';
     dt.textContent = label;
-    var dd = document.createElement('dd');
+    const dd = document.createElement('dd');
     dd.className = 'review-section__row-value';
     dd.textContent = value;
     div.appendChild(dt);
@@ -31,32 +31,32 @@ document.addEventListener('DOMContentLoaded', function () {
     dl.appendChild(div);
   }
 
-  var personalDl = document.getElementById('personal-details');
-  addRow(personalDl, 'Full Name', pi.fullName);
-  addRow(personalDl, 'Email',     pi.email);
-  addRow(personalDl, 'Phone',     pi.phone);
+  const personalDl = document.getElementById('personal-details');
+  addRow(personalDl, 'Full Name', personalInfo.fullName);
+  addRow(personalDl, 'Email',     personalInfo.email);
+  addRow(personalDl, 'Phone',     personalInfo.phone);
 
-  var addressDl = document.getElementById('address-details');
-  addRow(addressDl, 'Address', [addr.addressLine1, addr.addressLine2].filter(Boolean).join(', '));
-  addRow(addressDl, 'City',    addr.city && addr.postalCode ? addr.city + ', ' + addr.postalCode : addr.city || addr.postalCode);
-  addRow(addressDl, 'Country', getCountryName(addr.country));
+  const addressDl = document.getElementById('address-details');
+  addRow(addressDl, 'Address', [addressInfo.addressLine1, addressInfo.addressLine2].filter(Boolean).join(', '));
+  addRow(addressDl, 'City',    addressInfo.city && addressInfo.postalCode ? addressInfo.city + ', ' + addressInfo.postalCode : addressInfo.city || addressInfo.postalCode);
+  addRow(addressDl, 'Country', getCountryName(addressInfo.country));
 
   // Show last 4 digits only — full card number is never rendered
-  var payDl  = document.getElementById('payment-details');
-  var last4  = (pay.cardNumber || '').replace(/\D/g, '').slice(-4);
-  var masked = '•••• •••• •••• ' + (last4 || '••••');
+  const payDl  = document.getElementById('payment-details');
+  const last4  = (paymentInfo.cardNumber || '').replace(/\D/g, '').slice(-4);
+  const masked = '•••• •••• •••• ' + (last4 || '••••');
 
-  addRow(payDl, 'Cardholder',  pay.cardholderName || '—');
+  addRow(payDl, 'Cardholder',  paymentInfo.cardholderName || '—');
   addRow(payDl, 'Card Number', masked);
-  if (pay.expiryDate) addRow(payDl, 'Expires', pay.expiryDate);
+  if (paymentInfo.expiryDate) addRow(payDl, 'Expires', paymentInfo.expiryDate);
 
   // Guard against double-submit if the user clicks rapidly
-  var confirming = false;
+  let confirming = false;
   function handleConfirm() {
     if (confirming) return;
     confirming = true;
     ['confirm-btn', 'confirm-btn-mobile'].forEach(function (id) {
-      var btn = document.getElementById(id);
+      const btn = document.getElementById(id);
       if (!btn) return;
       btn.disabled = true;
       btn.querySelector('span').textContent = 'Processing…';
@@ -65,10 +65,19 @@ document.addEventListener('DOMContentLoaded', function () {
     window.location.href = 'processing.html';
   }
 
-  var confirmBtn = document.getElementById('confirm-btn');
+  const confirmBtn = document.getElementById('confirm-btn');
   if (confirmBtn) confirmBtn.addEventListener('click', handleConfirm);
-  var mobileCta = document.getElementById('confirm-btn-mobile');
+  const mobileCta = document.getElementById('confirm-btn-mobile');
   if (mobileCta) mobileCta.addEventListener('click', handleConfirm);
+
+  const editPersonalBtn = document.getElementById('edit-personal-btn');
+  if (editPersonalBtn) editPersonalBtn.addEventListener('click', function () { window.location.href = 'personal-info.html'; });
+  const editAddressBtn = document.getElementById('edit-address-btn');
+  if (editAddressBtn) editAddressBtn.addEventListener('click', function () { window.location.href = 'address.html'; });
+  const editPaymentBtn = document.getElementById('edit-payment-btn');
+  if (editPaymentBtn) editPaymentBtn.addEventListener('click', function () { window.location.href = 'payment.html'; });
+  const backBtn = document.getElementById('back-btn');
+  if (backBtn) backBtn.addEventListener('click', function () { window.location.href = 'payment.html'; });
 
   if (typeof lucide !== 'undefined') lucide.createIcons();
 });
