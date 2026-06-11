@@ -16,7 +16,7 @@
   padding: var(--space-5) var(--space-4);
   text-align: center;
   width: 100%;
-  max-width: 42rem;
+  max-width: 34rem;
   position: relative;
   clip-path: inset(0 round var(--radius-2xl));
   animation: fadeIn var(--transition-slow) ease-out both;
